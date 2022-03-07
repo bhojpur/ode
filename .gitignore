@@ -1,0 +1,53 @@
+*.swp
+*.swo
+bhojpur.iml
+
+test/tmp/
+
+my save path/
+
+profile.out
+
+### Project Specific
+bin/odesvr
+bin/odesvr.exe
+bin/odectl
+bin/odectl.exe
+
+### Tests
+**/testdata/failed
+
+### Go
+# Output of the coverage tool
+*.out
+
+### macOS
+# General
+.DS_Store
+
+# Thumbnails
+._*
+
+### JetBrains
+.idea
+
+### VSCode
+.vscode
+
+### Vim
+# Swap
+[._]*.s[a-v][a-z]
+[._]*.sw[a-p]
+[._]s[a-v][a-z]
+[._]sw[a-p]
+
+# Session
+Session.vim
+
+# Temporary
+.netrwhist
+*~
+# Auto-generated tag files
+tags
+# Persistent undo
+[._]*.un~

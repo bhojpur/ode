@@ -1,0 +1,109 @@
+version: "3"
+
+vars:
+  GREETING: Hello, Bhojpur ODE Developer!
+
+tasks:
+    default:
+        cmds:
+        - echo "{{.GREETING}}"
+        silent: true
+
+    build-web:
+        desc: Build the web application
+        cmds:
+        - GOFLAGS=-mod=mod go build -o bin/odectl client.go 
+        - GOFLAGS=-mod=mod go build -o bin/odesvr server.go 
+
+    build-web-wasm:
+        desc: Build the wasm application
+        cmds:
+        - cd native; guiutl package -name "Bhojpur ODE" -os wasm -icon Icon.png
+        - cd native/wasm; gui web
+
+    build-darwin:
+        desc: Build the desktop application for current OS
+        cmds:
+        - guiutl package -name "Bhojpur ODE" -os darwin -sourceDir native -icon native/Icon.png
+        - cp -R "Bhojpur ODE.app" ~/Applications
+
+    build-linux:
+        desc: Build the desktop application for current OS
+        cmds:
+        - guiutl package -name "Bhojpur ODE" -os linux -sourceDir native -icon native/Icon.png
+
+    build-windows:
+        desc: Build the desktop application for current OS
+        cmds:
+        - guiutl package -name "Bhojpur ODE" -os windows -sourceDir native -icon native/Icon.png
+
+    package-android:
+        desc: Package the mobile application for Android
+        cmds:
+        - guiutl package -name "Bhojpur ODE" -os android -appID net.bhojpur.ode -icon native/Icon.png
+
+    package-ios:
+        desc: Package the mobile application for iOS
+        cmds:
+        - guiutl package -name "Bhojpur ODE" -os ios -appID net.bhojpur.ode -icon native/Icon.png
+
+    release-macos:
+        desc: Release the native application for macOS App Store
+        cmds:
+        - guiutl release -appID net.bhojpur.ode -appVersion 1.0 -appBuild 1 -category business
+
+    release-android:
+        desc: Release the mobile application for Google Play
+        cmds:
+        - guiutl release -os android -appID net.bhojpur.ode -appVersion 1.0 -appBuild 1
+
+    release-ios:
+        desc: Release the mobile application for iOS App Store
+        cmds:
+        - guiutl release -os ios -appID net.bhojpur.ode -appVersion 1.0 -appBuild 1
+
+    run-web-server:
+        desc: Run the web server application from source code
+        cmds:
+        - GOFLAGS=-mod=mod go run server.go
+ 
+    run-web-client:
+        desc: Run the web client application from source code
+        cmds:
+        - GOFLAGS=-mod=mod go run client.go
+
+    run-mobile:
+        desc: Run the mobile client application on emulator
+        cmds:
+        - GOFLAGS=-mod=mod go run -tags mobile native/main.go
+
+    run-desktop: 
+        desc: Run the desktop application on local host
+        cmds:
+        - GOFLAGS=-mod=mod go run native/main.go
+
+    generate:
+        desc: Generate Go source code from Protool Buffers
+        cmds:
+        - protoc --go_out=plugins=grpc:. --go_opt=paths=source_relative pkg/api/v1/ode.proto
+        - protoc --go_out=plugins=grpc:. --go_opt=paths=source_relative pkg/api/v1/ode-ui.proto
+
+    test:
+        desc: Execute all the Unit Tests
+        cmds:
+        - gotestsum --junitfile test-results/unit-tests.xml -- -short -race -cover -covoderofile test-results/cover.out ./...
+
+    swagger.gen:
+        desc: Generate Go code
+        cmds:
+        - GOFLAGS=-mod=mod go generate bhojpur.net/ode/internal bhojpur.net/ode/pkg/swagger
+
+    swagger.validate:
+        desc: Validate all the Swagger API specifications
+        cmds:
+        - swagger validate pkg/swagger/swagger.yml
+
+    swagger.doc:
+        desc: Generate documentation for Swagger specified APIs
+        cmds:
+        - docker run -i yousan/swagger-yaml-to-html < pkg/swagger/swagger.yml > doc/index.html
