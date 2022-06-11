@@ -1,0 +1,314 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+# Copyright (c) 2018 Bhojpur Consulting Private Limited, India. All rights reserved.
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+# THE SOFTWARE.
+
+"""
+   Library for gateway tests
+"""
+
+from __future__ import print_function
+
+from future import standard_library
+
+standard_library.install_aliases()
+
+from builtins import str
+from builtins import range
+from builtins import object
+from io import StringIO
+from io import BytesIO
+import ode
+from ode.rtypes import rstring
+
+from ode.gateway.scripts import dbhelpers
+
+dbhelpers.USERS = {
+    'user': dbhelpers.UserEntry(
+        'webode_test_user', 'foobar', 'User', 'Webode'),
+    'author': dbhelpers.UserEntry(
+        'webode_test_author', 'foobar', 'Author', 'Webode'),
+}
+
+dbhelpers.PROJECTS = {
+    'testpr1': dbhelpers.ProjectEntry('webode_test_priv_project', 'author'),
+    'testpr2': dbhelpers.ProjectEntry('webode_test_priv_project2', 'author'),
+}
+
+dbhelpers.DATASETS = {
+    'testds1': dbhelpers.DatasetEntry('webode_test_priv_dataset', 'testpr1'),
+    'testds2': dbhelpers.DatasetEntry('webode_test_priv_dataset2', 'testpr1'),
+    'testds3': dbhelpers.DatasetEntry('webode_test_priv_dataset3', 'testpr2'),
+}
+
+dbhelpers.IMAGES = {
+    'testimg1': dbhelpers.ImageEntry(
+        'webode_test_priv_image', 'CHOBI_d3d.dv', 'testds1'),
+    'testimg2': dbhelpers.ImageEntry(
+        'webode_test_priv_image2', 'CHOBI_d3d.dv', 'testds1'),
+    'tinyimg': dbhelpers.ImageEntry(
+        'webode_test_priv_image_tiny', 'tinyTest.d3d.dv', 'testds1'),
+    'badimg': dbhelpers.ImageEntry(
+        'webode_test_priv_image_bad', False, 'testds1'),
+    'tinyimg2': dbhelpers.ImageEntry(
+        'webode_test_priv_image_tiny2', 'tinyTest.d3d.dv', 'testds2'),
+    'tinyimg3': dbhelpers.ImageEntry(
+        'webode_test_priv_image_tiny3', 'tinyTest.d3d.dv', 'testds3'),
+    'bigimg': dbhelpers.ImageEntry(
+        'webode_test_priv_image_big', 'big.tiff', 'testds3'),
+    '32float': dbhelpers.ImageEntry(
+        'webode_test_priv_image_32float',
+        '32bitfloat&pixelType=float&sizeX=8192&sizeY=8192.fake', 'testds3'),
+}
+
+class TestDBHelper(object):
+
+    def setUp(self, skipTestDB=False, skipTestImages=True):
+        self.tmpfiles = []
+        self._has_connected = False
+        self._last_login = None
+        self.doDisconnect()
+        self.USER = dbhelpers.USERS['user']
+        self.AUTHOR = dbhelpers.USERS['author']
+        self.ADMIN = dbhelpers.ROOT
+        gateway = ode.client_wrapper()
+        try:
+            rp = gateway.getProperty('ode.rootpass')
+            if rp:
+                dbhelpers.ROOT.passwd = rp
+        finally:
+            gateway.close()
+
+        self.prepTestDB(onlyUsers=skipTestDB, skipImages=skipTestImages)
+        self.doDisconnect()
+
+    def doConnect(self):
+        if not self._has_connected:
+            self.gateway.connect()
+            self._has_connected = True
+        assert self.gateway.isConnected(), 'Can not connect'
+        assert self.gateway.keepAlive(
+        ), 'Could not send keepAlive to connection'
+        self.gateway.setGroupForSession(
+            self.gateway.getEventContext().memberOfGroups[0])
+
+    def doDisconnect(self):
+        if self._has_connected and self.gateway:
+            self.doConnect()
+            self.gateway.close()
+            assert not self.gateway.isConnected(), 'Can not disconnect'
+        self.gateway = None
+        self._has_connected = False
+        self._last_login = None
+
+    def doLogin(self, user=None, groupname=None):
+        l = (user, groupname)
+        if self._has_connected and self._last_login == l:
+            return self.doConnect()
+        self.doDisconnect()
+        if user:
+            self.gateway = dbhelpers.login(user, groupname)
+        else:
+            self.gateway = dbhelpers.loginAsPublic()
+        self.doConnect()
+        self._last_login = l
+
+    def loginAsAdmin(self):
+        self.doLogin(self.ADMIN)
+
+    def loginAsAuthor(self):
+        self.doLogin(self.AUTHOR)
+
+    def loginAsUser(self):
+        self.doLogin(self.USER)
+
+    def loginAsPublic(self):
+        self.doLogin()
+
+    def tearDown(self):
+
+        try:
+            if self.gateway is not None:
+                self.gateway.close()
+        finally:
+            failure = False
+            for tmpfile in self.tmpfiles:
+                try:
+                    tmpfile.close()
+                except:
+                    print("Error closing:" + tmpfile)
+        if failure:
+            raise Exception("Exception on client.closeSession")
+
+    def getTestProject(self):
+        return dbhelpers.getProject(self.gateway, 'testpr1')
+
+    def getTestProject2(self):
+        return dbhelpers.getProject(self.gateway, 'testpr2')
+
+    def getTestDataset(self, project=None):
+        return dbhelpers.getDataset(self.gateway, 'testds1', project)
+
+    def getTestDataset2(self, project=None):
+        return dbhelpers.getDataset(self.gateway, 'testds2', project)
+
+    def getTestImage(self, dataset=None, autocreate=False):
+        return dbhelpers.getImage(self.gateway, 'testimg1', forceds=dataset,
+                                  autocreate=autocreate)
+
+    def getTestImage2(self, dataset=None):
+        return dbhelpers.getImage(self.gateway, 'testimg2', dataset)
+
+    def getBadTestImage(self, dataset=None, autocreate=False):
+        return dbhelpers.getImage(self.gateway, 'badimg', forceds=dataset,
+                                  autocreate=autocreate)
+
+    def getTinyTestImage(self, dataset=None, autocreate=False):
+        return dbhelpers.getImage(self.gateway, 'tinyimg', forceds=dataset,
+                                  autocreate=autocreate)
+
+    def getTinyTestImage2(self, dataset=None, autocreate=False):
+        return dbhelpers.getImage(self.gateway, 'tinyimg2', forceds=dataset,
+                                  autocreate=autocreate)
+
+    def getTinyTestImage3(self, dataset=None, autocreate=False):
+        return dbhelpers.getImage(self.gateway, 'tinyimg3', forceds=dataset,
+                                  autocreate=autocreate)
+
+    def getBigTestImage(self, dataset=None, autocreate=False):
+        return dbhelpers.getImage(self.gateway, 'bigimg', forceds=dataset,
+                                  autocreate=autocreate)
+
+    def get32FloatTestImage(self, dataset=None, autocreate=False):
+        return dbhelpers.getImage(self.gateway, '32float', forceds=dataset,
+                                  autocreate=autocreate)
+
+    def prepTestDB(self, onlyUsers=False, skipImages=True):
+        dbhelpers.bootstrap(onlyUsers=onlyUsers, skipImages=skipImages)
+
+    def waitOnCmd(self, client, handle):
+        callback = ode.callbacks.CmdCallbackI(client, handle)
+        callback.loop(10, 500)  # throws on timeout
+        rsp = callback.getResponse()
+        assert isinstance(rsp, ode.cmd.OK)
+        return callback
+
+    def createPDTree(self, project=None, dataset=None):
+        """
+        Create/link a Project and/or Dataset (link them if both are specified)
+        Existing objects can be parsed as an ode.model object(s) or Bhojpur ODE
+        Wrapper objects. Otherwise new objects will be created with name
+        str(project) or str(dataset). If project OR dataset is specified, the
+        ProjectWrapper or DatasetWrapper is returned. If both project and
+        dataset are specified, they will be linked and the PD-link is returned
+        as a OdeObjectWrapper.
+
+        @param project:     ode.model.ProjectDatasetLinkI
+                            OR ode.gateway.ProjectWrapper
+                            or name (string)
+        @param dataset:     ode.model.DatasetI
+                            OR ode.gateway.DatasetWrapper
+                            or name (string)
+        """
+        dsId = ds = None
+        prId = pr = None
+        returnVal = None
+        if dataset is not None:
+            try:
+                dsId = dataset.id
+                dsId = dsId.val
+            except:
+                ds = ode.model.DatasetI()
+                ds.name = rstring(str(dataset))
+                ds = self.gateway.getUpdateService().saveAndReturnObject(ds)
+                returnVal = ode.gateway.DatasetWrapper(self.gateway, ds)
+                dsId = ds.id.val
+        if project is not None:
+            try:
+                prId = project.id
+                prId = prId.val
+            except:
+                pr = ode.model.ProjectI()
+                pr.name = rstring(str(project))
+                pr = self.gateway.getUpdateService().saveAndReturnObject(pr)
+                returnVal = ode.gateway.ProjectWrapper(self.gateway, pr)
+                prId = pr.id.val
+        if dsId and prId:
+            link = ode.model.ProjectDatasetLinkI()
+            link.setParent(ode.model.ProjectI(prId, False))
+            link.setChild(ode.model.DatasetI(dsId, False))
+            link = self.gateway.getUpdateService().saveAndReturnObject(link)
+            returnVal = ode.gateway.OdeObjectWrapper(self.gateway, link)
+
+        return returnVal
+
+    def createTestImage(self, imageName="testImage", dataset=None, sizeX=16,
+                        sizeY=16, sizeZ=1, sizeC=1, sizeT=1):
+        """
+        Creates a test image of the required dimensions, where each pixel
+        value is set to the average value of x & y. If dataset (obj or name)
+        is specified, will be linked to image. If project (obj or name) is
+        specified, will be created/linked to dataset (if dataset not None)
+
+        @param dataset:     ode.model.DatasetI
+                            OR DatasetWrapper
+                            OR dataset ID
+        """
+        from numpy import fromfunction, int16
+
+        def f(x, y):
+            return x
+
+        def planeGen():
+            for p in range(sizeZ * sizeC * sizeT):
+                yield fromfunction(f, (sizeY, sizeX), dtype=int16)
+
+        ds = None
+        if dataset is not None:
+            if hasattr(dataset, "_obj"):
+                dataset = dataset._obj
+            if isinstance(dataset, ode.model.DatasetI):
+                ds = dataset
+            else:
+                try:
+                    dsId = int(dataset)
+                    ds = ode.model.DatasetI(dsId, False)
+                except:
+                    pass
+
+        image = self.gateway.createImageFromNumpySeq(
+            planeGen(), imageName, sizeZ=sizeZ, sizeC=sizeC, sizeT=sizeT,
+            dataset=ds)
+        return image
+
+    def createTestFile(self, parentpath, filename, content):
+        """
+        Creates an OriginalFile with the supplied content
+
+        @param parentpath:  Parent directory of the file
+        @param filename:    Filename
+        @param content:     String containing the content of the file
+        @return:            OriginalFileWrapper
+        """
+        sio = BytesIO(content.encode("utf-8"))
+        f = self.gateway.createOriginalFileFromFileObj(
+            sio, parentpath, filename, len(content))
+        return f

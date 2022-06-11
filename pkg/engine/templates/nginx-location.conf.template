@@ -1,0 +1,63 @@
+# Copyright (c) 2018 Bhojpur Consulting Private Limited, India. All rights reserved.
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+# THE SOFTWARE.
+#
+# These location blocks should be included in your server configuration
+# For example:
+#
+##server {
+##    listen 80;
+##    server_name $hostname;
+##
+##    # SSL configuration ...
+##
+##    sendfile on;
+##    client_max_body_size 0;
+##
+##    # Include generated file from Bhojpur ODE web config nginx-location:
+##    include /opt/ode/web/ode-web-location.include;
+##}
+
+# maintenance page serve from here
+location @maintenance%(PREFIX_NAME)s {
+    root %(ROOT)s/etc/templates/error;
+    try_files $uri /maintainance.html =502;
+}
+
+# webode django apps serve media from here
+location %(STATIC_URL)s {
+    alias %(STATIC_ROOT)s;
+}
+
+location @proxy_to_app%(PREFIX_NAME)s {
+    proxy_set_header X-Forwarded-Proto $scheme;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header Host $http_host;
+    proxy_redirect off;
+    proxy_buffering off;
+
+    proxy_pass http://%(FASTCGI_EXTERNAL)s;
+}
+
+location %(FORCE_SCRIPT_NAME)s {
+
+    error_page 502 @maintenance%(PREFIX_NAME)s;
+    # checks for static file, if not found proxy to app
+    try_files $uri @proxy_to_app%(PREFIX_NAME)s;
+}

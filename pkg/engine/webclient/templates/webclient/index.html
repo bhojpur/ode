@@ -1,0 +1,32 @@
+{% extends "webclient/login.html" %}
+{% load i18n %}
+
+{% comment %}
+<!--
+
+-->
+{% endcomment %}
+
+{% block title %}
+  Bhojpur ODE
+{% endblock %}
+
+{% block login %}
+
+    {% if error %}<h1 class="error">Following error occurred: INDEX_TEMPLATE, '{{ error }}'</h1>{% endif %}
+
+    <form class="standard_form inlined">
+      <h1 style="text-align: center">This is index template example.</h1>
+      <p id="goWebclientMsg" style="text-align: center; margin-top: 15px; margin-bottom:0px; position: relative; top:15px">
+        To <span>go</span> to the webclient, click <a href="{% url 'webindex' %}">here</a>
+      </p>
+    </form>
+
+{% endblock %}
+
+
+
+
+
+
+

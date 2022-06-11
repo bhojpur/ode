@@ -1,0 +1,114 @@
+#*
+ * Copyright (c) 2018 Bhojpur Consulting Private Limited, India. All rights reserved.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ *#
+/*
+ * 
+ */
+
+package ode.util;
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * Code-generated
+ */
+public class IceMap {
+
+        private static final Map<Class, Class> _ode2odero = new HashMap<Class, Class>();
+        private static final Map<Class, Class> _odero2ode = new HashMap<Class, Class>();
+
+        /**
+         * Unmodifiable map of ode.model.* classes to ode.model.* classes.
+         */
+        public static final Map<Class, Class> ODEtoODERO;
+
+        /**
+         * Unmodifiable map of ode.model.* classes to ode.model.* classes.
+         */
+        public static final Map<Class, Class> ODEROtoODE;
+
+        static {
+#macro(put $longtype $shorttype)
+#if(!$type.abstract)
+
+#if(!$longtype.contains("ode.model.internal.Permissions") && !$longtype.contains("ode.model.internal.Details"))
+        _ode2odero.put(${longtype}.Details.class,ode.model.DetailsI.class);
+#end
+        _ode2ode.put(${longtype}.class,ode.model.${shorttype}I.class);
+        _odero2ode.put(ode.model.${shorttype}.class,${longtype}.class);
+        _odero2ode.put(ode.model.${shorttype}I.class,${longtype}.class);
+#end
+#end
+#foreach($type in $types)
+#put($type.id $type.shortname)
+#end
+#put("ode.model.internal.Details" "Details")
+#put("ode.model.internal.Permissions" "Permissions")
+
+        //
+        // Overriding values. This is primarily a workaround and a more
+        // convenient way for specifying server-side implementation
+        // classes needs to be worked out.
+        //
+        _ode2odero.put(ode.model.roi.Ellipse.class, ode.model.SmartEllipseI.class);
+        _ode2odero.put(ode.model.roi.Line.class, ode.model.SmartLineI.class);
+        _ode2odero.put(ode.model.roi.Mask.class, ode.model.SmartMaskI.class);
+        _ode2odero.put(ode.model.roi.Path.class, ode.model.SmartPathI.class);
+        _ode2odero.put(ode.model.roi.Point.class, ode.model.SmartPointI.class);
+        _ode2odero.put(ode.model.roi.Polygon.class, ode.model.SmartPolygonI.class);
+        _ode2odero.put(ode.model.roi.Polyline.class, ode.model.SmartPolylineI.class);
+        _ode2odero.put(ode.model.roi.Rectangle.class, ode.model.SmartRectI.class);
+        _ode2odero.put(ode.model.roi.Label.class, ode.model.SmartTextI.class);
+
+        // Units
+        _ode2odero.put(ode.model.units.ElectricPotential.class, ode.model.ElectricPotentialI.class);
+        _odero2ode.put(ode.model.ElectricPotential.class, ode.model.units.ElectricPotential.class);
+        _odero2ode.put(ode.model.ElectricPotentialI.class, ode.model.units.ElectricPotential.class);
+        _ode2odero.put(ode.model.units.Frequency.class, ode.model.FrequencyI.class);
+        _odero2ode.put(ode.model.Frequency.class, ode.model.units.Frequency.class);
+        _odero2ode.put(ode.model.FrequencyI.class, ode.model.units.Frequency.class);
+        _ode2odero.put(ode.model.units.Length.class, ode.model.LengthI.class);
+        _odero2ode.put(ode.model.Length.class, ode.model.units.Length.class);
+        _odero2ode.put(ode.model.LengthI.class, ode.model.units.Length.class);
+        _ode2odero.put(ode.model.units.Power.class, ode.model.PowerI.class);
+        _odero2ode.put(ode.model.Power.class, ode.model.units.Power.class);
+        _odero2ode.put(ode.model.PowerI.class, ode.model.units.Power.class);
+        _ode2odero.put(ode.model.units.Pressure.class, ode.model.PressureI.class);
+        _odero2ode.put(ode.model.Pressure.class, ode.model.units.Pressure.class);
+        _odero2ode.put(ode.model.PressureI.class, ode.model.units.Pressure.class);
+        _ode2odero.put(ode.model.units.Temperature.class, ode.model.TemperatureI.class);
+        _odero2ode.put(ode.model.Temperature.class, ode.model.units.Temperature.class);
+        _odero2ode.put(ode.model.TemperatureI.class, ode.model.units.Temperature.class);
+        _ode2odero.put(ode.model.units.Time.class, ode.model.TimeI.class);
+        _odero2ode.put(ode.model.Time.class, ode.model.units.Time.class);
+        _odero2ode.put(ode.model.TimeI.class, ode.model.units.Time.class);
+
+        // Other
+        _ode2odero.put(ode.model.internal.NamedValue.class, ode.model.NamedValue.class);
+        _odero2ode.put(ode.model.NamedValue.class, ode.model.internal.NamedValue.class);
+
+        // Sealing
+        odetoODERO = Collections.unmodifiableMap(_ode2odero);
+        ODEROtoODE = Collections.unmodifiableMap(_odero2ode);
+    }
+}

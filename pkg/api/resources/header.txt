@@ -1,0 +1,21 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+    <head profile="http://www.w3.org/2005/10/profile">
+    <link rel="icon" 
+          type="image/vnd.microsoft.icon" 
+          href="https://static.bhojpur.net/favicon.ico">
+        <title>
+            Bhojpur ODE API Index - 
+TITLE
+        </title>
+        <style media="screen" type="text/css">
+@import "https://static.bhojpur.net/resources/styleForAPI.css";
+        </style>
+    </head>
+    <body>
+       <div id="wrapper">
+          <div id="banner">
+             <img src="https://static.bhojpur.net/image/logo.png" alt="Bhojpur Consulting">
+          </div>
+          <div id="doc-name-right" style="position: absolute;top: 117px;right: 25px;font-size: 24px;font-weight: bold;"><b>Bhojpur ODE API</b></div>
+       </div>

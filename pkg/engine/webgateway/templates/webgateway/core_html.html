@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+{% comment %}
+<!--
+
+-->
+{% endcomment %}
+
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta name="referrer" content="{{ html.meta_referrer|default:"origin-when-crossorigin" }}">
+
+    {% block link %}
+		<link rel="stylesheet" href="{% static "webgateway/css/reset.css"|add:url_suffix %}" type="text/css" />   
+		<link rel="stylesheet" href="{% static "webgateway/css/ode.body.css"|add:url_suffix %}" type="text/css" />
+		<link rel="stylesheet" href="{% static "webclient/css/dusty.css"|add:url_suffix %}" type="text/css" media="screen"/>
+    {% endblock %}
+
+    <!-- extend here to add page title -->
+    <title>
+        {% block title %}
+        {% endblock %}
+    </title>
+
+    {% block script %}
+        <!-- block for javascript <script> -->
+    {% endblock %}
+
+    {% block head %}
+        <!-- block for extra head elements (not css or javascript) E.g. icon, meta tags -->
+        {% include "webgateway/base/includes/shortcut_icon.html" %}
+    {% endblock %}
+
+</head>
+<body>
+
+{% block body %}
+
+{% endblock %}
+
+    <!-- settings.BASE_INCLUDE_TEMPLATE included here -->
+    {% if base_include_template %}
+      {% include base_include_template %}
+    {% endif %}
+</body>
+</html>

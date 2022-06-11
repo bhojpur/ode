@@ -1,0 +1,57 @@
+{% extends "base_error.html" %}
+{% load i18n %}
+
+{% comment %}
+<!--
+
+-->
+{% endcomment %}
+
+{% block title %}
+    {% trans "ODE.web - Help" %}
+{% endblock %}
+
+{% block body %}
+    <div class="bodyWrapper">
+        <h1>{% trans "ODE.web Help" %}</h1>
+
+        
+        <p>
+            {% trans "You may find the following resources useful. If you have any further questions, comments or suggestions, please use the feedback form below." %}
+        
+        <ul style="list-style: disc inside none">
+            <li>
+                <a href="https://help.bhojpur.net/">User Assistance</a>:
+                More information about the Bhojpur ODE clients.
+            </li>
+            <li>
+                <a href="https://www.bhojpur.net">Bhojpur ODE Environment</a>:
+                Home page of the Bhojpur ODE project.
+            </li>
+            <li>
+                <a href="https://www.bhojpur.net/ode">About Bhojpur ODE</a>:
+                Background and introduction to Bhojpur ODE.
+            </li>
+        </ul>
+        </p>
+
+        <hr />
+
+        <h1>{% trans "Send Feedback" %}</h1>
+        
+        <p>{% trans "Bhojpur ODE's QA system records any problem or comment you have submitted, your email address, and the IP address you are currently using. We store this information in a password-protected system. If you'd prefer us not to hold this information, please don't submit any information to Bhojpur ODE QA. Any feedback you provide will be used to further the development of the Bhojpur ODE web and improve our software." %}</p>
+
+        {% if error %}<ul class="errorlist"><li>{{ error }}</li></ul>{% endif %}
+        
+        <form action="{% url 'csend' %}" method="post" class="standard_form">{% csrf_token %}
+            {% for field in form %}
+                {% if field.field.required %}<span class="required">{{ field.label_tag }}</span>{% else %}{{ field.label_tag }}{% endif %}
+                {{ field }}
+                {% if field.errors %}{{ field.errors }}{% endif %}
+                {{ field.help_text|safe }}
+                <br/>
+            {% endfor %}
+                <input type="submit" value="Send" />
+        </form>
+    </div>
+{% endblock %}

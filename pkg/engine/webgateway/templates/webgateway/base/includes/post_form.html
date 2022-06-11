@@ -1,0 +1,10 @@
+{% load i18n %}
+{% comment %}
+<!--
+
+-->
+{% endcomment %}
+
+<form action="{{ url }}" method="post">{% csrf_token %}
+    <a href="javascript:;" onclick="parentNode.submit();">{{ submit }}</a>
+</form>

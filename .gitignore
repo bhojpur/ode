@@ -1,5 +1,19 @@
-*.swp
-*.swo
+/bin
+/build
+/dist
+
+__pycache__
+
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.egg*
+.cache
+.*un~
+*.pyc
+
 bhojpur.iml
 
 test/tmp/
@@ -30,6 +44,7 @@ bin/odectl.exe
 
 ### JetBrains
 .idea
+.gradle
 
 ### VSCode
 .vscode

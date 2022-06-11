@@ -1,0 +1,9 @@
+pluginManagement {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        maven { url 'https://artifacts.bhojpur.net/artifactory/maven/' }
+    }
+}
+
+rootProject.name = 'ode'

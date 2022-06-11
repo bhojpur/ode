@@ -1,0 +1,195 @@
+var MapAnnsPane = function MapAnnsPane($element, opts) {
+
+    var $header = $element.children('h1'),
+        $body = $element.children('div'),
+        $mapAnnContainer = $("#mapAnnContainer"),
+        objects = opts.selected,
+        canAnnotate = opts.canAnnotate;
+
+    var tmplText = $('#mapanns_template').html();
+    var mapAnnsTempl = _.template(tmplText);
+
+    var initEvents = (function initEvents() {
+
+        $header.on('click', function(){
+            $header.toggleClass('closed');
+            $body.slideToggle();
+
+            var expanded = !$header.hasClass('closed');
+            ODE.setPaneExpanded('maps', expanded);
+
+            if (expanded && $mapAnnContainer.is(":empty")) {
+                this.render();
+            }
+        }.bind(this));
+    }).bind(this);
+
+
+    var isClientMapAnn = function(ann) {
+        return ann.ns === ODE.constants.metadata.NSCLIENTMAPANNOTATION;
+    };
+    var isMyClientMapAnn = function(ann) {
+        return isClientMapAnn(ann) && ann.owner.id == WEBCLIENT.USER.id;
+    };
+
+    var annsEqual = function(annA, annB) {
+        // equal if all key-value pairs are identical and have same owner and namespace
+        var valuesA = annA.values;
+        var valuesB = annB.values;
+        if (annA.id === annB.id) return true;
+        if (annA.owner.id != annB.owner.id) return false;
+        if (annA.ns != annB.ns) return false;
+        if (valuesA.length != valuesB.length) return false;
+        for (var i=0; i<valuesA.length; i++) {
+            if (valuesA[i][0] !== valuesB[i][0] || valuesA[i][1] !== valuesB[i][1]) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    var groupDuplicateAnns = function(annList) {
+        // Try to collapse any IDENTICAL map anns that also have same owner and ns...
+        var unique_anns = [];
+        annList.forEach(function(ann){
+            var duplicate = false;
+            for (var u=0; u<unique_anns.length; u++) {
+                var unique_ann = unique_anns[u];
+                if (annsEqual(unique_ann, ann)) {
+                    // combine anns
+                    unique_ann.id = unique_ann.id + "," + ann.id;
+                    if (!unique_ann.parentNames) {
+                        unique_ann.parentNames = [unique_ann.link.parent.name];
+                    }
+                    unique_ann.parentNames.push(ann.link.parent.name);
+                    duplicate = true;
+                    break;
+                }
+            }
+            if (!duplicate) {
+                unique_anns.push(ann);
+            }
+        });
+        return unique_anns;
+    }
+
+    this.apiAnnotationUrl = function apiAnnotationUrl(url) {
+        if (!url) { return WEBCLIENT.URLS.webindex + "api/annotations/";}
+        return url;
+    }
+
+    this.render = function render() {
+
+        if ($mapAnnContainer.is(":visible")) {
+
+            if ($mapAnnContainer.is(":empty")) {
+                $mapAnnContainer.html("Loading key value annotations...");
+            }
+
+            // convert objects to json data
+            ajaxdata = {"type": "map"};
+            for (var i=0; i < objects.length; i++) {
+                var o = objects[i].split(/-(.+)/);
+                if (typeof ajaxdata[o[0]] !== 'undefined') {
+                    ajaxdata[o[0]].push(o[1]);
+                } else {
+                    ajaxdata[o[0]] = [o[1]];
+                }
+            }
+
+            $.ajax({
+                dataType: "json",
+                url: this.apiAnnotationUrl(opts.url),
+                data: ajaxdata,
+                traditional: true,
+                success: function(data){
+
+                    var experimenters = [];
+                    var batchAnn = objects.length > 1;
+                    if (data.experimenters.length > 0) {
+                        // manipulate data...
+                        // make an object of eid: experimenter
+                        experimenters = data.experimenters.reduce(function(prev, exp){
+                            prev[exp.id + ""] = exp;
+                            return prev;
+                        }, {});
+                    }
+
+                    // Populate experimenters within anns
+                    var anns = data.annotations.map(function(ann){
+                        if (data.experimenters.length > 0) {
+                            ann.owner = experimenters[ann.owner.id];
+                        }
+                        if (ann.link && ann.link.owner) {
+                            ann.link.owner = experimenters[ann.link.owner.id];
+                            // AddedBy IDs for filtering
+                            ann.addedBy = [ann.link.owner.id]; 
+                        }
+                        return ann;
+                    });
+
+                    // Sort map anns into 3 lists...
+                    var client_map_annotations = [];
+                    var my_client_map_annotations = [];
+                    var map_annotations = [];
+
+                    anns.forEach(function(ann){
+                        if (isMyClientMapAnn(ann)) {
+                            my_client_map_annotations.push(ann);
+                        } else if (isClientMapAnn(ann)) {
+                            client_map_annotations.push(ann);
+                        } else {
+                            map_annotations.push(ann);
+                        }
+                    });
+
+                    if (batchAnn) {
+                        my_client_map_annotations = groupDuplicateAnns(my_client_map_annotations);
+                        client_map_annotations = groupDuplicateAnns(client_map_annotations);
+                        map_annotations = groupDuplicateAnns(map_annotations);
+                    }
+
+                    // Update html...
+                    var html = "";
+                    var showHead = true;
+                    // If no annotations OR in batch_annotate, add placeholder to create map ann(s)
+                    if (canAnnotate) {
+                        if (my_client_map_annotations.length === 0 || batchAnn) {
+                            showHead = false;
+                            my_client_map_annotations.unshift({});   // placeholder
+                        }
+                    }
+                    // In batch_annotate view, we show which object each map is linked to
+                    var showParent = batchAnn;
+                    html = html + mapAnnsTempl({'anns': my_client_map_annotations, 'objCount': objects.length,
+                        'showTableHead': showHead, 'showNs': false, 'clientMapAnn': true, 'showParent': showParent});
+                    html = html + mapAnnsTempl({'anns': client_map_annotations,
+                        'showTableHead': false, 'showNs': false, 'clientMapAnn': true, 'showParent': showParent});
+                    html = html + mapAnnsTempl({'anns': map_annotations,
+                        'showTableHead': false, 'showNs': true, 'clientMapAnn': false, 'showParent': showParent});
+                    $mapAnnContainer.html(html);
+
+                    // re-use the ajaxdata to set Object IDS data on the parent container
+                    // removing unwanted keys first
+                    delete ajaxdata['type'];
+                    $mapAnnContainer.data('objIds', ajaxdata);
+
+                    // Finish up...
+                    ODE.linkify_element($( "table.keyValueTable" ));
+                    ODE.filterAnnotationsAddedBy();
+                    $(".tooltip", $mapAnnContainer).tooltip_init();
+                }
+            });
+        }
+    };
+
+
+    initEvents();
+
+    if (ODE.getPaneExpanded('maps')) {
+        $header.toggleClass('closed');
+        $body.show();
+    }
+
+    this.render();
+};

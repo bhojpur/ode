@@ -1,0 +1,71 @@
+{
+    "name": "bhojpur-ode",
+    "fullName": "Bhojpur ODE is a 2D/3D DICOM and other medical formats web viewer/editor",
+    "description": "Bhojpur ODE is unique 2D/3D medical volume data web viewer application. You can inspect data both in 2D and 3D modes.",
+    "version": "1.0.1",
+    "author": "Bhojpur Consulting Private Limited <info@bhojpur-consulting.com>",
+    "year": "2018",
+    "license": "Apache-2.0",
+    "licenses": [
+      {
+        "type": "Apache-2.0",
+        "url": "https://www.apache.org/licenses/LICENSE-2.0"
+      }
+    ],
+    "bugs": {
+      "url": "https://github.com/bhojpur/ode/issues"
+    },
+    "homepage": "https://ode.bhojpur.net/",
+    "private": false,
+    "dependencies": {
+      "@tensorflow/tfjs": "^1.7.4",
+      "bootstrap": "^4.5.0",
+      "daikon": "^1.2.42",
+      "eslint": "^7.27.0",
+      "filereader-stream": "^2.0.0",
+      "jquery": "^3.5.1",
+      "popper.js": "^1.16.1",
+      "react": "^16.13.1",
+      "react-bootstrap": "^1.0.1",
+      "react-bootstrap-table-next": "^3.3.5",
+      "react-dom": "^16.13.1",
+      "react-nouislider": "^2.0.1",
+      "react-redux": "^6.0.0",
+      "react-scripts": "4.0.3",
+      "redux": "^4.0.5",
+      "three": "^0.101.1",
+      "zlib": "^1.0.5"
+    },
+    "scripts": {
+      "start": "react-scripts start",
+      "build": "react-scripts build",
+      "test": "react-scripts test",
+      "lint": "eslint src/**/*.js",
+      "docker": "npm run build && docker run --name med3web -v ./build:/usr/share/nginx/html:ro -d -p 8080:80 nginx",
+      "prepare": "husky install"
+    },
+    "lint-staged": {
+      "*.js": "npm run lint"
+    },
+    "eslintConfig": {
+      "extends": "react-app"
+    },
+    "browserslist": [
+      ">0.2%",
+      "not dead",
+      "not ie > 1",
+      "not op_mini all"
+    ],
+    "devDependencies": {
+      "@babel/core": "7.14.3",
+      "canvas": "^2.6.1",
+      "eslint-plugin-react": "7.x.x",
+      "husky": "^6.0.0",
+      "lint-staged": "^11.0.0",
+      "node-pre-gyp": "^0.14.0"
+    },
+    "engines": {
+      "node": ">=12.16.1",
+      "npm": ">=6.13.4"
+    }
+  }
