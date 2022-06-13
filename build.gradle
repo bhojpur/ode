@@ -1,9 +1,29 @@
+// Copyright (c) 2018 Bhojpur Consulting Private Limited, India. All rights reserved.
+
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+// THE SOFTWARE.
+
 plugins {
     id "java-library"
-    id "net.bhojpur.ode.api" version "1.0.0"
-    id "net.bhojpur.ode.dsl" version "1.0.0"
-    id "net.bhojpur.ode.core" version "1.0.0"
-    id "net.bhojpur.ode.project" version "1.0.0"
+    // id "net.bhojpur.ode.api" version "1.0.0"
+    // id "net.bhojpur.ode.dsl" version "1.0.0"
+    // id "net.bhojpur.ode.core" version "1.0.0"
+    // id "net.bhojpur.ode.project" version "1.0.0"
     id "net.bhojpur.ode.gradle.ice-builder.slice" version "1.0.0"
 }
 
@@ -57,8 +77,16 @@ if (slice.iceVersion.contains("3.7")) {
         implementation "com.zeroc:icegrid:3.7.2"
         implementation "com.zeroc:icestorm:3.7.2"
     }
-    sourceSets.main.java {
-        srcDirs "pkg/api/v1", slice.output
+    sourceSets.main {
+        groovy {
+            srcDir "groovy"
+        }
+        resources {
+            srcDir "pkg/api/resources"
+        }
+        java {
+            srcDirs "pkg/api/v1", slice.output
+        }
     }
 } else if (slice.iceVersion.contains("3.6")) {
     slice.output = file("${generatedDir}/ice36")
@@ -66,8 +94,16 @@ if (slice.iceVersion.contains("3.7")) {
         implementation "com.zeroc:icegrid:3.6.5"
         implementation "com.zeroc:icestorm:3.6.5"
     }
-    sourceSets.main.java {
-        srcDirs "pkg/api/v1", slice.output
+    sourceSets.main {
+        groovy {
+            srcDir "groovy"
+        }
+        resources {
+            srcDir "pkg/api/resources"
+        }
+        java {
+            srcDirs "pkg/api/v1", slice.output
+        }
     }
 }
 
@@ -190,5 +226,15 @@ task compileIcedoc(type: com.zeroc.gradle.icebuilder.slice.IceDocsTask, dependsO
     footer = file("pkg/api/resources/footer.txt")
 }
 
+gradlePlugin {
+    plugins {
+        IcePlugin {
+            id = 'net.bhojpur.ode.gradle.ice-builder.slice'
+            implementationClass = 'com.zeroc.gradle.icebuilder.slice.SlicePlugin'
+        }
+    }
+}
+
 // Add publish functionality
 apply from: "publish.gradle"
+apply plugin: "net.bhojpur.ode.gradle.ice-builder.slice"

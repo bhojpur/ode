@@ -53,9 +53,17 @@ in project [WebGL Volume Rendering](https://github.com/lebarba/WebGLVolumeRender
 
 ## Build Source Code
 
-You need to install the [ZeroC ICE](https://doc.zeroc.com/ice/) for compiling `.ice` interface
-definition language files.
+You need to install `Python` >= 3.8, `Django`, and [ZeroC ICE](https://doc.zeroc.com/ice/)
+for compiling `.ice` interface definition language files.
 
 ```bash
 pip3 install zeroc-ice
+slice2py
+```
+
+Now, change directory to `pkg` and issue the following commands.
+
+```bash
+cd pkg
+python3 ./engine/manage.py runserver
 ```

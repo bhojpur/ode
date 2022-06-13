@@ -25,7 +25,7 @@ if __name__ == "__main__":
 
     import sys
     import Ice
-    import core
+    import ode
     import ode.clients
     import ode.tables
     from ode.util import Dependency

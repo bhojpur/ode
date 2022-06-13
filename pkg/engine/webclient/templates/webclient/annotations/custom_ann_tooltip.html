@@ -1,0 +1,14 @@
+
+{% comment %}
+<!--
+
+-->
+{% endcomment %}
+
+<span class="tooltip_html" style='display:none'>
+    <b>ID:</b> {{ ann.id }}<br />
+    {% if ann.ns %}<b>Namespace:</b> {{ ann.ns }}<br />{% endif %}
+    {% if ann.description %}<b>Description:</b> {{ ann.description }}<br />{% endif %}
+    <b>Owner:</b> {{ ann.getOwner.getFullName }}<br />
+    <b>Date:</b> {{ ann.creationEventDate|date:"Y-m-d H:i:s" }}
+</span>

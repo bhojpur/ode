@@ -1,0 +1,18 @@
+{% comment %}
+<!--
+
+-->
+{% endcomment %}
+
+    <!-- TABLES -->
+    {% if manager.well or manager.image %}
+    <h1 class="can-collapse closed" data-name="tables">
+        {{ label|default:"Tables" }} <span class="annotationCount">{{ tableCountsOnParents }}</span>
+    </h1>
+    <div class="annotations_section" style="display:none">
+
+        <div id="bulk_annotations_list"></div>
+
+        <div style="clear:both; margin:8px"></div>
+    </div>
+    {% endif %}

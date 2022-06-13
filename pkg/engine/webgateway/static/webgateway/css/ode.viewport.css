@@ -1,0 +1,205 @@
+/**
+ * webode_viewport - style definitions
+ 
+ * Copyright (c) 2018 Bhojpur Consulting Private Limited, India. All rights reserved.
+
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+
+/*div.webode-viewport-tiles {
+  background: transparent;
+  margin: 0;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  white-space: nowrap;
+}
+div.webode-viewport-tiles img {
+ border: medium none;
+ margin: 0;
+ padding: 0;
+ position: absolute;
+}*/
+  
+  
+.webode-viewport-vp {
+  position: absolute;
+  display: block;
+  border: 1px solid;
+  margin: 0px;
+  padding: 0px;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  background-color: #ddd;
+  top: 0px;
+  left: 15px;
+}
+
+.webode-viewport-top { 
+  position: relative;
+  height: 100%;
+}
+
+.webode-viewport-bot { 
+  position: relative;
+  left: 15px;
+  height: 15px;
+}
+
+.webode-viewport-scalebar {
+  display: none;
+  font-size: 12px;
+  font-color:#000;
+  text-align: center;
+  border: 1px solid #000;
+  background: rgba(255, 255, 255, 0.7);
+  position: absolute;
+  bottom: 50px;
+  left: 50px;
+  width: 0px;
+  height: 15px;
+  z-index: 1000;
+}
+
+.webode-viewport-msg {
+  display: none;
+  color: #F30;
+  font-weight: bold;
+  position: absolute;
+  top: 0.5em;
+  right: 0.5em;
+  z-index: 1000;
+}
+
+.webode-viewport-img {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+}
+
+/* Customizing the jquery-plugin-viewportImage classes */
+
+.image-viewer { 
+  position: relative;
+}
+
+.vslider { 
+  position: absolute;
+  width: 13px;
+  height: 100%;
+  display: block;
+  top: 0px;
+  left: 1px;
+}
+
+.hslider { 
+  position: relative;
+  height: 13px;
+  /*bottom: -3px;*/
+  display: block;
+  font-size: 0.1em;
+}
+
+.slider-line { 
+  /* width: 100%; */
+  background: #FFF;
+  font-size: 0.1em;
+}
+
+.slider-handle { 
+  background: #184A89;
+  font-size: 0.1em;
+  left: -1px; 
+  top: -1px;
+}
+
+.draggable {
+  cursor: -moz-grab;
+  cursor: pointer, auto;
+}
+
+.ondrag {
+  cursor: -moz-grabbing;
+  cursor: hand, auto;
+}
+
+.pick-pos {
+  cursor: crosshair;
+}
+
+.viewer {
+  z-index: 19;
+}
+
+.wb_zoomIn, .wb_zoom11, .wb_zoomOut {
+  position: absolute;
+  z-index: 10;
+  left: 10px;
+  width: 20px;
+}
+
+.rd-wode-ch {
+  margin-right: 5px;
+  padding: 1px 2px;
+  white-space: nowrap;
+}
+
+.squared div {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+.btnLabel {
+  padding: 1px;
+}
+
+.squared {
+  width: 49px;
+  height: 19px;
+  position: relative;
+}
+
+.fontWhite {
+  color: white;
+}
+
+/* from http://phrogz.net/tmp/canvas_image_zoom.html */
+.pixelated {
+  image-rendering:optimizeSpeed;             /* Legal fallback */
+  image-rendering:-moz-crisp-edges;          /* Firefox        */
+  image-rendering:-o-crisp-edges;            /* Opera          */
+  image-rendering:-webkit-optimize-contrast; /* Safari         */
+  image-rendering:optimize-contrast;         /* CSS3 Proposed  */
+  image-rendering:crisp-edges;               /* CSS4 Proposed  */
+  image-rendering:pixelated;                 /* CSS4 Proposed  */
+  -ms-interpolation-mode:nearest-neighbor;   /* IE8+           */
+}
+
+.lutBackground {
+  background-image: url('../img/luts_10.png');
+  background-repeat: no-repeat;
+  image-rendering: pixelated;
+}
+button>.lutBackground {
+  opacity: 0.3;
+}
+

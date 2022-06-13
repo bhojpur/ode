@@ -24,7 +24,7 @@
 import os.path
 import sys
 import logging
-import ode
+from ode import ode
 import engine.config
 import engine.clients
 import tempfile

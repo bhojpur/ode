@@ -1,0 +1,37 @@
+{% comment %}
+<!--
+
+-->
+{% endcomment %}
+
+    <!-- TAGS -->               
+    <div id="tagsPane">
+    <h1 class="can-collapse closed" data-name="tags">
+        {{ label|default:"Tags" }}
+        <span class="annotationCount">{{ annotationCounts.TagAnnotation }}</span>
+    </h1>
+    <div class="annotations_section" style="display:none">
+        
+        {% if obj_string %}
+            {% if not annotationBlocked %}
+                <a id="launch_tags_form"
+                    href="{% url 'annotate_tags' %}?{{ obj_string }}"
+                    class="btn silver btn_add">
+                    <span></span>
+                </a>
+            {% endif %}
+        {% else %}
+            {% if manager.canAnnotate %}
+                <div>
+                    <a id="launch_tags_form"
+                        href="{% url 'annotate_tags' %}?{{manager.obj_type}}={{ manager.obj_id }}" 
+                        class="btn silver btn_add" title="Add tags"><span></span></a>
+                </div>
+            {% endif %}
+        {% endif %}
+
+        <!-- display existing Tags -->
+        <div id="tags_container" class="lntags"></div>
+
+    </div>
+    </div>

@@ -19,5 +19,5 @@
 # THE SOFTWARE.
 
 ode_version = "1.0.0"
-ice_compatibility = "3.6.5"
+ice_compatibility = "3.7.7"
 build_year = "2018"

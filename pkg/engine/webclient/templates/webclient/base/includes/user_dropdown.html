@@ -1,0 +1,35 @@
+{% comment %}
+<!--
+
+-->
+{% endcomment %}
+
+{% if ode.user_dropdown %}
+{% if ode.is_public_user %}
+    <div id="public_login_button">
+        <a href="{% url ode.login_view %}">
+            <div id="show_public_login_button">
+                <img src="{% static 'webclient/image/personal32.png' %}"/>
+                <span>Login</span>
+            </div>
+        </a>
+    </div>
+{% else %}
+    <div id="user_dropdown">
+        <div id="show_user_dropdown">
+            <img src="{% url 'wamyphoto' %}" />
+            <span>{{ ode.user.getFullName }}</span>
+        </div>
+        <ul class="dropdown">
+            {% if ode.can_create %}
+              <li id="user_settings"><a href="{% url 'wamyaccount' 'edit' %}" title="User settings">
+                User settings
+              </a></li>
+            {% endif %}
+			<!-- Help -->
+            <li id="send"><a href="#" onclick="return ODE.openPopup('{% url 'csend' %}')">Send Feedback</a></li>
+			<li id="logout">{% include "webclient/base/includes/logout.html" %}</li>
+        </ul>
+    </div>
+{% endif %}{# ode.is_public_user #}
+{% endif %}{# ode.user_dropdown #}

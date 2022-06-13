@@ -1,0 +1,22 @@
+{% comment %}
+<!--
+
+-->
+{% endcomment %}
+
+    <!-- RATING -->
+    <div id="ratingsPane">
+    <h1 class="can-collapse closed" data-name="ratings">
+        {{ label|default:"Ratings" }}
+        <span class="annotationCount">{{ annotationCounts.LongAnnotation }}</span>
+    </h1>
+    <div class="annotations_section" style="display: none">
+        <!-- If we're in 'batch annotate' (obj_string) use annotationBlocked -->
+        <div id="rating_annotations"
+          {% if obj_string and not annotationBlocked %}
+              class="canAnnotate"
+          {% elif manager.canAnnotate %}
+              class="canAnnotate"
+          {% endif %}></div>
+     </div>
+     </div>

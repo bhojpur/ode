@@ -1,0 +1,52 @@
+{% comment %}
+<!--
+
+-->
+{% endcomment %}
+
+<script>
+
+$(document).ready(function() {
+
+    $("#right_panel").on('resize', function(event) {
+
+        // This behaviour is also in the metatdata_preview.html itself
+        var vpWidth = $(this).width() - 50;
+        // Use a 1:1 aspect ratio with the width.  Keep the viewport from
+        // taking up more than 75% of the available height.
+        var vpHeight = Math.max(
+            300,
+            Math.min(vpWidth, ($("#preview_tab").height() - 100) * 0.75)
+        );
+
+        if (ODE.preview_viewport) {
+            // Need to set a few sizes, then call viewport.refresh()
+            $("#viewport").css({'width': vpWidth + 'px', 'height': vpHeight + 'px'});
+            $("#viewport-vp").css({'width': vpWidth + 'px'});
+            $("#viewport-top").css({'height': vpHeight + 'px'});
+            ODE.preview_viewport.refresh(true);
+        }
+    });
+
+    $("#preview_tab").engine_right_plugin({
+        plugin_index:{{ forloop.counter }},
+        load_plugin_content: function(selected, obj_dtype, obj_id) {    // Url based on selected object(s)
+            var url;
+            var well_index = selected[0]["index"] || 0;
+            if (selected[0]["shareId"]) {
+                url = '{% url 'webindex' %}metadata_preview/'+obj_dtype+'/'+obj_id+'/'+selected[0]["shareId"] + '/';
+            } else {
+                url = '{% url 'webindex' %}metadata_preview/'+obj_dtype+'/'+obj_id + '/';
+            }
+            if (well_index > 0) {
+                url = url + '?index='+well_index;
+            }
+            //$this.html("<h1 style='padding: 20px 15px'>Loading...</h1>");
+            $(this).load(url);
+        },
+        supported_obj_types: ['image', 'well']
+    });
+
+});
+
+</script>

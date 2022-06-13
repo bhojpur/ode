@@ -1,0 +1,62 @@
+
+{% load i18n %}
+{% load common_filters %}
+
+{% comment %}
+<!--
+
+-->
+{% endcomment %}
+
+{% comment %}
+<!--
+  This is the content of a form for choosing existing file-annotations.
+  Loaded by AJAX into a form dialog.
+-->
+{% endcomment %}
+<script type="text/javascript">
+    $(document).ready(function(){
+        $(":button:contains('Accept')",
+            $("#choose_attachments_form").parent()).prop("disabled", true).addClass(
+                'ui-state-disabled');
+        
+        $('#id_annotation_file, #id_files').on('change',
+            function(){
+                if ($(this).val()){
+                    $(":button:contains('Accept')",
+                        $("#choose_attachments_form").parent()
+                            ).prop("disabled", false).removeClass('ui-state-disabled');
+                }
+                else {
+                    $(":button:contains('Accept')",
+                        $("#choose_attachments_form").parent()).prop("disabled", true).addClass(
+                            'ui-state-disabled');
+            }
+        });
+        
+    });
+</script>
+
+<div>
+
+    <h1>{% trans "Upload a new file" %}:</h1>
+    <span>Choose a local file to upload and attach</span>
+    {{ form_file.annotation_file }}
+</div>
+
+<p>
+    <h1>And/or attach an existing File:</h1>
+    <span>Select the attachments to add</span>
+    
+    <div>{{ form_file.files }}</div>
+    <!-- hidden fields used to specify the objects we're tagging -->
+    <div class="hiddenField">{{ form_file.image }}</div>
+    <div class="hiddenField">{{ form_file.dataset }}</div>
+    <div class="hiddenField">{{ form_file.project }}</div>
+    <div class="hiddenField">{{ form_file.screen }}</div>
+    <div class="hiddenField">{{ form_file.plate }}</div>
+    <div class="hiddenField">{{ form_file.acquisition }}</div>
+    <div class="hiddenField">{{ form_file.well }}</div>
+    <div class="hiddenField"><input type="text" name="index" value="{{ index }}"/></div>
+
+</p>

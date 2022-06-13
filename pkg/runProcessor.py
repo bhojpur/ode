@@ -25,7 +25,7 @@
 
 import sys
 import Ice
-import core
+import ode
 from ode.processor import ProcessorI
 
 if __name__ == "__main__":

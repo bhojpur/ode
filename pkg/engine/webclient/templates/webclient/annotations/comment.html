@@ -1,0 +1,49 @@
+{% load i18n %}
+{% load common_filters %}
+{% load wikitags %}
+
+{% comment %}
+<!--
+
+-->
+{% endcomment %}
+
+{% comment %}
+<!--
+  This comment block is used as an 'include' in the metadata_general panel and is also used in the 
+  add-comment AJAX response, to add new comment blocks to the metadata_general panel.
+-->
+{% endcomment %}
+
+<div class="ann_comment_wrapper" data-added-by="{{ added_by }}">
+
+    <div class="avatar">
+		<img src="{% url 'avatar' tann.details.owner.id.val %}" alt="{{ tann.getOwner.getFullName }}" title="{{ tann.getOwner.getFullName }}" />
+	</div>
+
+    <div class="ann_comment_text tooltip">
+        <div class="ann_comment_header">
+            <strong>{{ tann.getOwner.getFullName }}</strong> 
+            {% trans "at" %} 
+            {{ tann.creationEventDate|date:"Y-m-d H:i:s" }}
+        </div>
+    
+        {% if tann.canDelete %}
+            <img class='removeComment' id="{{ tann.id }}-comment" src="{% static "webclient/image/icon_basic_delete.png"%}" 
+                url='{% url 'manage_action_containers' "remove" %}comment/{{ tann.id }}/' title="Delete comment"/>
+        {% endif %}
+    
+        <div class='commentText'>
+        {{ tann.getTextValue|escape|linebreaksbr }}
+        </div>
+    </div>
+
+    {% if tann.ns or tann.description %}
+    <span class="tooltip_html" style='display:none'>
+        <b>ID:</b> {{ tann.id }}<br />
+        {% if tann.ns %}<b>Namespace:</b> {{ tann.ns }}<br />{% endif %}
+        {% if tann.description %}<b>Description:</b> {{ tann.description|escape }}<br />{% endif %}
+    </span>
+    {% endif %}
+
+</div>

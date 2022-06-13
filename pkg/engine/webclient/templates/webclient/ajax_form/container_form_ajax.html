@@ -1,0 +1,19 @@
+{% load i18n %}
+
+{% comment %}
+<!--
+
+-->
+{% endcomment %}
+
+{% if form %}
+
+<form method="post">{% csrf_token %}
+    <table class="form">
+    {% for field in form %}
+        <tr><td>{{ field }}<p class="error">{% if field.errors %}{{ field.errors }}{% endif %}</p></td><td>{{ field.help_text|safe }}</td></tr>
+    {% endfor %}
+    </table>
+</form>
+
+{% endif %}

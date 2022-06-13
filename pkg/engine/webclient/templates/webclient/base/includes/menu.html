@@ -1,0 +1,23 @@
+{% load i18n %}
+{% comment %}
+<!--
+
+-->
+{% endcomment %}
+
+<ul>
+    <!-- Handle links from settings -->
+    {% for link in ode.top_links %}
+        <li class="menu_link">
+          <a href="{{ link.link }}"
+            {% if link.attrs %}
+              {% for k, v in link.attrs.items %} {{ k }}="{{v}}"{% endfor %}
+            {% endif %}
+          >{{ link.label }}</a>
+        </li>
+    {% endfor %}
+
+    {% if ode.is_admin %}
+        <li class="admin"><a href="{% url 'waindex' %}" title="Web-Admin: Edit users and groups">{% trans "Admin" %}</a></li>
+    {% endif %}
+</ul>

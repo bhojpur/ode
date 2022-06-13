@@ -28,13 +28,12 @@
 """
 
 import Ice
-import core
+import ode
 from ode.rtypes import rint, rbool, rtime, rlist, rstring, rlong
 
 _ode = Ice.openModule("core")
 _ode_sys = Ice.openModule("ode.sys")
 __name__ = "ode.sys"
-
 
 class ParametersI(ode.sys.Parameters):
     """

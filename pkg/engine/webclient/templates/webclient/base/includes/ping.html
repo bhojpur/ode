@@ -1,0 +1,28 @@
+{% comment %}
+<!--
+
+-->
+{% endcomment %}
+
+{% comment %}
+<!--
+  This include is an AJAX 'ping' that simply keeps the Bhojpur ODE session alive while the webpage is open.
+  The Bhojpur ODE session timeout can be configured by $ bin/ode config set ode.sessions.timeout 600000    # millisecs (10 mins by default)
+  The webclient ping interval can be configured by $ bin/ode config set ode.web.ping_interval 60000  # millisecs (1 min by default)
+  NB: keepalive can be disabled with $ bin/ode config set ode.web.ping_interval 0
+-->
+{% endcomment %}
+
+{% if ping_interval %}
+
+<script>
+    $(document).ready(function() {
+        
+        var ping_interval = {{ ping_interval }};
+        var i = setInterval(function (){
+            $.get("{% url 'keepalive_ping' %}");
+        }, ping_interval);
+    });
+</script>
+
+{% endif %}

@@ -1,0 +1,22 @@
+{% comment %}
+<!--
+
+-->
+{% endcomment %}
+
+
+<div class="toolbar_dropdown">
+    <button class="btn silver btn_figscripts" title="Publishing Options">
+        <span></span>
+    </button>
+    <ul id="figScriptList" class="dropdown">
+        {% for script in figScripts %}
+        <li {% if not script.enabled %}class="disabled"{% endif %}
+            title="{{ script.tooltip }}">
+            <a href="{% url 'figure_script' script.id %}">
+                {{ script.name }}...
+            </a>
+        </li>
+        {% endfor %}
+    </ul>
+</div>

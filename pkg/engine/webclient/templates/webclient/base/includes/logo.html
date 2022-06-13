@@ -1,0 +1,18 @@
+{% load i18n %}
+{% comment %}
+<!--
+
+-->
+{% endcomment %}
+
+<a id="logo"
+{% if ode.logo_href %}
+    href="{{ ode.logo_href }}"
+  {% endif %}
+>
+  {% if ode.logo_src %}
+    <img src="{{ ode.logo_src }}" />
+  {% else %}
+    <img src="{% static "webgateway/img/logo2.png" %}"/>
+  {% endif %}
+</a>

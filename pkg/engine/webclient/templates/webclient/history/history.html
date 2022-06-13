@@ -1,0 +1,64 @@
+{% extends "webclient/base/base_container.html" %}
+{% load i18n %}
+
+{% comment %}
+<!--
+
+-->
+{% endcomment %}
+
+{% block link %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static "webclient/css/calendar.css"|add:url_suffix %}" type="text/css" media="screen"/>
+    <link rel="stylesheet" href="{% static "webgateway/css/ode.table.css"|add:url_suffix %}" type="text/css" media="screen"/>
+{% endblock %}
+
+{% block script %}
+    {{ block.super }}
+    
+    <script type="text/javascript">
+        $(document).ready(function() 
+            {
+                $("div#history_calendar").html('<p>{% trans "Loading calendar... please wait" %} <img src ="{% static "webgateway/img/spinner.gif" %}"/></p>');
+                $("div#history_calendar").load('{% url 'load_calendar' %}');
+
+                ODE.table_selection_changed();    // selects nothing
+
+                $("#filtersearch label").inFieldLabels();
+        })
+    </script>
+
+{% endblock %}
+
+{% block left %}
+	
+	<div id="history_calendar"></div>
+	
+{% endblock %}
+
+{% block center %}
+
+	<div id="center_panel_header" >
+		
+		<form class="search filtersearch" id="filtersearch" action="#">
+            <div>
+                <label for="id_search">
+		            Filter Results
+		        </label>
+			    <input type="text" id="id_search" value="">
+			</div>
+			<input type="submit" value="Go" />
+			<span class="loading" style="display:none">
+				<img class="loader" alt="Loading" src="{% static "webgateway/img/spinner.gif" %}">
+			</span>
+		</form>
+
+		{% comment %}
+		<h1>{{ eContext.breadcrumb.2 }} {{ eContext.breadcrumb.1 }} {% if controller.day_items_size %}{{ controller.total_items_size }} {% plural controller.total_items_size 'item' 'items' %}{% endif %}</h1>
+		{% endcomment %}
+		
+	</div>
+
+<div id="content_details" class="center_panel_content"> </div>
+
+{% endblock %}

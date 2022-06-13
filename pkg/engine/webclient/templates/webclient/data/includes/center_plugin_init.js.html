@@ -1,0 +1,33 @@
+{% comment %}
+<!--
+
+-->
+{% endcomment %}
+
+<script type="text/javascript">
+
+    if (typeof ODE === "undefined") {ODE = {}}
+    // set the enabled status of the option to select a plugin. Set by index (0-based)
+    ODE.set_center_plugin_enabled = function (index, enabled) {
+        // the first 'plugin' is actually the second option (first is thumbnails)
+        var $plugin_option = $('#center_panel_chooser select option:nth-child('+ (index+1) +')');
+        if (enabled) {
+            $plugin_option.prop('disabled', false);
+        } else {
+            $plugin_option.prop('disabled', true);
+        }
+    }
+
+    $(document).ready(function() {
+        $(".center_panel_content").hide();
+        $("#content_details").show();
+
+        $('#center_panel_chooser select').on('change', function() {
+            var panel_id = this.options[this.selectedIndex].value;
+            $(".center_panel_content").hide();
+            $(panel_id).show();
+            // other listeners are bound to the parent element (independent of chooser being <select>)
+            $('#center_panel_chooser').trigger("center_plugin_changed.ode");
+        });
+    });
+</script>

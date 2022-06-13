@@ -1,0 +1,34 @@
+{% load i18n %}
+
+{% comment %}
+<!--
+
+-->
+{% endcomment %}
+
+<div class="clear"> </div>
+
+{% if manager.paging %}
+<div class="paging" id="page" data-page="{{ manager.paging.page }}"> 
+    {% if manager.paging.prev %}
+        <input onclick="ODE.doPagination({{ manager.paging.prev }});" class="button_pagination" type="button" value="Previous" alt="Previous"/>
+    {% endif %} {% trans "Page" %}:
+    
+    {% for p in manager.paging.total %}
+        {% ifequal manager.paging.page p %}
+            {{ p }} 
+        {% else %}
+            {% ifequal p -1 %}
+                ...
+            {% else %}
+                <input onclick="ODE.doPagination({{ p }});" class="button_pagination" type="button" value="{{ p }}" alt="{{ p }}"/>
+            {% endifequal %}
+        {% endifequal %}
+    {% endfor %}
+    {% if manager.paging.next %}
+        <input onclick="ODE.doPagination({{ manager.paging.next }});" class="button_pagination" type="button" value="Next" alt="Next"/>
+    {% endif %}
+
+</div>
+<div class="clear"> </div>
+{% endif %}

@@ -42,7 +42,7 @@ try:
     if compat[0:2] != vers[0:2]:
         msg = """
 
-        ERROR: Zero-C Ice version mismatch!
+        Bhojpur ODE: [ERROR] Zero-C Ice version mismatch!
 
         Your Bhojpur ODE code has been compiled using Ice version %s
         but you seem to have Ice version %s installed. If you need
@@ -74,8 +74,8 @@ def client_wrapper(*args, **kwargs):
 
     @return:    See above
     """
-    import core.gateway
-    return core.gateway.OdeGateway(*args, **kwargs)
+    import ode.gateway
+    return ode.gateway.OdeGateway(*args, **kwargs)
 
 def client(*args, **kwargs):
     import ode.clients

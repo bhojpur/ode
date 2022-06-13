@@ -1,0 +1,51 @@
+{% comment %}
+<!--
+
+-->
+{% endcomment %}
+
+<script type="text/javascript">
+
+
+    $(document).ready(function(){
+
+        $('body').on('click', function(event) {
+            if (!$(event.target).hasClass("scriptButton")) {
+                ODE.hideScriptList();
+            }
+        });
+        // Loading Scripts with AJAX for drop-down menu, (only the first time we click)
+
+        // handles clicking on a script (if href is not '#')
+        $("#scriptList.sub_menu").on('click', 'a', ODE.openScriptWindow);
+
+        $("#scriptList.sub_menu").on('click', 'a', function(event) {
+            var $a = $(event.target),
+                script_url = $a.attr('href');
+            if (script_url != "#") {
+                // Clicked on script - handled by ODE.openScriptWindow above
+                $("#scriptList").hide();
+                return false;
+            }
+
+            // we have clicked on <a> within a <li>, with sibling <ul>
+            var $li = $a.parent(),
+                $ul = $li.children('ul');
+            if ($li.hasClass('menu_back')) {
+                $li.parent().parent().siblings().show();
+                $li.parent().hide();
+                $li.parent().siblings('a').show();
+            } else {
+                $ul.show();
+                $li.siblings().hide();
+                $a.hide();
+            }
+        });
+
+        $("#scriptButton").on('click',
+            {webindex: "{% url 'webindex' %}"},
+            ODE.showScriptList
+        );
+    });
+
+</script>

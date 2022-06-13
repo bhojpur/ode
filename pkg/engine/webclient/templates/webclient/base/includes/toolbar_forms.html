@@ -1,0 +1,43 @@
+{% load i18n %}
+{% load common_filters %}
+
+{% comment %}
+<!--
+
+-->
+
+{% endcomment %}
+
+<script type="text/javascript">
+if (typeof ODE === "undefined") { ODE={}; }
+
+    ODE.createShare = function() {
+        $("#create_share_form").dialog("open");
+        return false;
+    }
+
+    $(document).ready(function(){
+
+        $("#create_share_form").dialog({
+            title: "Shares not supported",
+            autoOpen: false,
+            resizable: true,
+            height: 250,
+            width:450,
+            modal: true,
+            buttons: {
+                "OK": function() {
+                    $( this ).dialog( "close" );
+                }
+            }
+        });
+    });
+</script>
+
+<!-- hidden dialog -->
+<div id="create_share_form" style="display:none">
+    <p>Share functionality is no longer supported.</p>
+    <p>Please see <a target="_blank" href="https://www.bhojpur.net/ode/features/share/">Sharing your data in Bhojpur ODE</a>
+        for alternative workflows.
+    </p>
+</div>

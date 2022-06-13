@@ -1,0 +1,24 @@
+{% load i18n %}
+
+{% comment %}
+<!--
+
+-->
+{% endcomment %}
+
+{% comment %}
+<!--
+  This page is designed as an AJAX response, to be used in a drop-down menu, currently used by 'annotations/metadata-general.html' 
+-->
+{% endcomment %}
+
+{% for folder in scriptMenu %}
+    <li>
+        <a href="#" title="{{ folder.path }}">{{ folder.name }}</a>
+        <ul>
+            {% for script in folder.scripts %}
+            <li><a href="{% url 'script_ui' script.0 %}">{{ script.1 }}...</a></li>
+            {% endfor %}
+        </ul>
+    </li>
+{% endfor %}

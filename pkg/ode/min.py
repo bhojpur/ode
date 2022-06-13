@@ -21,17 +21,17 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-
 # This file is an import-only file providing a mechanism for other files to
 # import a range of modules in a controlled way. It could be made to pass
 # flake8 but given its simplicity it is being marked as noqa for now.
 #
 # flake8: noqa
 
-import core
+import ode
 import IceImport
-if core.__import_style__ is None:
-    core.__import_style__ = "min"
+
+if ode.__import_style__ is None:
+    ode.__import_style__ = "min"
 
 # Internal types
 IceImport.load("ode_model_NamedValue_ice")
@@ -51,4 +51,4 @@ IceImport.load("ode_Constants_ice")
 
 IceImport.load("Glacier2_Router_ice")
 
-import core.rtypes
+import ode.rtypes

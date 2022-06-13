@@ -37,14 +37,14 @@ import traceback
 
 from os import W_OK
 
-import core  # Do we need both??
-import core.clients
-import core.callbacks
+import ode  # Do we need both??
+import ode.clients
+import ode.callbacks
 
 # For ease of use
-from core.columns import columns2definition
-from core.rtypes import rfloat, rlong, rstring, unwrap
-from core.util.decorators import locked
+from ode.columns import columns2definition
+from ode.rtypes import rfloat, rlong, rstring, unwrap
+from ode.util.decorators import locked
 from extras.path import path
 from extras import portalocker
 from functools import wraps

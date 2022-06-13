@@ -1,0 +1,24 @@
+{% load i18n %}
+
+{% comment %}
+<!--
+
+-->
+{% endcomment %}
+
+<h2>{% trans "Most recent tags" %}:</h2>
+{% if controller.mostRecentTags %}
+    <div class="tags">
+            {% for key,value in controller.mostRecentTags.items %}
+              
+				<span class="tag_annotation_wrapper">
+					<div class="tag">
+						<a class="tag_inner" href="{% url 'load_template' "usertags" %}{% if not value.obj.isOwned %}?experimenter={{  value.obj.getOwner.id }}{% endif %}" class="tag" target="_top">{{ value.obj.textValue|escape }}</a>
+					</div>
+				</span>	
+           
+		    {% endfor %}
+    </div>
+{% else %}
+    <div><p>{% trans "No tags." %}</p></div>
+{% endif %}
