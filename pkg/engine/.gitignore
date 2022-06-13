@@ -1,3 +1,6 @@
 db.sqlite3
 django
 *.DS_Store
+bin
+lib
+__pycache__

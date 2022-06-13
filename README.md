@@ -53,6 +53,8 @@ in project [WebGL Volume Rendering](https://github.com/lebarba/WebGLVolumeRender
 
 ## Build Source Code
 
+### Code Generator
+
 You need to install `Python` >= 3.8, `Django`, and [ZeroC ICE](https://doc.zeroc.com/ice/)
 for compiling `.ice` interface definition language files.
 
@@ -61,9 +63,21 @@ pip3 install zeroc-ice
 slice2py
 ```
 
+### Web Forms
+
+You can build it using `node.js`
+
+```bash
+cd pkg/webui
+npm install
+node_modules/webpack/bin/webpack.js --progress
+```
+
+### Web Application
+
 Now, change directory to `pkg` and issue the following commands.
 
 ```bash
 cd pkg
-python3 ./engine/manage.py runserver
+python3 ./engine/manage.py runserver 0:8000
 ```

@@ -1,0 +1,6 @@
+*.egg
+*.pyc
+var
+build
+dist/
+target/
