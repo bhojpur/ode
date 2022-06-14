@@ -24,7 +24,7 @@ plugins {
     // id "net.bhojpur.ode.dsl" version "1.0.0"
     // id "net.bhojpur.ode.core" version "1.0.0"
     // id "net.bhojpur.ode.project" version "1.0.0"
-    id "net.bhojpur.ode.gradle.ice-builder.slice" version "1.0.0"
+    // id "net.bhojpur.ode.gradle.ice-builder.slice" version "1.0.0"
 }
 
 group = "net.bhojpur.ode"
@@ -69,6 +69,14 @@ dependencies {
 
 configurations.all {
     exclude group: 'com.google.code.findbugs'
+}
+
+slice {
+    java {
+        include = [file("${generatedSliceDir}")]
+        files = fileTree(dir: file("${generatedSliceDir}"), include: "**/*.ice")
+        args = "--tie"
+    }
 }
 
 if (slice.iceVersion.contains("3.7")) {
@@ -166,14 +174,6 @@ api {
 task copySliceFiles(type: Copy, dependsOn: "generateIce") {
     from "pkg/api/api/v1"
     into "${generatedSliceDir}"
-}
-
-slice {
-    java {
-        include = [file("${generatedSliceDir}")]
-        files = fileTree(dir: file("${generatedSliceDir}"), include: "**/*.ice")
-        args = "--tie"
-    }
 }
 
 tasks.addRule("Pattern: pythonTask<ID>") { String taskName ->

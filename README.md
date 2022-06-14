@@ -53,14 +53,33 @@ in project [WebGL Volume Rendering](https://github.com/lebarba/WebGLVolumeRender
 
 ## Build Source Code
 
-### Code Generator
+The `Bhojpur ODE` platform core components are developed using several technologies (e.g.
+`Groovy`, `Gradle`, `Ice`, `Python`, `Node.js`).
 
-You need to install `Python` >= 3.8, `Django`, and [ZeroC ICE](https://doc.zeroc.com/ice/)
-for compiling `.ice` interface definition language files.
+### Pre-requisites
+
+You need to install [ZeroC ICE](https://doc.zeroc.com/ice/) for compiling `.ice` interface
+definition language files. For example, on a `macOS` operating system
 
 ```bash
-pip3 install zeroc-ice
-slice2py
+brew install zeroc-ice/tap/ice
+brew install ice
+brew install zeroc-ice/tap/ice-builder-xcode
+slice2cpp -v
+slice2java -v
+sudo pip3 install zeroc-ice
+slice2py -v
+brew install --cask zeroc-ice/tap/icegridgui
+export ODEDIR==$(pwd)
+```
+
+### Code Generator
+
+You need to install `Python` >= 3.8, `Django`, `Pillow`, `numpy`, `tables`, `mox3`, and
+other software libraries.
+
+```bash
+sudo pip3 install -U -r requirements.txt
 ```
 
 ### Web Forms

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 # Copyright (c) 2018 Bhojpur Consulting Private Limited, India. All rights reserved.
@@ -57,7 +57,7 @@ MIMETYPE = "text/x-python"
 HELP = """Support for launching, uploading and otherwise managing \
 ODE.scripts"""
 
-DEMO_SCRIPT = """#!/usr/bin/env python
+DEMO_SCRIPT = """#!/usr/bin/env python3
 import ode
 import ode.rtypes as rtypes
 import ode.scripts as scripts
