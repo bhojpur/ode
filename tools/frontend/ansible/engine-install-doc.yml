@@ -1,0 +1,21 @@
+---
+- hosts: all
+  tasks:
+    - name: Clean doc
+      file:
+        path: "{{ path }}/doc/engine-install-{{ prefix }}.rst"
+        state: absent
+      when: clean
+    - name: Create doc dir
+      file:
+        path: "{{ path }}/doc"
+        state: directory
+        mode: 0755
+    - name: Generate engine-install-{{ prefix }}.rst
+      template:
+        src: "engine-install-doc.txt.j2"
+        dest: "{{ path }}/doc/engine-install-{{ prefix }}.rst"
+
+  vars:
+    - doc: True
+    - prefix: "{{ os }}-ice{{ ice_version }}"

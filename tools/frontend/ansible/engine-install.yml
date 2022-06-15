@@ -1,0 +1,136 @@
+---
+
+- hosts: all
+  tasks:
+    - name: Delete {{ os }}-{{ prefix }} dir (clean {{ clean }})
+      file:
+        path: "{{ path }}/{{ prefix }}"
+        state: absent
+      when: clean
+    - name: Create {{ os }}-{{ prefix }} dir
+      file:
+        path: "{{ path }}/{{ prefix }}"
+        state: directory
+        mode: 0755
+    - name: Generate engine-install-{{ prefix }}
+      template:
+        src: "engine-install.sh.j2"
+        dest: "{{ path }}/engine-install-{{ prefix }}"
+        mode: a+x
+
+    - name: Generate common/create_user.sh
+      template:
+        src: "common/create_user.sh.j2"
+        dest: "{{ path }}/{{ prefix }}/create_user.sh"
+        mode: a+x
+      when: ode_user|default(None) != None
+
+    - name: Generate common/engine_configure.sh
+      template:
+        src: "common/engine_configure.sh.j2"
+        dest: "{{ path }}/{{ prefix }}/engine_configure.sh"
+        mode: a+x
+    - name: Generate common/virtualenv.sh
+      template:
+        src: "common/virtualenv.sh.j2"
+        dest: "{{ path }}/{{ prefix }}/virtualenv.sh"
+        mode: a+x
+    - name: Generate common/install.sh
+      template:
+        src: "common/install.sh.j2"
+        dest: "{{ path }}/{{ prefix }}/install.sh"
+        mode: a+x
+    - name: Generate common/install_web_session.sh
+      template:
+        src: "common/install_web_session.sh.j2"
+        dest: "{{ path }}/{{ prefix }}/install_web_session.sh"
+        mode: a+x
+    - name: Generate common/web_session_configure.sh
+      template:
+        src: "common/web_session_configure.sh.j2"
+        dest: "{{ path }}/{{ prefix }}/web_session_configure.sh"
+        mode: a+x
+    - name: Generate common/install_whitenoise.sh
+      template:
+        src: "common/install_whitenoise.sh.j2"
+        dest: "{{ path }}/{{ prefix }}/install_whitenoise.sh"
+        mode: a+x
+    - name: Generate common/whitenoise_configuration.sh
+      template:
+        src: "common/whitenoise_configuration.sh.j2"
+        dest: "{{ path }}/{{ prefix }}/whitenoise_configuration.sh"
+        mode: a+x
+    - name: Generate common/install_cors.sh
+      template:
+        src: "common/install_cors.sh.j2"
+        dest: "{{ path }}/{{ prefix }}/install_cors.sh"
+        mode: a+x
+    - name: Generate common/cors_configuration.sh
+      template:
+        src: "common/cors_configuration.sh.j2"
+        dest: "{{ path }}/{{ prefix }}/cors_configuration.sh"
+        mode: a+x
+    - name: Generate {{ prefix }}/deps.sh
+      template:
+        src: "{{ os }}/deps.sh.j2"
+        dest: "{{ path }}/{{ prefix }}/deps.sh"
+        mode: a+x
+    - name: Generate {{ prefix }}/deps_ice{{ ice_version }}.sh
+      template:
+        src: "{{ os }}/deps_ice{{ ice_version }}.sh.j2"
+        dest: "{{ path }}/{{ prefix }}/deps_ice{{ ice_version }}.sh"
+        mode: a+x
+      when: "{{ ice_version }}"
+    - name: Generate {{ prefix }}/deps_web_session.sh
+      template:
+        src: "{{ os }}/deps_web_session.sh.j2"
+        dest: "{{ path }}/{{ prefix }}/deps_web_session.sh"
+        mode: a+x
+
+    - name: Generate {{ prefix }}/nginx.sh
+      template:
+        src: "{{ os }}/nginx.sh.j2"
+        dest: "{{ path }}/{{ prefix }}/nginx.sh"
+        mode: a+x
+
+    - name: Generate {{ prefix }}/selinux.sh
+      template:
+        src: "{{ os }}/selinux.sh.j2"
+        dest: "{{ path }}/{{ prefix }}/selinux.sh"
+        mode: a+x
+      when: selinux
+
+    - name: Generate {{ prefix }}/daemon.sh
+      template:
+        src: "{{ os }}/daemon.sh.j2"
+        dest: "{{ path }}/{{ prefix }}/daemon.sh"
+        mode: a+x
+      when: daemon
+
+    - name: Generate ode-web-systemd.service.sh (centos)
+      template:
+        src: "{{ os }}/ode-web-systemd.service.j2"
+        dest: "{{ path }}/{{ prefix }}/ode-web-systemd.service"
+      when: (os | regex_findall("centos"))
+    - name: Generate ode-web-init.d (ubuntu/debian)
+      template:
+        src: "{{ os }}/ode-web-init.d.j2"
+        dest: "{{ path }}/{{ prefix }}/ode-web-init.d"
+      when: (os | regex_findall("ubuntu")) or (os | regex_findall("debian"))
+
+    - name: Generate run.sh (ubuntu/debian/osx)
+      template:
+        src: "{{ os }}/run.sh.j2"
+        dest: "{{ path }}/{{ prefix }}/run"
+        mode: a+x
+      when: (os | regex_findall("ubuntu")) or os=="osx" or (os | regex_findall("debian"))
+
+    - name: Generate init.sh (osx)
+      template:
+        src: "{{ os }}/init.sh.j2"
+        dest: "{{ path }}/{{ prefix }}/init.sh"
+        mode: a+x
+      when: os=="osx"
+
+  vars:
+    prefix: "{{ os }}-ice{{ ice_version }}"

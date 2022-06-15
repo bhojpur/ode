@@ -82,8 +82,8 @@ slice {
 if (slice.iceVersion.contains("3.7")) {
     slice.output = file("$generatedDir/ice37")
     dependencies {
-        implementation "com.zeroc:icegrid:3.7.2"
-        implementation "com.zeroc:icestorm:3.7.2"
+        implementation "com.zeroc:icegrid:3.7.7"
+        implementation "com.zeroc:icestorm:3.7.7"
     }
     sourceSets.main {
         groovy {

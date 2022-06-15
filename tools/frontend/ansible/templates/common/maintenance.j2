@@ -1,0 +1,33 @@
+{% if doc %}
+You can manage the sessions using the following configuration options and commands:
+
+-  Session cookies :property:`ode.web.session_expire_at_browser_close`:
+
+   -  A boolean that determines whether to expire the session when the user
+      closes their browser.
+      See :djangodoc:`Django Browser-length sessions vs. persistent
+      sessions documentation <topics/http/sessions/#browser-length-vs-persistent-sessions>`
+      for more details. The default value is ``True``::
+
+          ode config set ode.web.session_expire_at_browser_close "True"
+
+   -  The age of session cookies, in seconds. The default value is ``86400``::
+
+          ode config set ode.web.session_cookie_age 86400
+
+- Clear session:
+
+  Each session for a logged-in user in ODE.web is kept in the session 
+  store. Stale sessions can cause the store to grow with time. ODE.web 
+  uses by default the OS file system as the session store backend and 
+  does not automatically purge stale sessions, see
+  :djangodoc:`Django file-based session documentation <topics/http/sessions/#using-file-based-sessions>` for more details. It is therefore the responsibility of the Bhojpur ODE 
+  administrator to purge the session cache using the provided management command::
+      
+      ode web clearsessions
+
+  It is recommended to call this command on a regular basis, for example 
+  as a :download:`daily cron job <../../ode-web-cron>`, see
+  :djangodoc:`Django clearing the session store documentation <topics/http/sessions/#clearing-the-session-store>` for more information.
+
+{% endif %}

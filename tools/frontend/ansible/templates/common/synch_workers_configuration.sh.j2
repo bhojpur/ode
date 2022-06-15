@@ -1,0 +1,7 @@
+{% if doc %}
+To find out more about the number of worker threads for handling requests, see `Gunicorn threads <https://docs.gunicorn.org/en/stable/settings.html#threads>`_. Additional settings can be configured by changing the following properties::
+
+    ode config set ode.web.wsgi_worker_class
+    ode config set ode.web.wsgi_threads $(2-4 x NUM_CORES)
+
+{% endif %}

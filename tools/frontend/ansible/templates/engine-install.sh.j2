@@ -1,0 +1,69 @@
+#!/bin/bash
+
+# Copyright (c) 2018 Bhojpur Consulting Private Limited, India. All rights reserved.
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+# THE SOFTWARE.
+
+set -e -u -x
+
+{% include 'common/arg_vars.j2' with context %}
+
+path=`dirname $0`/{{ os }}-ice{{ ice_version }}
+
+{% if ode_user %}
+bash $path/create_user.sh
+{% endif %}
+
+# install other dependencies
+bash $path/deps.sh
+
+bash $path/virtualenv.sh
+
+# install ZeroC IcePy
+bash $path/deps_ice{{ ice_version }}.sh
+
+# install Bhojpur ODE web
+bash $path/install.sh
+
+su - {{ ode_user }}  -c "ODEDIR=$ODEDIR WEBPORT=$WEBPORT WEBPREFIX=$WEBPREFIX WEBSERVER_CONF=$WEBSERVER_CONF WEBSERVER_NAME=$WEBSERVER_NAME bash $path/engine_configure.sh"
+
+if [[ $WEBSESSION = *[!\ ]* ]]; then
+    bash $path/deps_web_session.sh
+    bash $path/install_web_session.sh
+    su - {{ ode_user }}  -c "ODEDIR=$ODEDIR bash $path/web_session_configure.sh"
+fi
+
+bash $path/install_cors.sh
+
+su - {{ ode_user }}  -c "ODEDIR=$ODEDIR bash $path/cors_configuration.sh"
+
+
+bash $path/install_whitenoise.sh
+
+su - {{ ode_user }}  -c "ODEDIR=$ODEDIR bash $path/whitenoise_configuration.sh"
+
+bash $path/nginx.sh
+
+{% if selinux %}
+bash $path/selinux.sh
+{% endif %}
+
+{% if daemon %}
+bash $path/daemon.sh
+{% endif %}

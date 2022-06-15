@@ -1,0 +1,45 @@
+{% if doc %}
+Configure Bhojpur ODE web and create the NGINX ODE configuration file to be included in a system-wide NGINX configuration by redirecting the output of the command ``ode web config nginx`` below into a file. If an attempt is made to access ODE.web whilst it is not running, the generated NGINX configuration file will automatically display a maintenance page::
+
+export PATH={{ virtualenv_path }}/bin:$PATH
+
+{% else %}
+#!/bin/bash
+
+# Copyright (c) 2018 Bhojpur Consulting Private Limited, India. All rights reserved.
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+# THE SOFTWARE.
+
+set -e -u -x
+
+WEBPREFIX=${WEBPREFIX:-{{ default.web_prefix }}}
+WEBPORT=${WEBPORT:-{{ default.web_port }}}
+WEBSERVER_NAME=${WEBSERVER_NAME:-{{ default.web_server_name }}}
+
+export ODEDIR=$ODEDIR
+export PATH={{ virtualenv_path }}/bin:$PATH
+
+if [[ $WEBPREFIX = *[!\ ]* ]]; then
+    ode config set ode.web.prefix "{{ web_prefix or '${WEBPREFIX}' }}"
+    ode config set ode.web.static_url "{{ web_prefix or '${WEBPREFIX}' }}/static/"
+fi
+
+{% endif %}
+
+ode web config nginx --http "{{ web_port or '${WEBPORT}' }}" --servername "{{ web_server_name or '${WEBSERVER_NAME}' }}" > {{ ode_user_web_dir }}/nginx.conf.tmp

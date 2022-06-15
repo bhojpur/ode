@@ -1,0 +1,7 @@
+{% if doc %}
+To find out more about the maximum number of simultaneous clients, see `Gunicorn worker-connections <https://docs.gunicorn.org/en/stable/settings.html#worker-connections>`_. Additional settings can be configured by changing the following properties::
+
+    ode config set ode.web.wsgi_worker_class gevent
+    ode config set ode.web.wsgi_worker_connections 1000
+    ode config set ode.web.application_server.max_requests 0
+{% endif %}

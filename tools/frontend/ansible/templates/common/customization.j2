@@ -1,0 +1,43 @@
+{% if doc %}
+Bhojpur ODE web offers a number of configuration options. The configuration changes **will not be applied** until Gunicorn is restarted using ``ode web restart``. The Gunicorn workers are managed **separately** from other ODE processes. You can check their status or stop them using ``ode web status`` or ``ode web stop``.
+
+-  Session engine:
+
+  -  Bhojpur ODE web offers alternative session backends to automatically delete stale data using the cache session store backend, see :djangodoc:`Django cached session documentation <topics/http/sessions/#using-cached-sessions>` for more details.
+
+  - `Redis <https://redis.io/>`_ requires `django-redis <https://github.com/jazzband/django-redis/>`_ in order to be used with ODE.web. We assume that Redis has already been installed. To configure the cache, run::
+
+      ode config set ode.web.caches '{"default": {"BACKEND": "django_redis.cache.
+      RedisCache", "LOCATION": "redis://127.0.0.1:6379/0"}}'
+
+  -  After installing all the cache prerequisites set the following::
+
+      ode config set ode.web.session_engine django.contrib.sessions.backends.cache
+
+- Use a prefix:
+
+  By default ODE.web expects to be run from the root URL of the webserver.
+  This can be changed by setting :property:`ode.web.prefix` and
+  :property:`ode.web.static_url`. For example, to make ODE.web appear at
+  `http://example.org/ode/`::
+
+      ode config set ode.web.prefix '/ode'
+      ode config set ode.web.static_url '/ode/static/'
+
+  and regenerate your webserver configuration.
+
+All configuration options can be found on various sections of
+:ref:`web_index` developers documentation. For the full list, refer to
+:ref:`web_configuration` properties.
+
+The most popular configuration options include:
+
+-  Debug mode, see :property:`ode.web.debug`.
+
+-  Customizing ODE clients e.g. to add your own logo to the login page
+   (:property:`ode.web.login_logo`) or use an index page as an alternative
+   landing page for users (:property:`ode.web.index_template`). See
+   :doc:`/sysadmins/customization` for further information.
+
+-  Enabling a public user see :doc:`/sysadmins/public`.
+{% endif %}

@@ -1,0 +1,71 @@
+# Copyright (c) 2018 Bhojpur Consulting Private Limited, India. All rights reserved.
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+# THE SOFTWARE.
+
+# INTERNAL CONFIG DON'T CHANGE
+
+path: "{{ playbook_dir }}"
+clean:
+os: debian10
+ice_version: "3.7"
+python_version: "3.8"
+
+doc: False
+doc_conf:
+  note: ".. walkthroughs are generated using ansible\n"
+  header: "ODE.web installation on Debian 10 and IcePy 3.7\n=================================================\n"
+  link_install: "Please first read :doc:`../../server-debian10-ice37`.\n"
+  os_full_name: Debian10
+  prerequisites: "Installing prerequisites\n------------------------\n"
+  virtual_env: "Creating a virtual environment\n------------------------------\n"
+  web_install: "Installing ODE.web\n--------------------\n"
+  webapps_install: "Installing ODE.web apps\n-------------------------\n"
+  web_configuration: "Configuring ODE.web\n---------------------\n"
+  gunicorn_configuration: "Configuring Gunicorn\n--------------------\n"
+  cors_configuration: "Setting up CORS\n---------------\n"
+  standalone_web: "Running ODE.web\n-----------------\n"
+  nginx_configuration: "Configuring NGINX\n-----------------\n"
+  sel: "SELinux\n-------\n"
+  web_run: "Automatically running ODE.web\n-------------------------------\n"
+  maintenance: "Maintaining ODE.web\n---------------------\n"
+  troubleshoot: "Troubleshooting\n---------------\n"
+  gunicorn_configuration_advanced: "Configuring Gunicorn advanced options\n-------------------------------------\n"
+  sync_workers: "Experimental: Sync workers\n~~~~~~~~~~~~~~~~~~~~~~~~~~\n"
+  async_workers: "Experimental: Async workers\n~~~~~~~~~~~~~~~~~~~~~~~~~~~\n"
+
+default:
+  web_prefix:
+  web_port: 80
+  web_server_name: localhost
+
+ode_user: "ode-web"
+ode_user_home_dir: "/opt/ode/web"
+virtualenv_path: "{{ ode_user_home_dir }}/venv3"
+ode_user_web_dir: "{{ ode_user_home_dir }}/ode-web"
+
+selinux: False
+daemon: True
+
+# VARS
+
+web_session:
+
+web_prefix:
+web_port:
+web_server_name:

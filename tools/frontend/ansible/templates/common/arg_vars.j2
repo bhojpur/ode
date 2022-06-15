@@ -1,0 +1,25 @@
+{% if doc %}
+For convenience the main ODE.web configuration options have been defined as environment variables. You can either use your own values, or alternatively use the following ones::
+
+{% if not doc %}
+ODE_USER={{ ode_user }}
+ODEDIR={{ ode_user_web_dir }}
+
+{% endif %}
+{% if web_session %}
+export WEBSESSION={{ web_session }}
+{% endif %}
+{% if default.web_prefix %}
+export WEBPREFIX={{ default.web_prefix }}
+{% endif %}
+export ODEDIR={{ ode_user_web_dir }}
+{% else %}
+ODE_USER=${ODE_USER:-{{ ode_user }}}
+ODEDIR={{ ode_user_web_dir }}
+
+WEBSESSION=${WEBSESSION:-{{ web_session }}}
+
+WEBPREFIX=${WEBPREFIX:-{{ default.web_prefix }}}
+WEBPORT=${WEBPORT:-{{ default.web_port }}}
+WEBSERVER_NAME=${WEBSERVER_NAME:-{{ default.web_server_name }}}
+{% endif %}

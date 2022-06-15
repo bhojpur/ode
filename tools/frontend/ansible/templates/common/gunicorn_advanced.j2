@@ -1,0 +1,18 @@
+{% if doc %}
+Bhojpur ODE web deployment can be configured with sync and async workers. **Sync workers** are faster and recommended for a data repository with :ref:`download_restrictions`. If you wish to offer users the ability to download data then you have to use **async workers**. ODE.web is able to handle multiple clients on a single worker thread switching context as necessary while streaming binary data from ODE.server. Depending on the traffic and scale of the repository you should configure connections and speed limits on your server to avoid blocking resources. We recommend you run benchmark and performance tests. It is also possible to apply :ref:`download_restrictions` and offer alternative access to binary data.
+
+.. note::
+    Handling streaming request/responses requires proxy buffering
+    to be turned off. For more details refer to
+    `Gunicorn deployment <https://docs.gunicorn.org/en/stable/deploy.html>`_
+    and
+    `NGINX configuration <https://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_buffering>`_.
+
+.. note::
+    :property:`ode.web.application_server.max_requests` should be set to 0
+
+
+See
+`Gunicorn design <https://docs.gunicorn.org/en/stable/design.html>`_ for more details.
+
+{% endif %}

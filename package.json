@@ -1,9 +1,9 @@
 {
     "name": "bhojpur-ode",
     "fullName": "Bhojpur ODE is a 2D/3D DICOM and other medical formats web viewer/editor",
-    "description": "Bhojpur ODE is unique 2D/3D medical volume data web viewer application. You can inspect data both in 2D and 3D modes.",
+    "description": "Bhojpur ODE is a unique 2D/3D medical volume data web viewer application. You can inspect data both in 2D and 3D modes.",
     "version": "1.0.1",
-    "author": "Bhojpur Consulting Private Limited <info@bhojpur-consulting.com>",
+    "author": "Bhojpur Consulting Private Limited <product@bhojpur-consulting.com>",
     "year": "2018",
     "license": "Apache-2.0",
     "licenses": [

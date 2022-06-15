@@ -1,0 +1,23 @@
+{% if doc %}
+Should you wish to run Bhojpur ODE web automatically, a `systemd.service` file could be created. See below an example file `ode-web-systemd.service`::
+
+{% endif %}
+[Unit]
+Description=ODE.web
+# Not mandatory, NGINX may be running on a different server
+Requires=nginx.service
+After=network.service
+
+[Service]
+User={{ ode_user }}
+Type=forking
+PIDFile={{ ode_user_web_dir }}/var/django.pid
+Restart=no
+RestartSec=10
+Environment="PATH={{ virtualenv_path }}/bin:/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin"
+Environment="ODEDIR={{ ode_user_web_dir }}"
+ExecStart={{ virtualenv_path }}/bin/ode web start
+ExecStop={{ virtualenv_path }}/bin/ode web stop
+
+[Install]
+WantedBy=multi-user.target

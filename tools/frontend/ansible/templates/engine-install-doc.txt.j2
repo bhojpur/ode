@@ -1,0 +1,266 @@
+{% import "macros.j2" as tools with context %}
+{{ doc_conf.note }}
+{{ doc_conf.header }}
+{{ doc_conf.link_install }}
+
+{% set path = 'common/introduction.j2' %}
+{% macro style() %}{% include path ignore missing with context %}{% endmacro %}
+{{ style()|indent }}
+
+{% set path = 'common/run_as_root.j2' %}
+{% macro style() %}{% include path ignore missing with context %}{% endmacro %}
+{{ style()|indent }}
+
+{% if ode_user %}
+{% macro style() %}{% include 'common/create_user.sh.j2' ignore missing with context %}{% endmacro %}
+{{ style()|indent }}
+{% endif %}
+
+{% set path = os + '/init.sh.j2' %}
+{% macro style() %}{% include path ignore missing with context %}{% endmacro %}
+{{ style()|indent }}
+
+{{ doc_conf.prerequisites }}
+{% if os != 'osx' %}
+{% set path = 'common/run_as_root.j2' %}
+{% macro style() %}{% include path ignore missing with context %}{% endmacro %}
+{{ style()|indent }}
+
+{% endif %}
+
+{% set path = os + '/deps.sh.j2' %}
+{% macro style() %}{% include path with context %}{% endmacro %}
+{{ style()|indent }}
+
+{% if web_session %}
+
+{% set path = os + '/deps_web_session.sh.j2' %}
+{% macro style() %}{% include path with context %}{% endmacro %}
+{{ style()|indent }}
+{% endif %}
+
+{{ doc_conf.virtual_env }}
+{% if os != 'osx' %}
+{% set path = 'common/run_as_root.j2' %}
+{% macro style() %}{% include path ignore missing with context %}{% endmacro %}
+{{ style()|indent }}
+{% endif %}
+
+{% macro style() %}{% include 'common/virtualenv.sh.j2' with context %}{% endmacro %}
+{{ style()|indent }}
+
+
+{% set path = os + '/deps_ice' + ice_version + '.sh.j2' %}
+{% macro style() %}{% include path with context %}{% endmacro %}
+{{ style()|indent }}
+
+
+{% macro style() %}{% include 'common/install.sh.j2' with context %}{% endmacro %}
+{{ style()|indent }}
+
+{{ doc_conf.webapps_install }}
+
+{% macro style() %}{% include 'common/webapps_install.j2' with context %}{% endmacro %}
+{{ style()|indent }}
+
+{{ doc_conf.web_configuration }}
+{% if os != 'osx' %}
+{% set path = 'common/run_as_ode.j2' %}
+{% macro style() %}{% include path ignore missing with context %}{% endmacro %}
+{{ style()|indent }}
+{% endif %}
+
+{% set path = 'common/arg_vars.j2' %}
+{% macro style() %}{% include path ignore missing with context %}{% endmacro %}
+{{ style()|indent }}
+
+{% macro style() %}{% include 'common/engine_configure.sh.j2' with context %}{% endmacro %}
+{{ style()|indent }}
+
+{% macro style() %}{% include 'common/customization.j2' with context %}{% endmacro %}
+{{ style()|indent }}
+
+{{ doc_conf.gunicorn_configuration }}
+{% if os != 'osx' %}
+{% set path = 'common/run_as_ode.j2' %}
+{% macro style() %}{% include path ignore missing with context %}{% endmacro %}
+{{ style()|indent }}
+{% endif %}
+
+{% macro style() %}{% include 'common/gunicorn.j2' with context %}{% endmacro %}
+{{ style()|indent }}
+
+{{ doc_conf.cors_configuration }}
+
+{% set path = 'common/run_as_root.j2' %}
+{% macro style() %}{% include path ignore missing with context %}{% endmacro %}
+{{ style()|indent }}
+
+{% macro style() %}{% include 'common/install_cors.sh.j2' with context %}{% endmacro %}
+{{ style()|indent }}
+
+{% if os != 'osx' %}
+{% set path = 'common/run_as_ode.j2' %}
+{% macro style() %}{% include path ignore missing with context %}{% endmacro %}
+{{ style()|indent }}
+{% endif %}
+
+{% macro style() %}{% include 'common/cors_configuration.sh.j2' with context %}{% endmacro %}
+{{ style()|indent }}
+
+{{ doc_conf.nginx_configuration }}
+{% if os != 'osx' %}
+{% set path = 'common/run_as_root.j2' %}
+{% macro style() %}{% include path ignore missing with context %}{% endmacro %}
+{{ style()|indent }}
+{% endif %}
+
+{% set path = os + '/nginx.sh.j2' %}
+{% macro style() %}{% include path ignore missing with context %}{% endmacro %}
+{{ style()|indent }}
+
+{% set path = 'common/nginx_production.j2' %}
+{% macro style() %}{% include path ignore missing with context %}{% endmacro %}
+{{ style()|indent }}
+
+{% set path = 'common/nginx_production_bis.j2' %}
+{% macro style() %}{% include path ignore missing with context %}{% endmacro %}
+{{ style()|indent }}
+
+{{ doc_conf.standalone_web }}
+{% if os != 'osx' %}
+{% set path = 'common/run_as_root.j2' %}
+{% macro style() %}{% include path ignore missing with context %}{% endmacro %}
+{{ style()|indent }}
+{% endif %}
+
+{% macro style() %}{% include 'common/install_whitenoise.sh.j2' with context %}{% endmacro %}
+{{ style()|indent }}
+
+{% if web_session %}
+{% set path = 'common/install_web_session.sh.j2' %}
+{% macro style() %}{% include path with context %}{% endmacro %}
+{{ style()|indent }}
+{% endif %}
+
+{% if os != 'osx' %}
+{% set path = 'common/run_as_ode.j2' %}
+{% macro style() %}{% include path ignore missing with context %}{% endmacro %}
+{{ style()|indent }}
+{% endif %}
+
+{% if web_session %}
+{% set path = 'common/web_session_configure.sh.j2' %}
+{% macro style() %}{% include path with context %}{% endmacro %}
+{{ style()|indent }}
+{% endif %}
+
+{% macro style() %}{% include 'common/whitenoise_configuration.sh.j2' with context %}{% endmacro %}
+{{ style()|indent }}
+
+{{ doc_conf.web_run }}
+
+{% if daemon %}
+{% if os != 'osx' %}
+{% set path = 'common/run_as_root.j2' %}
+{% macro style() %}{% include path ignore missing with context %}{% endmacro %}
+{{ style()|indent }}
+{% endif %}
+
+{% if os == 'centos7' %}
+{% set path = os + '/ode-web-systemd.service.j2'%}
+{% macro style() %}{% include path ignore missing with context %}{% endmacro %}
+{{ style()|indent }}
+{% endif %}
+{% if os.startswith('ubuntu') or os.startswith('debian') %}
+{% set path = os + '/ode-web-init.d.j2'%}
+{% macro style() %}{% include path ignore missing with context %}{% endmacro %}
+{{ style()|indent }}
+{% endif %}
+
+{% set path = os + '/daemon.sh.j2'%}
+{% macro style() %}{% include path ignore missing with context %}{% endmacro %}
+{{ style()|indent }}
+{% endif %}
+
+{% if os.startswith('ubuntu') or os == 'osx' or  os.startswith('debian') %}
+{% set path = os + '/run.sh.j2'%}
+{% macro style() %}{% include path ignore missing with context %}{% endmacro %}
+{{ style()|indent }}
+{% endif %}
+
+{{ doc_conf.maintenance }}
+{% if os != 'osx' %}
+{% set path = 'common/run_as_ode.j2' %}
+{% macro style() %}{% include path ignore missing with context %}{% endmacro %}
+{{ style()|indent }}
+{% endif %}
+
+{% set path = 'common/maintenance.j2'%}
+{% macro style() %}{% include path ignore missing with context %}{% endmacro %}
+{{ style()|indent }}
+
+{{ doc_conf.troubleshoot }}
+{% if os != 'osx' %}
+{% set path = 'common/run_as_ode.j2' %}
+{% macro style() %}{% include path ignore missing with context %}{% endmacro %}
+{{ style()|indent }}
+{% endif %}
+
+{% set path = 'common/troubleshoot.j2'%}
+{% macro style() %}{% include path ignore missing with context %}{% endmacro %}
+{{ style()|indent }}
+
+{{ doc_conf.gunicorn_configuration_advanced }}
+{% set path = 'common/gunicorn_advanced.j2'%}
+{% macro style() %}{% include path ignore missing with context %}{% endmacro %}
+{{ style()|indent }}
+
+{% if os != 'osx' %}
+{{ doc_conf.sync_workers }}
+{% set path = 'common/run_as_root.j2' %}
+{% macro style() %}{% include path ignore missing with context %}{% endmacro %}
+{{ style()|indent }}
+
+{% set path = 'common/synch_workers_install.sh.j2'%}
+{% macro style() %}{% include path ignore missing with context %}{% endmacro %}
+{{ style()|indent }}
+
+{% set path = 'common/run_as_ode.j2' %}
+{% macro style() %}{% include path ignore missing with context %}{% endmacro %}
+{{ style()|indent }}
+
+{% set path = 'common/synch_workers_configuration.sh.j2'%}
+{% macro style() %}{% include path ignore missing with context %}{% endmacro %}
+{{ style()|indent }}
+{% endif %}
+
+{% if os != 'osx' %}
+{{ doc_conf.async_workers }}
+{% set path = 'common/run_as_root.j2' %}
+{% macro style() %}{% include path ignore missing with context %}{% endmacro %}
+{{ style()|indent }}
+
+{% set path = 'common/asynch_workers_install.sh.j2'%}
+{% macro style() %}{% include path ignore missing with context %}{% endmacro %}
+{{ style()|indent }}
+
+{% set path = 'common/run_as_ode.j2' %}
+{% macro style() %}{% include path ignore missing with context %}{% endmacro %}
+{{ style()|indent }}
+
+{% set path = 'common/asynch_workers_configuration.sh.j2'%}
+{% macro style() %}{% include path ignore missing with context %}{% endmacro %}
+{{ style()|indent }}
+{% endif %}
+
+{% if selinux %}
+{{ doc_conf.sel }}
+{% set path = 'common/run_as_root.j2' %}
+{% macro style() %}{% include path ignore missing with context %}{% endmacro %}
+{{ style()|indent }}
+
+{% set path = os + '/selinux.sh.j2' %}
+{% macro style() %}{% include path ignore missing with context %}{% endmacro %}
+{{ style()|indent }}
+{% endif %}
