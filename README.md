@@ -4,7 +4,7 @@ The `Bhojpur ODE` is a high performance optical data processing engine based on
 the [Bhojpur.NET Platform](https://github.com/bhojpur/platform) ecosystem for
 delivery of distributed `applications` or `services`. It features advanced
 visualization (both in 2D and 3D modes) of medical volumetric data, provided in
-popular file formats: DICOM, NIfTI, KTX<sup>™</sup>, HDR, etc.
+popular file formats: `DICOM`, `NIfTI`, `KTX`<sup>™</sup>, `HDR`, etc.
 
 ## Motivation
 
@@ -23,7 +23,7 @@ standards support
 ## Installation
 
 It works as a standalone HTML5 web application. The latest version can be used with
-WebGL-enabled desktop browsers (Chrome, Firefox, Opera) and allows limited usage
+`WebGL`-enabled desktop browsers (Chrome, Firefox, Opera) and allows limited usage
 with mobile browsers (Android Chrome). Version for Safari (macOS, iOS) is planned for
 future.
 
@@ -53,13 +53,18 @@ in project [WebGL Volume Rendering](https://github.com/lebarba/WebGLVolumeRender
 
 ## Build Source Code
 
-The `Bhojpur ODE` platform core components are developed using several technologies (e.g.
-`Groovy`, `Gradle`, `Ice`, `Python`, `Node.js`).
+The `Bhojpur ODE` platform core components is developed using several software technologies
+(e.g. [Groovy](https://groovy-lang.org), [Gradle](https://gradle.org),
+[Ice](https://zeroc.com/products/ice), [Python](https://www.python.org),
+[Node.js](https://nodejs.org), [Java](https://www.java.com)).
+
+Based on a Gradle [ice builder plugin](https://github.com/zeroc-ice/ice-builder-gradle),
+we have created a custom Gradle plugin for the Bhojpur ODE.
 
 ### Pre-requisites
 
-You need to install [ZeroC ICE](https://doc.zeroc.com/ice/) for compiling `.ice` interface
-definition language files. For example, on a `macOS` operating system
+You need to install [Zero-C ICE](https://doc.zeroc.com/ice/) middleware for compiling 
+`.ice` interface definition language files. For example, on a `macOS` operating system
 
 ```bash
 brew install zeroc-ice/tap/ice

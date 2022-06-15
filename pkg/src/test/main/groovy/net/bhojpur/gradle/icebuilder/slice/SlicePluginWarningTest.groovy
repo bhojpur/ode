@@ -1,4 +1,4 @@
-package com.zeroc.gradle.icebuilder.slice
+package net.bhojpur.gradle.icebuilder.slice
 
 // Copyright (c) 2018 Bhojpur Consulting Private Limited, India. All rights reserved.
 
@@ -19,3 +19,32 @@ package com.zeroc.gradle.icebuilder.slice
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
+
+import org.junit.Test
+
+import static org.junit.Assert.assertTrue
+import static org.junit.Assume.assumeTrue
+
+class SlicePluginWarningTest extends TestCase {
+
+    @Test
+    public void testWarning() {
+
+        pathToFile([project.rootDir, 'src', 'main', 'slice']).mkdirs()
+
+        writeTestSliceToFile(pathToFile([project.rootDir, 'src', 'main', 'slice', 'Test.ice']))
+
+        project.tasks.compileSlice.action()
+    }
+
+    private void writeTestSliceToFile(file) {
+        file << """
+           |module Test
+           |{
+           |
+           |["java:buffer"] sequence<string> TestSeq;
+           |
+           |};
+        """.stripMargin()
+    }
+}

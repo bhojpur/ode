@@ -1,4 +1,4 @@
-package com.zeroc.gradle.icebuilder.slice;
+package net.bhojpur.gradle.icebuilder.slice
 
 // Copyright (c) 2018 Bhojpur Consulting Private Limited, India. All rights reserved.
 
@@ -20,14 +20,32 @@ package com.zeroc.gradle.icebuilder.slice;
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-class Index {
-    final name
-    def javaType
-    def type
-    def member
-    def caseSensitive = true
+import org.gradle.api.file.FileCollection
+import org.gradle.api.tasks.AbstractExecTask
 
-    Index(String n) {
-        name = n
+class PythonExec extends AbstractExecTask {
+
+    PythonExec() {
+        super(PythonExec.class)
+        super.executable(project.slice.slice2py)
+        super.args("-I${project.slice.sliceDir}")
     }
+
+    def include(Object... arguments) {
+        List modified = arguments.collect { "-I${it}" }
+        return super.args(modified)
+    }
+
+    def prefix(String prefix) {
+        return super.args("--prefix=${prefix}")
+    }
+
+    def outputDir(File dir) {
+        return super.args("--output-dir=${dir}")
+    }
+
+    def iceFiles(FileCollection files) {
+        return super.args(files.getFiles())
+    }
+
 }

@@ -1,4 +1,4 @@
-package com.zeroc.gradle.icebuilder.slice
+package net.bhojpur.gradle.icebuilder.slice
 
 // Copyright (c) 2018 Bhojpur Consulting Private Limited, India. All rights reserved.
 
@@ -19,28 +19,3 @@ package com.zeroc.gradle.icebuilder.slice
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-
-import org.gradle.api.Project
-import org.gradle.api.file.FileCollection
-
-class Python {
-    final String name
-
-    final Project project
-
-    def args
-
-    def include
-
-    def files
-
-    def srcDir
-
-    File outputDir
-
-    Python(name, project) {
-        this.name = name
-        this.project = project
-        this.srcDir = project.file("src/main/slice")
-    }
-}

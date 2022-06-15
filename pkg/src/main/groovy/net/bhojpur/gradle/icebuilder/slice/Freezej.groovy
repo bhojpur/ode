@@ -1,4 +1,4 @@
-package com.zeroc.gradle.icebuilder.slice;
+package net.bhojpur.gradle.icebuilder.slice;
 
 // Copyright (c) 2018 Bhojpur Consulting Private Limited, India. All rights reserved.
 
@@ -20,15 +20,27 @@ package com.zeroc.gradle.icebuilder.slice;
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-class Dict {
-    final name
-    def javaType
-    def key
-    def value
-    // list of dictionary values
-    def index
+import org.gradle.api.NamedDomainObjectContainer
 
-    Dict(String n) {
-        name = n
+class Freezej {
+    final NamedDomainObjectContainer<Dict> dict;
+    final NamedDomainObjectContainer<Index> index;
+
+    def name
+    def args = ""
+    def files
+    def srcDir
+    def include
+
+    Freezej(dict, index) {
+        this.dict = dict
+        this.index = index
+    }
+
+    def dict(Closure closure) {
+        dict.configure(closure)
+    }
+    def index(Closure closure) {
+        index.configure(closure)
     }
 }

@@ -27,8 +27,8 @@ plugins {
     // id "net.bhojpur.ode.gradle.ice-builder.slice" version "1.0.0"
 }
 
-group = "net.bhojpur.ode"
-version = "1.0.0-SNAPSHOT"
+group = "net.bhojpur.gradle.ice-builder"
+version = "1.0.0"
 
 repositories {
     mavenLocal()
@@ -172,7 +172,7 @@ api {
 }
 
 task copySliceFiles(type: Copy, dependsOn: "generateIce") {
-    from "pkg/api/api/v1"
+    from "api/api/v1"
     into "${generatedSliceDir}"
 }
 
@@ -183,7 +183,7 @@ tasks.addRule("Pattern: pythonTask<ID>") { String taskName ->
         def dir = camel.replaceAll("([A-Z])", '/$1').toLowerCase()
         def dirAsPrefix = dir.replace("/", "_") + "_"
 
-        task(taskName, type: com.zeroc.gradle.icebuilder.slice.PythonTask, dependsOn: "copySliceFiles") {
+        task(taskName, type: net.bhojpur.gradle.icebuilder.slice.PythonTask, dependsOn: "copySliceFiles") {
             includeDirs = "${generatedSliceDir}"
             inputFiles = fileTree(dir: "${generatedSliceDir}/${dir}", include: "**.ice")
             outputDir = file("$pythonOutputDir")
@@ -218,23 +218,23 @@ compileSlice.dependsOn "copySliceFiles"
 // Set compileJava to additionally depend on "splitJava"
 compileJava.dependsOn "generateJava"
 
-task compileIcedoc(type: com.zeroc.gradle.icebuilder.slice.IceDocsTask, dependsOn: "compileSlice") {
+task compileIcedoc(type: net.bhojpur.gradle.icebuilder.slice.IceDocsTask, dependsOn: "compileSlice") {
     outputDir = file("${iceOutputDir}")
-    includeDirs = files("${generatedSliceDir}", "pkg/api/v1")
-    sourceDirs = files("${generatedSliceDir}", "pkg/api/v1")
-    header = file("pkg/api/resources/header.txt")
-    footer = file("pkg/api/resources/footer.txt")
+    includeDirs = files("${generatedSliceDir}", "api/v1")
+    sourceDirs = files("${generatedSliceDir}", "api/v1")
+    header = file("api/resources/header.txt")
+    footer = file("api/resources/footer.txt")
 }
 
 gradlePlugin {
     plugins {
         IcePlugin {
             id = 'net.bhojpur.ode.gradle.ice-builder.slice'
-            implementationClass = 'com.zeroc.gradle.icebuilder.slice.SlicePlugin'
+            implementationClass = 'net.bhojpur.gradle.icebuilder.slice.SlicePlugin'
         }
     }
 }
 
 // Add publish functionality
 apply from: "publish.gradle"
-apply plugin: "net.bhojpur.ode.gradle.ice-builder.slice"
+apply plugin: "groovy"
