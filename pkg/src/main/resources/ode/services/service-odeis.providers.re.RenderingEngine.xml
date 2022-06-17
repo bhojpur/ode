@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+  <bean
+          id="internal-odeis.providers.re.RenderingEngine"
+          class="ode.services.RenderingBean" scope="prototype">
+	  <constructor-arg ref="/ODE/Pixels"/>
+	  <constructor-arg ref="executor"/>
+	  <constructor-arg ref="internal-ode.api.LocalCompress"/>
+	  <constructor-arg ref="securitySystem"/>
+	  <constructor-arg ref="internal-ode.api.LutProvider"/>
+  </bean>
+  
+  <bean id="managed-odeis.providers.re.RenderingEngine" parent="selfManagingService" scope="prototype">
+    <property name="proxyInterfaces" value="odeis.providers.re.RenderingEngine"/>
+    <property name="target" ref="internal-odeis.providers.re.RenderingEngine"/>
+  </bean>
+
+</beans>

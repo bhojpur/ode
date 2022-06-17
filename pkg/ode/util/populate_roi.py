@@ -523,7 +523,7 @@ class PlateAnalysisCtxFactory(object):
 
     def find_filesets_for_plate(self, plateid):
         """
-        ODE5 support. See #12235
+        Bhojpur ODE support.
         """
         return self.query_service.findAllByQuery((
             'select ofile from Fileset f '

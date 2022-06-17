@@ -241,7 +241,7 @@ class UserEntry (object):
 
     def changePassword(self, client, password, rootpass):
         a = client.getAdminService()
-        client.c.sf.setSecurityPassword(rootpass)  # See #3202
+        client.c.sf.setSecurityPassword(rootpass)  #
         a.changeUserPassword(self.name, ode.gateway.ode_type(password))
 
     @staticmethod

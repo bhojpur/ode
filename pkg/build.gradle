@@ -90,10 +90,10 @@ if (slice.iceVersion.contains("3.7")) {
             srcDir "groovy"
         }
         resources {
-            srcDir "pkg/api/resources"
+            srcDir "api/resources"
         }
         java {
-            srcDirs "pkg/api/v1", slice.output
+            srcDirs "api/v1", slice.output
         }
     }
 } else if (slice.iceVersion.contains("3.6")) {
@@ -107,7 +107,7 @@ if (slice.iceVersion.contains("3.7")) {
             srcDir "groovy"
         }
         resources {
-            srcDir "pkg/api/resources"
+            srcDir "api/resources"
         }
         java {
             srcDirs "pkg/api/v1", slice.output
@@ -172,7 +172,7 @@ api {
 }
 
 task copySliceFiles(type: Copy, dependsOn: "generateIce") {
-    from "api/api/v1"
+    from "api/v1"
     into "${generatedSliceDir}"
 }
 

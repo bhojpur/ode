@@ -469,7 +469,7 @@ class ITest(object):
             raw_pixel_store.close()
 
         if thumb:
-            # See #9070. Forcing a thumbnail creation
+            # Forcing a thumbnail creation
             tb = session.createThumbnailStore()
             try:
                 s = tb.getThumbnailByLongestSideSet(rint(16), [pixels_id])
@@ -783,8 +783,6 @@ class ITest(object):
         correct password and less=True:
 
             login_attempt("user", 0.15, pw="REALVALUE", less=True)
-
-        See integration.tickets4000 and 5000
         """
         c = ode.client()  # ok because followed by __del__
         try:
@@ -1001,7 +999,7 @@ class ITest(object):
         try:
             store.setFileId(ofile.getId().getValue())
             store.write(binary, 0, len(binary))
-            ofile = store.save()  # See ticket:1501
+            ofile = store.save()  #
         finally:
             store.close()
 

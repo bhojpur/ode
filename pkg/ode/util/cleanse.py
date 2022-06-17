@@ -200,7 +200,7 @@ def initial_check(config_service, admin_service=None):
         raise Exception('SecurityViolation: Admins only!')
 
     #
-    # Compare server versions. See ticket #3123
+    # Compare server versions.
     #
     if config_service is None:
         print("No config service provided! "

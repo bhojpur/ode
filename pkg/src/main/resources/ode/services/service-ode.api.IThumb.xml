@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+  <bean parent="level2"
+        id="internal-ode.api.ThumbnailStore"
+        class="ode.services.ThumbnailBean" scope="prototype">
+  	<constructor-arg><value>true</value></constructor-arg>
+    <property name="ioService" ref="/ODE/Thumbs"/>
+    <property name="IPixels" ref="internal-ode.api.IPixels"/>
+    <property name="pixelDataService" ref="/ODE/Pixels"/>
+    <property name="scaleService" ref="internal-ode.api.IScale"/>
+    <property name="compressionService" ref="internal-ode.api.ICompress"/>
+    <property name="IRepositoryInfo" ref="internal-ode.api.IRepositoryInfo"/>
+    <property name="settingsService" ref="internal-ode.api.IRenderingSettings"/>
+    <property name="inProgressImageResource" value="classpath:ode/services/image-loading.xml"/>
+    <property name="lutProvider" ref="internal-ode.api.LutProvider"/>
+  </bean>
+  
+  <bean id="managed-ode.api.ThumbnailStore" parent="managedStatefulService" scope="prototype">
+    <property name="proxyInterfaces" value="ode.api.ThumbnailStore"/>
+    <property name="target" ref="internal-ode.api.ThumbnailStore"/>    
+  </bean>
+
+  <bean id="internal-ode.api.ThumbnailStoreSubstituter" class="ode.services.util.BeanInstantiationSubstituter">
+    <constructor-arg ref="readOnlyStatus"/>
+    <constructor-arg value="internal-ode.api.ThumbnailStore"/>
+    <constructor-arg value="ode.services.ThumbnailBeanReadOnly"/>
+    <property name="isWriteDb" value="true"/>
+    <property name="isWriteRepo" value="true"/>
+  </bean>
+
+</beans>

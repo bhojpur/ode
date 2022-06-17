@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+  <description>
+        Defines the contexts for the Bhojpur ODE Server. Other beanRefFactory.xmls may define
+  other contexts.
+  </description>
+
+  <bean    id="ode.model"
+        class="org.springframework.context.support.ClassPathXmlApplicationContext"
+        lazy-init="true">
+    <constructor-arg index="0">
+      <list>
+        <value>classpath:ode/services/messaging.xml</value>
+        <value>classpath:ode/model.xml</value>
+      </list>
+    </constructor-arg>
+  </bean>
+
+  <bean    id="ode.datalayer"
+          class="ode.system.OdeContext"
+          lazy-init="true">
+    <constructor-arg index="0">
+      <list>
+        <value>classpath:ode/config.xml</value>
+        <value>classpath:ode/services/messaging.xml</value>
+        <value>classpath:ode/services/datalayer.xml</value>
+        <value>classpath:ode/services/sec-primitives.xml</value>
+      </list>
+    </constructor-arg>
+    <constructor-arg index="1" ref="ode.model"/>
+  </bean>
+
+  <bean    id="ode.server"
+          class="ode.system.OdeContext"
+          lazy-init="true">
+    <constructor-arg index="0">
+      <list>
+        <!--
+        Arranged roughly in stack order, which is to say that beans
+        from files higher in the list, should not use beans from files
+        lower in the list.
+        -->
+        <value>classpath:ode/config.xml</value>
+        <value>classpath:ode/services/messaging.xml</value>
+        <value>classpath:ode/services/checksum.xml</value>
+        <value>classpath:ode/services/datalayer.xml</value>
+        <value>classpath*:ode/services/db-*.xml</value>
+        <value>classpath:ode/services/sec-primitives.xml</value>
+        <value>classpath:ode/services/hibernate.xml</value>
+        <value>classpath:ode/services/services.xml</value>
+        <value>classpath*:ode/services/service-*.xml</value>
+        <value>classpath:ode/services/sec-system.xml</value>
+        <value>classpath:ode/services/startup.xml</value>
+        <!-- Allow user added files -->
+        <value>classpath*:server/*.xml</value>
+      </list>
+    </constructor-arg>
+    <constructor-arg index="1" ref="ode.model"/>
+  </bean>
+
+  <bean    id="ode.fulltext"
+          class="ode.system.OdeContext"
+          lazy-init="true">
+    <constructor-arg index="0">
+      <list>
+        <!-- Primary reason for this context -->
+        <value>classpath:ode/services/indexer.xml</value>
+        <!--
+        Similar to ode.server, but includes as few components as
+        possible to keep the memory overhead and startup time to
+        a minimum.
+        -->
+        <value>classpath:ode/config.xml</value>
+        <value>classpath:ode/services/messaging.xml</value>
+        <value>classpath:ode/services/datalayer.xml</value>
+        <value>classpath*:ode/services/db-*.xml</value>
+        <value>classpath:ode/services/sec-primitives.xml</value>
+        <value>classpath:ode/services/hibernate.xml</value>
+        <value>classpath:ode/services/services.xml</value>
+        <!-- If we could disable shares here, then it would be possible
+        to remove admin, ldap, share and possibly more! -->
+        <value>classpath:ode/services/service-ode.api.IAdmin.xml</value>
+        <value>classpath:ode/services/service-ode.api.IConfig.xml</value>
+        <value>classpath:ode/services/service-ode.api.ILdap.xml</value>
+        <value>classpath:ode/services/service-ode.api.IQuery.xml</value>
+        <value>classpath:ode/services/service-ode.api.IShare.xml</value>
+        <value>classpath:ode/services/service-ode.api.ITypes.xml</value>
+        <value>classpath:ode/services/service-ode.api.IUpdate.xml</value>
+        <value>classpath:ode/services/service-ode.api.Search.xml</value>
+        <value>classpath:ode/services/service-ode.io.nio.OriginalFilesService.xml</value>
+        <value>classpath:ode/services/checksum.xml</value>
+        <!-- Needed to refresh the session cache -->
+        <value>classpath:ode/services/service-ode.api.ISession.xml</value>
+      </list>
+    </constructor-arg>
+    <constructor-arg index="1" ref="ode.model"/>
+  </bean>
+
+  <bean    id="ode.pixeldata"
+          class="ode.system.OdeContext"
+          lazy-init="true">
+    <constructor-arg index="0">
+      <list>
+        <!-- Primary reason for this context -->
+        <value>classpath:ode/services/pixeldata.xml</value>
+        <value>classpath:ode/services/service-ode.io.nio.PixelData.xml</value>
+        <value>classpath:ode/services/service-ode.io.nio.PixelsService.xml</value>
+        <!--
+        Similar to ode.server, but includes as few components as
+        possible to keep the memory overhead and startup time to
+        a minimum.
+        -->
+        <value>classpath:ode/config.xml</value>
+        <value>classpath:ode/services/messaging.xml</value>
+        <value>classpath:ode/services/datalayer.xml</value>
+        <value>classpath*:ode/services/db-*.xml</value>
+        <value>classpath:ode/services/sec-primitives.xml</value>
+        <value>classpath:ode/services/hibernate.xml</value>
+        <value>classpath:ode/services/services.xml</value>
+        <!-- If we could disable shares here, then it would be possible
+        to remove admin, ldap, share and possibly more! -->
+        <value>classpath:ode/services/service-ode.api.IAdmin.xml</value>
+        <value>classpath:ode/services/service-ode.api.IConfig.xml</value>
+        <value>classpath:ode/services/service-ode.api.ILdap.xml</value>
+        <value>classpath:ode/services/service-ode.api.IQuery.xml</value>
+        <value>classpath:ode/services/service-ode.api.IShare.xml</value>
+        <value>classpath:ode/services/service-ode.api.ITypes.xml</value>
+        <value>classpath:ode/services/service-ode.api.IUpdate.xml</value>
+        <value>classpath:ode/services/service-ode.api.Search.xml</value>
+        <value>classpath:ode/services/service-ode.io.nio.OriginalFilesService.xml</value>
+        <value>classpath:ode/services/checksum.xml</value>
+        <!-- Needed to refresh the session cache -->
+        <value>classpath:ode/services/service-ode.api.ISession.xml</value>
+      </list>
+    </constructor-arg>
+    <constructor-arg index="1" ref="ode.model"/>
+  </bean>
+</beans>

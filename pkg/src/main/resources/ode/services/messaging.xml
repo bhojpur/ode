@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+  <description>
+    Defines an ApplicationEventMulticaster which can be used by all contexts.
+
+    This is important. Either via static fields, JNDI lookup, Ice proxies or
+    similar mechanisms the multicaster used should function as one logical
+    entity regardless of parent or child contexts.
+
+    This context file should be included in any beanRefContext.xml which
+    intends to interoperate via Bhojpur ODE "messages" (notifications/events).
+  </description>
+
+  <bean id="applicationEventMulticaster" class="ode.services.messages.GlobalMulticaster">
+    <description>
+
+    </description>
+  </bean>
+</beans>

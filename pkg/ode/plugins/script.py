@@ -548,7 +548,7 @@ class ScriptControl(BaseControl):
 
                         self.ctx.out("    Subtype: %s" % proto_value)
 
-                    # ticket:11472 - string min/max need quoting
+                    # string min/max need quoting
                     def min_max(x):
                         if x:
                             if x.val is None:

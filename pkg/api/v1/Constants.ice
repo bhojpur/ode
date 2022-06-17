@@ -208,7 +208,7 @@ module ode {
         const string NSFILETRANSFER = "bhojpur.net/ode/import/fileTransfer";
         const string NSEXPERIMENTERPHOTO = "bhojpur.net/ode/experimenter/photo";
         const string NSBULKANNOTATIONS = "bhojpur.net/ode/bulk_annotations";
-        const string NSOMETIFF = "bhojpur.net/ode/ode_tiff";
+        const string NSODETIFF = "bhojpur.net/ode/ode_tiff";
 
         //
         // ode.grid.Param.namespaces in Scripts.ice

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+  <description>
+  HOOKS : These beans are used to provide startup and shutdown logic.
+  </description>
+
+  <bean id="dbPatchCheck"
+     class="ode.services.util.DBPatchCheck"
+     init-method="start" lazy-init="false">
+     <constructor-arg ref="simpleSqlAction"/>
+     <constructor-arg ref="preferenceContext"/>
+  </bean>
+
+  <bean id="dbUserCheck" depends-on="dbPatchCheck"
+     class="ode.services.util.DBUserCheck" lazy-init="false">
+     <constructor-arg ref="simpleSqlAction"/>
+     <constructor-arg ref="preferenceContext"/>
+     <constructor-arg ref="readOnlyStatus"/>
+  </bean>
+
+  <bean id="jvmSettingsCheck"
+     class="ode.services.util.JvmSettingsCheck"
+     lazy-init="false">
+  </bean>
+
+  <bean id="readOnlyStatus"
+      class="ode.services.util.ReadOnlyStatus">
+     <constructor-arg value="${ode.cluster.read_only}"/>
+     <constructor-arg value="${ode.cluster.read_only.db}"/>
+     <constructor-arg value="${ode.cluster.read_only.repo}"/>
+     <constructor-arg ref="sqlActionWrapper"/>
+     <constructor-arg value="${ode.data.dir}"/>
+     <constructor-arg value="${ode.managed.dir}"/>
+  </bean>
+
+  <bean id="dbFormatEnumerationCheck"
+     class="ode.services.util.DBEnumCheck"
+     init-method="start" lazy-init="false">
+     <constructor-arg ref="executor"/>
+     <constructor-arg ref="preferenceContext"/>
+     <constructor-arg ref="ensureEnum"/>
+     <constructor-arg ref="readOnlyStatus"/>
+  </bean>
+
+  <bean id="dbMappedEnumerationCheck"
+     class="ode.services.util.DBMappedEnumCheck"
+     init-method="start" lazy-init="false">
+     <constructor-arg ref="executor"/>
+     <constructor-arg ref="preferenceContext"/>
+     <constructor-arg ref="ensureEnum"/>
+     <constructor-arg ref="readOnlyStatus"/>
+  </bean>
+
+  <bean id="ensureEnum"
+     class="ode.services.util.EnsureEnum">
+     <constructor-arg ref="executor"/>
+     <constructor-arg ref="uuid"/>
+     <constructor-arg ref="roles"/>
+     <constructor-arg ref="readOnlyStatus"/>
+  </bean>
+
+  <bean id="dbUnicodeUnitsCheck" depends-on="dbPatchCheck"
+     class="ode.services.util.DBUnicodeUnitsCheck"
+     init-method="start" lazy-init="false">
+     <constructor-arg ref="executor"/>
+     <constructor-arg ref="preferenceContext"/>
+     <constructor-arg ref="readOnlyStatus"/>
+  </bean>
+
+  <bean id="serverDirectoryCheck"
+     class="ode.services.util.ServerDirectoryCheck"
+     init-method="run" lazy-init="false">
+     <constructor-arg value="${ode.data.dir}"/>
+     <constructor-arg value="${ode.managed.dir}"/>
+     <constructor-arg ref="readOnlyStatus"/>
+  </bean>
+
+  <bean id="serverVersionCheck"
+     class="ode.services.util.ServerVersionCheck"
+     init-method="start" destroy-method="stop" lazy-init="false">
+     <constructor-arg value="${ode.version}"/>
+  </bean>
+
+  <bean id="upgradeCheck"
+     class="ode.system.UpgradeCheck"
+     init-method="run" lazy-init="false">
+     <constructor-arg index="0" value="${ode.upgrades.url}"/>
+     <constructor-arg index="1" value="${ode.version}"/>
+     <constructor-arg index="2" value="server"/>
+  </bean>
+
+  <alias name="${ode.metrics.bean}" alias="metrics"/>
+
+  <bean id="defaultMetrics" class="ode.system.metrics.DefaultMetrics">
+    <property name="graphiteAddress" value="${ode.metrics.graphite}"/>
+  </bean>
+
+  <bean id="nullMetrics" class="ode.system.metrics.NullMetrics"/>
+
+  <bean class="ode.services.util.SleepTimer"
+        lazy-init="false"
+        destroy-method="destroy"/>
+
+</beans>

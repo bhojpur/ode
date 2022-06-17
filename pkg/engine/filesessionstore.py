@@ -199,7 +199,7 @@ class SessionStore(SessionBase):
 
                 # This will atomically rename the file (os.rename) if the OS
                 # supports it. Otherwise this will result in a shutil.copy2
-                # and os.unlink (for example on Windows). See #9084.
+                # and os.unlink (for example on Windows).
                 shutil.move(output_file_name, session_file_name)
                 renamed = True
             finally:

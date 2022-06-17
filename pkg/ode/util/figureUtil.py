@@ -32,7 +32,7 @@ from builtins import str
 from builtins import range
 from past.utils import old_div
 try:
-    from PIL import Image, ImageDraw  # see ticket:2597
+    from PIL import Image, ImageDraw  #
 except ImportError:
     import Image
     import ImageDraw

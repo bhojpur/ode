@@ -16812,7 +16812,7 @@ $.widget( "ui.spinner", {
 		this._setOption( "step", this.options.step );
 
 		// Only format if there is a value, prevents the field from being marked
-		// as invalid in Firefox, see #9573.
+		// as invalid in Firefox.
 		if ( this.value() !== "" ) {
 
 			// Format the value, but don't constrain.

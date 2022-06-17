@@ -150,7 +150,7 @@ class BaseClient(object):
 
         # Copying args since we don't really want them edited
         if args:
-            # See ticket:5516 To prevent issues on systems where the base
+            # To prevent issues on systems where the base
             # class of path.path is unicode, we will encode all unicode
             # strings here.
             args = [arg.encode("utf-8") if isinstance(arg, str)
@@ -334,7 +334,7 @@ class BaseClient(object):
                     "Ice.ImplicitContext not set to Shared")
             ctx.put(ode.constants.CLIENTUUID, self.__uuid)
 
-            # ticket:2951 - sending user group
+            # sending user group
             group = id.properties.getPropertyWithDefault("ode.group", "")
             if group:
                 ctx.put("ode.group", group)
@@ -924,7 +924,7 @@ class BaseClient(object):
             prx = self.__sf.createRawFileStore()
             try:
                 prx.setFileId(ofile.id.val)
-                prx.truncate(size)  # ticket:2337
+                prx.truncate(size)  #
                 self.write_stream(file, prx, block_size)
             finally:
                 prx.close()
@@ -947,7 +947,7 @@ class BaseClient(object):
         if not self.__sf:
             raise ode.ClientError("No session. Use createSession first.")
 
-        # Search for objects in all groups. See #12146
+        # Search for objects in all groups.
         ctx = self.getContext(group=-1)
         prx = self.__sf.createRawFileStore()
 
@@ -1294,7 +1294,7 @@ class BaseClient(object):
         Implemention of ClientCallback which will be added to
         any Session which this instance creates. Note: this client
         should avoid all interaction with the {@link client#lock} since it
-        can lead to deadlocks during shutdown. See: ticket:1210
+        can lead to deadlocks during shutdown.
         """
 
         #

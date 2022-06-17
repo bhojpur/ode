@@ -3356,7 +3356,7 @@ class LoginView(View):
 
             connector = Connector(server_id, is_secure)
 
-            # TODO: version check should be done on the low level, see #5983
+            # TODO: version check should be done on the low level
             compatible = True
             if settings.CHECK_VERSION:
                 compatible = connector.check_version(self.useragent)

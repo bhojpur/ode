@@ -64,7 +64,7 @@ class WithGroup(object):
     invocation.
 
     For example, using a job handle as root requires logging
-    manually into the group. (ticket:2044)
+    manually into the group.
     """
 
     def __init__(self, service, group_id):
@@ -753,7 +753,7 @@ class ProcessorI(ode.grid.Processor, ode.util.Servant):
         self.category = category  #: Category to be used w/ ProcessI
         self.ode_home = ode_home
 
-        # Extensions for user-mode processors (ticket:1672)
+        # Extensions for user-mode processors
 
         self.use_session = use_session
         """
@@ -785,8 +785,6 @@ class ProcessorI(ode.grid.Processor, ode.util.Servant):
         Overrides the default action in order to register this proxy
         with the session's sharedResources to register for callbacks.
         The on_newsession handler will also keep new sessions informed.
-
-        See ticket:2304
         """
         ode.util.Servant.setProxy(self, prx)
         session = self.internal_session()

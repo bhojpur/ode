@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+  <bean parent="stateful"
+        id="internal-ode.api.RawPixelsStore"
+        class="ode.services.RawPixelsBean" scope="prototype">
+     <constructor-arg><value>true</value></constructor-arg>
+     <constructor-arg value="${ode.data.dir}"/>
+    <!--  
+      Copied from id="binary" parent (no multiple inheritance). This is needed
+      so long there isn't a wrapper instance around the RawPixelsStore as in
+      service-odeis.providers.re.RenderingEngine.xml
+    -->
+    <property name="pixelsMetadata" ref="internal-ode.api.IPixels"/>
+    <property name="pixelsData"     ref="/ODE/Pixels"/>
+    <property name="IRepositoryInfo" ref="internal-ode.api.IRepositoryInfo"/>
+    <property name="sqlAction" ref="simpleSqlAction"/>
+  </bean>
+
+  <bean id="managed-ode.api.RawPixelsStore" parent="managedStatefulService" scope="prototype">
+    <property name="proxyInterfaces" value="ode.api.RawPixelsStore"/>
+    <property name="target" ref="internal-ode.api.RawPixelsStore"/>
+  </bean>
+
+  <bean id="internal-ode.api.RawPixelsStoreSubstituter" class="ode.services.util.BeanInstantiationSubstituter">
+    <constructor-arg ref="readOnlyStatus"/>
+    <constructor-arg value="internal-ode.api.RawPixelsStore"/>
+    <constructor-arg value="ode.services.RawPixelsBeanReadOnly"/>
+    <property name="isWriteDb" value="true"/>
+    <property name="isWriteRepo" value="true"/>
+  </bean>
+
+</beans>

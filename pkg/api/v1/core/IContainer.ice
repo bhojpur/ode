@@ -299,7 +299,7 @@ module ode {
                  * @return A set of images.
                  */
                 idempotent ImageList getImagesByOptions(ode::sys::Parameters options) throws ServerError;
-                /* Warning: following discussion in trac ticket 11019 the return type of getImagesBySplitFilesets may be changed. */
+                /* Warning: the return type of getImagesBySplitFilesets may be changed. */
 
                 /**
                  * Given a list of IDs of certain entity types, calculates
@@ -308,7 +308,6 @@ module ode {
                  * indirectly, as being included. The return value lists both
                  * the fileset IDs and the image IDs in ascending order,
                  * the image ID lists separated by if they were included.
-                 * Warning: following discussion in trac ticket 11019 the
                  * return type may be changed.
                  * @param included the entities included
                  * @param options parameters, presently ignored

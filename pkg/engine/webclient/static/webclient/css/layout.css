@@ -1301,7 +1301,7 @@
     
     
     .ui-state-disabled {
-        /*display:none; it breaks calendar layout see #9130*/
+        /*display:none; it breaks calendar layout*/
     }
     
     

@@ -5018,7 +5018,7 @@ def ode_tiff_info(request, imageId, conn=None, **kwargs):
     # Any existing ODE-TIFF will appear in list
     links = list(
         conn.getAnnotationLinks(
-            "Image", [imageId], ns=ode.constants.namespaces.NSOMETIFF
+            "Image", [imageId], ns=ode.constants.namespaces.NSODETIFF
         )
     )
     rv = {}

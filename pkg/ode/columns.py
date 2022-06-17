@@ -356,8 +356,6 @@ class AbstractArrayColumn(AbstractColumn):
         # assert(len(shape) == 2)
         # self.size = shape[1]
 
-        # http://www.pytables.org/trac-bck/ticket/231
-        # http://www.pytables.org/trac-bck/ticket/232
         # TODO: Clean this up
 
         # Taken from http://www.pytables.org/trac-bck/changeset/4176
@@ -539,8 +537,8 @@ class MaskColumnI(AbstractColumn, ode.grid.MaskColumn):
 
         # WORKAROUND:
         self.imageId = rows["i"].tolist()
-        self.theZ = rows["z"].tolist()  # ticket:1665
-        self.theT = rows["t"].tolist()  # ticket:1665
+        self.theZ = rows["z"].tolist()  #
+        self.theT = rows["t"].tolist()  #
         self.x = rows["x"]
         self.y = rows["y"]
         self.w = rows["w"]

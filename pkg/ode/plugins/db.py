@@ -195,7 +195,6 @@ class DatabaseControl(BaseControl):
 
     def _sql_directory(self, db_vers, db_patch):
         """
-        See #2689
         """
         dbprofile = self._db_profile()
         sql_directory = self.ctx.dir / "sql" / dbprofile / \

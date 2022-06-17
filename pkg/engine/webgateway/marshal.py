@@ -125,7 +125,6 @@ def imageMarshal(image, key=None, request=None):
     try:
         # Replicating the functionality of the deprecated
         # ImageWrapper.getDataset() with shares in mind.
-        # -- Tue Sep  6 10:48:47 BST 2011 (See #6660)
         parents = image.listParents()
         if parents is not None:
             datasets = [p for p in parents if p.ODE_CLASS == "Dataset"]

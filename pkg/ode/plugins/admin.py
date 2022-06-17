@@ -604,7 +604,7 @@ present, the user will enter a console""")
                         computername = win32api.GetComputerName()
                         user = "\\".join([computername, user])
                     try:
-                        # See #9967, code based on http://mail.python.org/\
+                        # code based on http://mail.python.org/\
                         # pipermail/python-win32/2010-October/010791.html
                         self.ctx.out("Granting SeServiceLogonRight to service"
                                      " user \"%s\"" % user)
@@ -1749,8 +1749,6 @@ present, the user will enter a console""")
     def checkice(self, args=None):
         """
         Checks for Ice version compatibility.
-
-        See ticket:2514, ticket:1260
         """
 
         def _check(msg, vers):
@@ -1766,7 +1764,6 @@ present, the user will enter a console""")
         vers = Ice.stringVersion()
         _check("IcePy version", vers)
 
-        # See ticket #10051
         popen = self.ctx.popen(["icegridnode", "--version"])
         env = self.ctx._env()
         # Unclear how this could have been set with the call to unsetenv
@@ -1832,7 +1829,7 @@ present, the user will enter a console""")
 
         cfg = config.as_map()
         ode_data_dir = self._get_data_dir(config)
-        config.close()  # Early close. See #9800
+        config.close()  # Early close.
         for x in ("name", "user", "host", "port", "properties", "url"):
             # NOT passing password on command-line
             k = "ode.db.%s" % x

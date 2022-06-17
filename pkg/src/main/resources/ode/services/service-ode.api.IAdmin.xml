@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd"
+       default-lazy-init="true">
+
+  <alias name="internal-ode.api.IAdmin" alias="internal-ode.api.LocalAdmin"/>
+
+  <bean parent="level2" name="internal-ode.api.IAdmin" class="ode.logic.AdminImpl">
+    <description>
+    Privileged bean which has several "private" references injected. This is not
+    an example of what should be done.
+    </description>
+    <constructor-arg ref="simpleSqlAction"/>
+    <constructor-arg ref="odeSessionFactory"/>
+    <constructor-arg ref="mailSender"/>
+    <constructor-arg ref="templateMessage"/>
+    <constructor-arg ref="aclVoter"/>
+    <constructor-arg ref="roleProvider"/>
+    <constructor-arg ref="passwordProvider"/>
+    <constructor-arg ref="internal-ode.api.ILdap"/>
+    <constructor-arg ref="passwordUtil"/>
+    <constructor-arg ref="chmodStrategy"/>
+    <constructor-arg ref="checksumProviderFactory"/>
+    <constructor-arg ref="adminPrivileges"/>
+  </bean>
+
+  <bean id="loginAttemptListener" class="ode.security.auth.LoginAttemptListener" lazy-init="false">
+    <constructor-arg index="0" value="${ode.security.login_failure_throttle_count}"/>
+    <constructor-arg index="1" value="${ode.security.login_failure_throttle_time}"/>
+  </bean>
+
+  <alias name="${ode.security.password_provider}" alias="passwordProvider"/>
+
+  <bean id="ldapPasswordProvider431" class="ode.security.auth.providers.LdapPasswordProvider431">
+    <description>
+        PasswordProvider which was the default LDAP implementation until 4.3.2. This implementation
+        does NOT check the user_filter on every login, which is useful if any manual intervention
+        is necessary by the sysadmin after a user has been created, e.g. when capitalization differs
+        or a DN is changed.
+    </description>
+    <constructor-arg ref="passwordUtil"/>
+    <constructor-arg ref="internal-ode.api.ILdap"/>
+    <constructor-arg value="true"/>
+  </bean>
+
+  <bean id="ldapPasswordProvider" class="ode.security.auth.LdapPasswordProvider">
+    <description>
+        New LDAP PasswordProvider implementation as of 4.3.2 which checks the user_filter
+        on every login. Due to other issues (DN synchronization and capitalization handling)
+        this may not be the best implementation for all sites.
+    </description>
+    <constructor-arg ref="passwordUtil"/>
+    <constructor-arg ref="internal-ode.api.ILdap"/>
+    <constructor-arg value="true"/>
+  </bean>
+
+  <bean id="jdbcPasswordProviderNoSalt" class="ode.security.auth.JdbcPasswordProvider">
+    <description>
+        Version of JDBCPasswordProvider as available in Bhojpur ODE with no
+        salting support.
+    </description>
+    <constructor-arg index="0" ref="passwordUtil"/>
+    <constructor-arg index="1" value="true"/>
+    <constructor-arg index="2" value="false"/>
+    <property name="legacyUtil" ref="latin1PasswordUtil"/>
+  </bean>
+
+  <bean id="jdbcPasswordProvider" class="ode.security.auth.JdbcPasswordProvider">
+    <constructor-arg ref="passwordUtil"/>
+    <constructor-arg index="1" value="true"/>
+    <constructor-arg index="2" value="true"/>
+    <property name="legacyUtil" ref="latin1PasswordUtil"/>
+  </bean>
+
+  <bean id="jdbcHashedPasswordProvider" class="ode.security.auth.JdbcHashedPasswordProvider">
+    <description>
+      Subclass of jdbcPasswordProvider which does not hash passwords when
+      setting them, so an already hashed password can be passed in.
+    </description>
+    <constructor-arg ref="passwordUtil"/>
+  </bean>
+
+  <bean id="chainedPasswordProvider431" class="ode.security.auth.PasswordProviders">
+    <constructor-arg>
+      <list>
+        <ref bean="ldapPasswordProvider431"/>
+        <ref bean="jdbcPasswordProvider"/>
+      </list>
+    </constructor-arg>
+  </bean>
+
+  <bean id="chainedPasswordProviderNoSalt" class="ode.security.auth.PasswordProviders">
+    <constructor-arg>
+      <list>
+        <ref bean="ldapPasswordProvider"/>
+        <ref bean="jdbcPasswordProviderNoSalt"/>
+      </list>
+    </constructor-arg>
+  </bean>
+
+  <bean id="chainedPasswordProvider" class="ode.security.auth.PasswordProviders">
+    <constructor-arg ref="atomicIgnoreCase"/>
+    <constructor-arg>
+      <list>
+        <ref bean="ldapPasswordProvider"/>
+        <ref bean="jdbcPasswordProvider"/>
+      </list>
+    </constructor-arg>
+  </bean>
+
+  <bean id="atomicIgnoreCase"
+    class="java.util.concurrent.atomic.AtomicBoolean">
+    <constructor-arg value="${ode.security.ignore_case}"/>
+  </bean>
+
+  <bean id="roleProvider" class="ode.security.auth.SimpleRoleProvider">
+    <constructor-arg ref="securitySystem"/>
+    <constructor-arg ref="odeSessionFactory"/>
+    <constructor-arg ref="atomicIgnoreCase"/>
+  </bean>
+
+  <bean id="passwordUtil" class="ode.security.auth.PasswordUtil">
+    <constructor-arg ref="simpleSqlAction"/>
+    <constructor-arg ref="roles"/>
+    <constructor-arg value="${ode.security.password_required}"/>
+    <constructor-arg value="UTF-8"/>
+    <property name="queryService" ref="internal-ode.api.IQuery"/>
+  </bean>
+
+  <bean id="latin1PasswordUtil" class="ode.security.auth.PasswordUtil">
+    <constructor-arg ref="simpleSqlAction"/>
+    <constructor-arg ref="roles"/>
+    <constructor-arg value="${ode.security.password_required}"/>
+    <constructor-arg value="ISO-8859-1"/>
+    <property name="queryService" ref="internal-ode.api.IQuery"/>
+  </bean>
+
+  <bean name="managed-ode.api.IAdmin" parent="managedService">
+    <property name="proxyInterfaces">
+      <list>
+        <value>ode.api.IAdmin</value>
+        <value>ode.api.local.LocalAdmin</value>
+      </list>
+    </property>
+    <property name="target" ref="internal-ode.api.IAdmin"/>
+  </bean>
+
+</beans>

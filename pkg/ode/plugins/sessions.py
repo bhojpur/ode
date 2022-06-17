@@ -439,7 +439,7 @@ class SessionsControl(UserGroupControl):
                         and not port_differs:
                     try:
                         if previous[2] is not None:
-                            # Missing session uuid file. Deleted? See #4199
+                            # Missing session uuid file. Deleted?
                             conflicts = store.conflicts(
                                 previous[0], previous[1], previous[2], props,
                                 True)
@@ -492,7 +492,7 @@ class SessionsControl(UserGroupControl):
         # For session key access, we now need to lookup the stored_name
         # since otherwise, all access to the directory under ~/ode/sessions
         # will fail. Then, if no session can be found, we exit immediately
-        # rather than asking for a password. See #4223
+        # rather than asking for a password.
         #
         if args.key:
             stored_name = store.find_name_by_key(server, args.key)

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+  <alias name="internal-ode.api.IShare" alias="internal-ode.api.LocalShare"/>
+  
+  <bean parent="level2" name="internal-ode.api.IShare" class="ode.services.sharing.ShareBean">
+    <description>
+    Bean which uses the SessionManager and ISession to create special access
+    control lists for sharing persistent objects with other users and guests.
+    </description>
+    <constructor-arg ref="internal-ode.api.IAdmin"/>
+    <constructor-arg ref="sessionManager"/>
+    <constructor-arg ref="shareStore"/>
+    <constructor-arg ref="executor"/>
+    <constructor-arg ref="mailUtil"/>
+  </bean> 
+ 
+  <bean name="managed-ode.api.IShare" parent="managedService">
+    <property name="proxyInterfaces">
+      <list>
+        <value>ode.api.IShare</value>
+        <value>ode.api.local.LocalShare</value>
+      </list>
+    </property>
+    <property name="target" ref="internal-ode.api.IShare"/>
+  </bean> 
+  
+  <!--
+    ============================================================================
+   -->
+
+    <!-- init() is called on first usage to handle a cyclical dependency on
+    session factory -->
+    <bean id="shareStore" class="ode.services.sharing.BlobShareStore"
+        destroy-method="close">
+        <property name="sqlAction" ref="simpleSqlAction"/>
+    </bean>
+
+</beans>

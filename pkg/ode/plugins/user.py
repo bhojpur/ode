@@ -187,7 +187,6 @@ class UserControl(UserGroupControl):
         own_name = self.ctx.get_event_context().userName
         admin = client.sf.getAdminService()
 
-        # tickets 3202, 5841
         own_pw = self._ask_for_password(" for your user (%s)"
                                         % own_name, strict=False)
         try:

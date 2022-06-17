@@ -1,0 +1,33 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+  <bean id="scriptRepoHelper" class="ode.services.scripts.ScriptRepoHelper" depends-on="sessionManager">
+      <constructor-arg ref="executor"/>
+      <constructor-arg ref="uuid"/>
+      <constructor-arg ref="roles"/>
+      <constructor-arg ref="readOnlyStatus"/>
+  </bean>
+  <bean id="PythonScripts" class="ode.services.scripts.ScriptFileType">
+      <constructor-arg index="0" value="*.py"/>
+      <constructor-arg index="1" value="text/x-python"/>
+      <constructor-arg index="2" value="${ode.launcher.python}"/>
+      <constructor-arg index="3" value="${ode.process.python}"/>
+  </bean>
+  <bean id="JythonScripts" class="ode.services.scripts.ScriptFileType">
+      <constructor-arg index="0" value="*.jy"/>
+      <constructor-arg index="1" value="text/x-jython"/>
+      <constructor-arg index="2" value="${ode.launcher.jython}"/>
+      <constructor-arg index="3" value="${ode.process.jython}"/>
+  </bean>
+  <bean id="MatlabScripts" class="ode.services.scripts.ScriptFileType">
+      <constructor-arg index="0" value="*.m"/>
+      <constructor-arg index="1" value="text/x-matlab"/>
+      <constructor-arg index="2" value="${ode.launcher.matlab}"/>
+      <constructor-arg index="3" value="${ode.process.matlab}"/>
+  </bean>
+  <bean id="LUTScripts" class="ode.services.scripts.ScriptFileType">
+      <constructor-arg index="0" value="*.lut"/>
+      <constructor-arg index="1" value="text/x-lut"/>
+  </bean>
+
+</beans>

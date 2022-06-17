@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+  <bean id="odeFilePathResolver" class="ode.services.OdeFilePathResolver">
+    <constructor-arg value="${ode.data.dir}"/>
+    <constructor-arg ref="simpleSqlAction"/>
+  </bean>
+
+  <!-- Casting string to Long to prevent the wrong ctor from being used -->
+  <bean name="MemoizerWait" class="java.lang.Long">
+    <constructor-arg value="${ode.pixeldata.memoizer_wait}"/>
+  </bean>
+
+  <bean name="/ODE/Pixels" class="ode.io.nio.PixelsService"
+        parent="filesystem">
+    <!-- note constructor-args from parent bean -->
+    <constructor-arg value="${ode.pixeldata.memoizer.dir}"/>
+    <constructor-arg ref="MemoizerWait"/>
+    <constructor-arg ref="odeFilePathResolver"/>
+    <constructor-arg ref="backOff"/>
+    <constructor-arg ref="tileSizes"/>
+    <constructor-arg ref="internal-ode.api.IQuery"/>
+    <property name="metrics" ref="metrics"/>
+    <property name="memoizerDirectoryLocal" value="${ode.pixeldata.memoizer.dir.local}"/>
+  </bean>
+
+  <bean id="backOff" class="${ode.pixeldata.backoff}">
+    <constructor-arg index="0" ref="tileSizes"/>
+    <constructor-arg index="1" value="${ode.pixeldata.backoff.default}"/>
+    <constructor-arg index="2" value="${ode.pixeldata.backoff.maxpixels}"/>
+  </bean>
+
+  <bean id="configuredTileSizes" class="ode.io.nio.ConfiguredTileSizes">
+    <constructor-arg index="0" value="${ode.pixeldata.tile_width}"/>
+    <constructor-arg index="1" value="${ode.pixeldata.tile_height}"/>
+    <constructor-arg index="2" value="${ode.pixeldata.max_plane_width}"/>
+    <constructor-arg index="3" value="${ode.pixeldata.max_plane_height}"/>
+    <constructor-arg index="4" value="${ode.pixeldata.max_plane_float_override}"/>
+  </bean>
+
+  <alias name="${ode.pixeldata.tile_sizes_bean}" alias="tileSizes"/>
+
+</beans>

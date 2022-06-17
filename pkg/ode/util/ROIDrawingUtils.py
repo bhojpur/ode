@@ -47,9 +47,9 @@ Example code to draw 10 ellipses randomly on an image::
 Example code to draw a polyline on an image an display it in PIL::
 
     try:
-        from PIL import Image, ImageDraw # see ticket:2597
+        from PIL import Image, ImageDraw #
     except ImportError:
-        import Image, ImageDraw # see ticket:2597
+        import Image, ImageDraw #
 
     import ROI_utils
     import ROIDrawingUtils
@@ -64,10 +64,10 @@ Example code to draw a polyline on an image an display it in PIL::
 
 from builtins import object
 try:
-    from PIL import Image, ImageDraw  # see ticket:2597
+    from PIL import Image, ImageDraw  #
 except ImportError:
     import Image
-    import ImageDraw  # see ticket:2597
+    import ImageDraw  #
 
 import warnings
 

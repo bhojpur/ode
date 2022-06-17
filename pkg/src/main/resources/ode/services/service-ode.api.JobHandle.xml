@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+  <bean parent="stateful"
+        id="internal-ode.api.JobHandle"
+        class="ode.services.JobBean" scope="prototype">
+    <property name="typesService" ref="internal-ode.api.ITypes"/>
+    <property name="updateService" ref="internal-ode.api.IUpdate"/>
+    <property name="processManager" ref="processManager"/>
+  </bean>
+  
+  <bean id="managed-ode.api.JobHandle" parent="managedStatefulService" scope="prototype">
+    <property name="proxyInterfaces" value="ode.api.JobHandle"/>
+    <property name="target" ref="internal-ode.api.JobHandle"/>
+  </bean>
+  
+  <bean id="processManager" class="ode.services.procs.ProcessManager">
+    <constructor-arg ref="sessionManager"/>
+    <constructor-arg ref="securitySystem"/>
+    <constructor-arg ref="executor"/>
+    <constructor-arg>
+      <list/>
+    </constructor-arg>
+  </bean>
+
+  <bean id="process-jobs-run" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+    <property name="targetObject" ref="processManager" />
+    <property name="targetMethod" value="run" />
+    <property name="concurrent" value="false" />
+  </bean>
+
+  <!--
+  <bean id="process-jobs-every-30-seconds" class="org.springframework.scheduling.quartz.CronTriggerBean">
+    <property name="jobDetail" ref="process-jobs-run" />
+    <property name="cronExpression" value="0,30 * * * * ?" />
+  </bean>
+  -->
+
+</beans>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+  <bean name="internal-ode.api.LutProvider"
+        class="ode.logic.LutProviderImpl">
+    <constructor-arg ref="scriptRepoHelper"/>
+    <constructor-arg ref="LUTScripts"/>
+  </bean>
+
+  <bean id="managed-ode.api.LutProvider" parent="managedService">
+    <property name="proxyInterfaces"
+              value="odeis.providers.re.lut.LutProvider"/>
+    <property name="target" ref="internal-ode.api.LutProvider"/>
+  </bean>
+
+</beans>

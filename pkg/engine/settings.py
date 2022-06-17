@@ -1669,7 +1669,6 @@ MANAGERS = ADMINS  # from CUSTOM_SETTINGS_MAPPINGS  # noqa
 SESSION_SERIALIZER = "django.contrib.sessions.serializers.PickleSerializer"
 
 # Load custom settings from etc/grid/config.xml
-# Tue  2 Nov 2010 11:03:18 GMT -- ticket:3228
 # MIDDLEWARE: A tuple of middleware classes to use.
 MIDDLEWARE = sort_properties_to_tuple(MIDDLEWARE_CLASSES_LIST)  # noqa
 

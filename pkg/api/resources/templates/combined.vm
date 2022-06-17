@@ -931,7 +931,6 @@ Properties used throughout the accessor generation
 #set( $unloadedPython = "self.checkUnloadedProperty(_${property.name},'${propLoaded}')" )
 #set( $fieldName = "${property.name}Seq")
 #set( $getter = "this.${fieldName}" )
-## See ticket:684
 ## If this is the case, we can't use the accessor and have to use a generated method
 #set( $copyMethod = "this.set${PropertyName}( ($javaType) mapper.findCollection( (Collection) source.retrieve(${type.id}.${PropertyName.toUpperCase()})), null /* FIXME - argument unneeded */);" )
 
@@ -1237,7 +1236,7 @@ the special set methods are added.
 
 [$jav]             if (this.${propLoaded}) {
 
-ticket:684 This is necessary to map back and forth from sets.
+This is necessary to map back and forth from sets.
 #set( $fieldType = $property.fieldType.replaceAll("[<].*[>]",""))
 [$jav]               target.putAt( $STATICFIELDNAME, mapper.reverse( this.${fieldName}, ${fieldType}.class ));
 [$jav]             } else {

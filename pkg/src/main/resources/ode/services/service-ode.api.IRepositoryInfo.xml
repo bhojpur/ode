@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+  <bean id="internal-ode.api.IRepositoryInfo" class="ode.logic.RepositoryInfoImpl">
+    <property name="datadir" value="${ode.data.dir}"/>
+    <property name="thumbnailService" ref="/ODE/Thumbs"/>
+    <property name="pixelsService" ref="/ODE/Pixels"/>
+    <property name="fileService" ref="/ODE/Files"/>
+    <property name="sqlAction" ref="simpleSqlAction"/>
+  </bean>
+
+  <bean id="managed-ode.api.IRepositoryInfo" parent="managedService">
+	<property name="proxyInterfaces" value="ode.api.IRepositoryInfo"/>
+    <property name="target" ref="internal-ode.api.IRepositoryInfo"/>
+  </bean>
+
+  <bean id="removeUnusedFilesRun" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+    <property name="targetObject" ref="internal-ode.api.IRepositoryInfo" />
+    <property name="targetMethod" value="removeUnusedFiles" />
+  </bean>
+
+</beans>

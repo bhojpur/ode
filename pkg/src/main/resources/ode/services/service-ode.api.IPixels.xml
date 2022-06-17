@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+  <bean parent="level2" id="internal-ode.api.IPixels" class="ode.logic.PixelsImpl"/>
+  
+  <bean id="managed-ode.api.IPixels" parent="managedService">
+    <property name="proxyInterfaces" value="ode.api.IPixels"/>
+    <property name="target" ref="internal-ode.api.IPixels"/>
+  </bean>
+  
+</beans>

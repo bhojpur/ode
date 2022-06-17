@@ -93,8 +93,6 @@ class TableI(ode.grid.Table, ode.util.SimpleServant):
         Checks that the current user can write to the given object
         at the database level. If not, no FS level writes are permitted
         either.
-
-        ticket:2910
         """
         if not self.can_write:
             raise ode.SecurityViolation(

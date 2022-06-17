@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+  <bean parent="stateful"
+        id="internal-ode.api.RawFileStore"
+        class="ode.services.RawFileBean" scope="prototype">
+    <constructor-arg><value>true</value></constructor-arg>
+    <property name="originalFilesService" ref="/ODE/Files"/>
+    <property name="IRepositoryInfo" ref="internal-ode.api.IRepositoryInfo"/>
+    <property name="adminService" ref="internal-ode.api.IAdmin"/>
+    <property name="checksumProviderFactory" ref="checksumProviderFactory"/>
+  </bean>
+
+  <bean id="managed-ode.api.RawFileStore" parent="managedStatefulService" scope="prototype">
+    <property name="proxyInterfaces" value="ode.api.RawFileStore"/>
+    <property name="target" ref="internal-ode.api.RawFileStore"/>
+  </bean>
+
+  <bean id="internal-ode.api.RawFileStoreSubstituter" class="ode.services.util.BeanInstantiationSubstituter">
+    <constructor-arg ref="readOnlyStatus"/>
+    <constructor-arg value="internal-ode.api.RawFileStore"/>
+    <constructor-arg value="ode.services.RawFileBeanReadOnly"/>
+    <property name="isWriteDb" value="true"/>
+    <property name="isWriteRepo" value="true"/>
+  </bean>
+
+</beans>

@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+  <description>
+  sec-primitives.xml defines the low-level decision makers and state holders
+  for security questions. These classes can safely be used by the hibernate
+  layer, such as via the EventListener.
+  </description>
+
+  <bean id="keystore" class="ode.security.KeyAndTrustStoreConfiguration" lazy-init="false">
+    <description>Sets the keystore and truststore System properties on start-up</description>
+    <property name="keyStore" value="${ode.security.keyStore}" />
+    <property name="keyStorePassword" value="${ode.security.keyStorePassword}" />
+    <property name="trustStore" value="${ode.security.trustStore}" />
+    <property name="trustStorePassword" value="${ode.security.trustStorePassword}" />
+  </bean>
+
+  <bean id="currentDetails" class="ode.security.basic.CurrentDetails">
+    <constructor-arg ref="sessionCache"/>
+    <constructor-arg ref="roles"/>
+    <constructor-arg ref="systemTypes"/>
+    <constructor-arg ref="adminPrivileges"/>
+    <constructor-arg ref="managedRepoUuids"/>
+    <constructor-arg ref="scriptRepoUuids"/>
+  </bean>
+
+  <alias name="currentDetails" alias="principalHolder"/>
+
+  <bean id="internalServiceFactory" class="ode.tools.spring.InternalServiceFactory"/>
+
+  <bean id="roles" factory-bean="dbUserCheck" factory-method="getRoles"/>
+
+  <bean id="adminPrivileges" class="ode.security.basic.LightAdminPrivileges">
+    <constructor-arg ref="roles"/>
+  </bean>
+
+  <bean id="securityFilterHolder" class="ode.security.SecurityFilterHolder">
+    <constructor-arg ref="currentDetails"/>
+    <constructor-arg ref="&amp;OneGroupSecurityFilter"/><!-- filter is a factory -->
+    <constructor-arg ref="&amp;AllGroupsSecurityFilter"/><!-- filter is a factory -->
+    <constructor-arg ref="&amp;SharingSecurityFilter"/><!-- filter is a factory -->
+  </bean>
+
+  <bean id="OneGroupSecurityFilter" class="ode.security.basic.OneGroupSecurityFilter">
+    <constructor-arg ref="roles"/>
+  </bean>
+
+  <bean id="AllGroupsSecurityFilter" class="ode.security.basic.AllGroupsSecurityFilter">
+    <constructor-arg ref="simpleSqlAction"/>
+    <constructor-arg ref="roles"/>
+  </bean>
+
+  <bean id="SharingSecurityFilter" class="ode.security.basic.SharingSecurityFilter">
+    <constructor-arg ref="roles"/>
+    <constructor-arg ref="shareStore"/>
+  </bean>
+
+  <bean id="LightAdminPrivilegesSecurityFilter" class="ode.security.basic.LightAdminPrivilegesSecurityFilter">
+    <constructor-arg ref="roles"/>
+  </bean>
+
+  <bean id="initPropertyFilters" class="ode.security.basic.PropertyFilterInitializer">
+    <constructor-arg ref="adminPrivileges"/>
+    <constructor-arg ref="currentDetails"/>
+    <constructor-arg ref="dataSource"/>
+    <constructor-arg ref="roles"/>
+  </bean>
+
+  <bean id="sqlQueryTransformer" class="ode.tools.hibernate.SqlQueryTransformer" depends-on="initPropertyFilters">
+    <constructor-arg ref="dataSource"/>
+  </bean>
+
+  <alias name="${ode.security.chmod_strategy}" alias="chmodStrategy"/>
+
+  <bean id="groupChmodStrategy" class="ode.security.basic.GroupChmodStrategy">
+    <constructor-arg ref="basicACLVoter"/>
+    <constructor-arg ref="odeSessionFactory"/>
+    <constructor-arg ref="simpleSqlAction"/>
+    <constructor-arg ref="extendedMetadata"/>
+  </bean>
+
+  <bean id="systemTypes" class="ode.security.SystemTypes"/>
+
+  <bean id="tokenHolder" class="ode.security.basic.TokenHolder"/>
+
+  <bean id="managedRepoUuids" class="com.google.common.collect.Sets" factory-method="newConcurrentHashSet"/>
+
+  <bean id="scriptRepoUuids" class="com.google.common.collect.Sets" factory-method="newConcurrentHashSet"/>
+
+  <alias name="${ode.policy.bean}" alias="policyService"/>
+
+  <bean id="defaultPolicyService" class="ode.security.policy.DefaultPolicyService"/>
+
+  <bean id="RESTRICT-BINARY-ACCESS" class="ode.security.policy.BinaryAccessPolicy">
+    <constructor-arg>
+      <set>
+        <value>ode.model.annotations.FileAnnotation</value>
+        <value>ode.model.core.Image</value>
+        <value>ode.model.core.OriginalFile</value>
+        <value>ode.model.screen.Plate</value>
+        <value>ode.model.screen.Well</value>
+      </set>
+    </constructor-arg>
+    <constructor-arg ref="aclVoter"/>
+    <constructor-arg value="${ode.policy.binary_access}"/>
+  </bean>
+
+  <bean id="aclVoter" class="ode.security.CompositeACLVoter">
+    <constructor-arg ref="currentDetails"/>
+    <constructor-arg ref="sharingACLVoter"/>
+    <constructor-arg ref="basicACLVoter"/>
+  </bean>
+
+  <bean id="sharingACLVoter" class="ode.security.sharing.SharingACLVoter">
+    <constructor-arg ref="systemTypes"/>
+    <constructor-arg ref="currentDetails"/>
+    <constructor-arg ref="shareStore"/>
+    <constructor-arg ref="tokenHolder"/>
+  </bean>
+
+  <bean id="basicACLVoter" class="ode.security.basic.BasicACLVoter">
+    <constructor-arg ref="currentDetails"/>
+    <constructor-arg ref="systemTypes"/>
+    <constructor-arg ref="tokenHolder"/>
+    <constructor-arg ref="securityFilterHolder"/>
+    <constructor-arg ref="policyService"/>
+    <constructor-arg ref="roles"/>
+    <constructor-arg ref="adminPrivileges"/>
+    <constructor-arg ref="sessionProviderBare"/>
+    <constructor-arg ref="readOnlyStatus"/>
+    <constructor-arg ref="managedRepoUuids"/>
+    <constructor-arg ref="scriptRepoUuids"/>
+    <constructor-arg ref="uuid"/>  <!-- allows setting OriginalFile.repo -->
+  </bean>
+
+  <bean name="sessionCache" class="ode.services.sessions.state.SessionCache">
+    <property name="cacheManager"  ref="cacheManager"/>
+    <property name="updateInterval" value="${ode.sessions.sync_force}"/><!-- ms -->
+  </bean>
+
+  <bean name="sessionManager" class="ode.services.sessions.SessionManagerImpl"
+    depends-on="dbPatchCheck"
+    init-method="init"><!-- Init called to add root login method. -->
+    <property name="uuid"            ref="uuid"/>
+    <property name="principalHolder" ref="principalHolder"/>
+    <property name="sessionCache"    ref="sessionCache"/>
+    <property name="roles"           ref="roles"/>
+    <property name="adminPrivileges" ref="adminPrivileges"/>
+    <property name="executor"        ref="executor"/>
+    <property name="defaultTimeToIdle" value="${ode.sessions.timeout}"/>
+    <property name="defaultTimeToLive" value="${ode.sessions.maximum}"/>
+    <property name="maxUserTimeToIdle" value="${ode.sessions.max_user_time_to_idle}"/>
+    <property name="maxUserTimeToLive" value="${ode.sessions.max_user_time_to_live}"/>
+    <property name="counterFactory"  ref="sessionCounterFactory"/>
+    <property name="readOnly"        ref="readOnlyStatus"/>
+    <property name="sessionProvider" ref="sessionProvider"/>
+  </bean>
+
+  <bean id="eventProvider" class="ode.security.basic.EventProviderWrapper">
+    <constructor-arg ref="readOnlyStatus"/>
+    <constructor-arg>
+      <!-- Providers are listed in descending order of preference. -->
+      <list>
+        <bean class="ode.security.basic.EventProviderInDb">
+          <constructor-arg ref="internalServiceFactory"/>
+        </bean>
+        <bean class="ode.security.basic.EventProviderInMemory">
+        </bean>
+      </list>
+    </constructor-arg>
+  </bean>
+
+  <bean id="nodeProvider" class="ode.security.basic.NodeProviderWrapper">
+    <constructor-arg ref="readOnlyStatus"/>
+    <constructor-arg>
+      <!-- Providers are listed in descending order of preference. -->
+      <list>
+        <bean class="ode.security.basic.NodeProviderInDb">
+          <constructor-arg ref="uuid"/>
+          <constructor-arg ref="executor"/>
+        </bean>
+        <bean class="ode.security.basic.NodeProviderInMemory">
+          <constructor-arg ref="uuid"/>
+        </bean>
+      </list>
+    </constructor-arg>
+  </bean>
+
+  <bean id="sessionProvider" class="ode.services.sessions.SessionProviderWrapper">
+    <constructor-arg ref="readOnlyStatus"/>
+    <constructor-arg>
+      <!-- Providers are listed in descending order of preference. -->
+      <list>
+        <bean class="ode.services.sessions.SessionProviderInDb">
+          <constructor-arg ref="roles"/>
+          <constructor-arg ref="nodeProvider"/>
+          <constructor-arg ref="executor"/>
+          <constructor-arg ref="sqlActionWrapper"/>
+        </bean>
+        <bean class="ode.services.sessions.SessionProviderInMemory">
+          <constructor-arg ref="roles"/>
+          <constructor-arg ref="nodeProvider"/>
+          <constructor-arg ref="executor"/>
+        </bean>
+      </list>
+    </constructor-arg>
+  </bean>
+
+  <!-- avoids dependency on executor bean -->
+  <bean id="sessionProviderBare" class="ode.services.sessions.SessionProviderWrapper">
+    <constructor-arg ref="readOnlyStatus"/>
+    <constructor-arg>
+      <!-- Providers are listed in descending order of preference. -->
+      <list>
+        <bean class="ode.services.sessions.SessionProviderInDb">
+          <constructor-arg ref="roles"/>
+          <constructor-arg><null/></constructor-arg>
+          <constructor-arg><null/></constructor-arg>
+          <constructor-arg><null/></constructor-arg>
+        </bean>
+        <bean class="ode.services.sessions.SessionProviderInMemory">
+          <constructor-arg ref="roles"/>
+          <constructor-arg><null/></constructor-arg>
+          <constructor-arg><null/></constructor-arg>
+        </bean>
+      </list>
+    </constructor-arg>
+  </bean>
+
+  <bean id="methodSecurity" class="ode.security.basic.BasicMethodSecurity">
+    <property name="sessionManager" ref="sessionManager"/>
+  </bean>
+
+  <!-- Throttling primitives -->
+
+  <bean id="threadCounterFactory" class="ode.services.sessions.stats.CounterFactory">
+    <property name="objectsReadHardLimit" value="64000"/>
+    <property name="objectsWrittenHardLimit" value="64000"/>
+  </bean>
+
+  <!-- Uses Integer.MAX_VALUE -->
+  <bean id="sessionCounterFactory" class="ode.services.sessions.stats.CounterFactory"/>
+
+  <!--
+  The following stats types
+  -->
+
+  <bean id="perSessionStats" class="ode.services.sessions.stats.PerSessionStats">
+    <constructor-arg ref="currentDetails"/>
+  </bean>
+
+  <bean id="perThreadStats" class="ode.services.sessions.stats.PerThreadStats">
+    <constructor-arg ref="currentDetails"/>
+  </bean>
+
+  <bean id="delegatingStats" class="ode.services.sessions.stats.DelegatingStats">
+    <constructor-arg>
+      <list>
+        <ref bean="perThreadStats"/>
+        <ref bean="perSessionStats"/>
+      </list>
+    </constructor-arg>
+  </bean>
+
+</beans>

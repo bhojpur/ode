@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+  <alias name="internal-ode.api.IQuery" alias="internal-ode.api.LocalQuery"/> 
+  <bean parent="level1" id="internal-ode.api.IQuery" class="ode.logic.QueryImpl">
+    <property name="timeoutSetter" ref="timeoutSetter"/>
+    <property name="analyzer" value="${ode.search.analyzer}"/>
+  </bean>
+ 
+  <bean id="managed-ode.api.IQuery" parent="managedService">
+    <property name="proxyInterfaces">
+      <list>
+        <value>ode.api.IQuery</value>
+        <value>ode.api.local.LocalQuery</value>
+      </list>
+    </property>
+    <property name="target" ref="internal-ode.api.IQuery"/>
+  </bean>  
+  
+</beans>

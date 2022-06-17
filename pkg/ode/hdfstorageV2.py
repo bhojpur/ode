@@ -205,8 +205,7 @@ class HdfStorage(object):
         self.logger = logging.getLogger("core.tables.HdfStorage")
 
         self.__hdf_path = path(file_path)
-        # Locking first as described at:
-        # http://www.pytables.org/trac/ticket/185
+        # Locking first
         self.__hdf_file = HDFLIST.addOrThrow(file_path, self, read_only)
         self.__tables = []
 

@@ -779,7 +779,7 @@
 						}
 						// let this fall through because server response could be an empty document
 						// log('Could not access iframe DOM after mutiple tries.');
-						// throw 'DOMException: not available';
+						// throw 'DODException: not available';
 					}
 
 					// log('response detected');

@@ -82,7 +82,7 @@ def cmd(args,
         if debug:
             command += ["-Xdebug", debug_string]
 
-    # Add JAVA_OPTS at the end. ticket:1439
+    # Add JAVA_OPTS at the end.
     if "JAVA_OPTS" in list(os.environ.keys()):
         command += shlex.split(os.environ["JAVA_OPTS"])
 

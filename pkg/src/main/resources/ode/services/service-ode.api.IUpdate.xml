@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+  <bean parent="level1" id="internal-ode.api.IUpdate" class="ode.logic.UpdateImpl">
+    <property name="adminService" ref="internal-ode.api.LocalAdmin"/>
+    <property name="queryService" ref="internal-ode.api.LocalQuery"/>
+    <property name="executor" ref="executor"/>
+    <property name="sessionManager" ref="sessionManager"/>
+    <property name="fullTextBridge" ref="fullTextBridge"/>
+    <property name="indexWatcher" ref="indexWatcher"/>
+  </bean>
+
+  <alias name="internal-ode.api.IUpdate" alias="internal-ode.api.LocalUpdate"/>
+
+  <bean id="managed-ode.api.IUpdate" parent="managedService">
+    <property name="proxyInterfaces">
+      <list>
+        <value>ode.api.IUpdate</value>
+        <value>ode.api.local.LocalUpdate</value>        
+      </list>
+    </property>
+    <property name="target" ref="internal-ode.api.IUpdate"/>
+  </bean>
+
+  <bean name="indexWatcher" class="ode.services.search.IndexWatcher">
+    <constructor-arg ref="dataSource"/>
+    <constructor-arg value="PersistentEventLogLoader.v2.current_id"/>
+  </bean>
+
+  <bean id="indexWatcherTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+    <property name="jobDetail">
+      <bean class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="indexWatcher"/>
+        <property name="targetMethod" value="poll"/>
+        <property name="concurrent" value="false"/>
+      </bean>
+    </property>
+    <property name="cronExpression" value="*/1 * * * * ?"/>
+  </bean>
+</beans>

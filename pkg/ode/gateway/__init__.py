@@ -101,10 +101,9 @@ logger = logging.getLogger(__name__)
 THISPATH = os.path.dirname(os.path.abspath(__file__))
 
 try:
-    from PIL import Image, ImageDraw, ImageFont     # see ticket:2597
+    from PIL import Image, ImageDraw, ImageFont     #
 except:  # pragma: nocover
     try:
-        # see ticket:2597
         import Image
         import ImageDraw
         import ImageFont
@@ -7765,7 +7764,7 @@ class _ChannelWrapper (OdeObjectWrapper):
         """
         si = self._obj.getStatsInfo()
         if si is None:
-            logger.info("getStatsInfo() is null. See #9695")
+            logger.info("getStatsInfo() is null")
             try:
                 if self._re is not None:
                     return self._re.getPixelsTypeLowerBound(0)
@@ -7794,7 +7793,7 @@ class _ChannelWrapper (OdeObjectWrapper):
         """
         si = self._obj.getStatsInfo()
         if si is None:
-            logger.info("getStatsInfo() is null. See #9695")
+            logger.info("getStatsInfo() is null")
             try:
                 if self._re is not None:
                     return self._re.getPixelsTypeUpperBound(0)
@@ -10679,7 +10678,7 @@ class _LightSettingsWrapper (OdeObjectWrapper):
     def getLightSource(self):
         if self._obj.lightSource is None:
             return None
-        if not self._obj.lightSource.isLoaded():    # see #5742
+        if not self._obj.lightSource.isLoaded():    #
             lid = self._obj.lightSource.id.val
             params = ode.sys.Parameters()
             params.map = {"id": rlong(lid)}

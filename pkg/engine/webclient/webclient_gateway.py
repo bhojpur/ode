@@ -70,10 +70,10 @@ except Exception:
 logger = logging.getLogger(__name__)
 
 try:
-    from PIL import Image  # see ticket:2597
+    from PIL import Image  #
 except ImportError:
     try:
-        import Image  # see ticket:2597
+        import Image  #
     except Exception:
         logger.error(
             "You need to install the Python Imaging Library. Get it at"

@@ -161,8 +161,6 @@ class Dependency(object):
     dependency on a non-shipped library. This is called
     lazily from the run method of the application to give
     logging time to be initialized.
-
-    See #4566
     """
 
     def __init__(self, key):
@@ -530,7 +528,7 @@ class Server(Ice.Application):
                 self.adapter.activate()
                 # calls setProxy
                 ctx.add_servant(self.adapter, self.impl, self.identity)
-                # ticket:1978 for non-collocated registries
+                # non-collocated registries
                 prx = self.adapter.createDirectProxy(self.identity)
                 # This must happen _after_ activation
                 add_grid_object(self.communicator(), prx)
@@ -682,7 +680,7 @@ class Resources(object):
                             "Exception during execution", exc_info=True)
 
                     ctx.logger.debug("Sleeping %s" % ctx.sleeptime)
-                    # ticket:1531 - Attempting to catch threading issues
+                    # Attempting to catch threading issues
                     try:
                         ctx.stop_event.wait(ctx.sleeptime)
                     except ValueError:
@@ -691,7 +689,7 @@ class Resources(object):
                 if isinstance(ctx.stop_event,
                               ode.util.concurrency.AtExitEvent):
                     if ctx.stop_event.atexit:
-                        return  # Skipping log. See #3260
+                        return  # Skipping log
 
                 ctx.logger.info("Halted")
 
@@ -791,7 +789,7 @@ class Environment(object):
         in the current execution environment.
         """
         if sys.platform == "win32":
-            # Prevents SocketException. See ticket:1518
+            # Prevents SocketException.
             self.env = os.environ.copy()
         else:
             self.env = {}
@@ -835,8 +833,6 @@ def get_user(default=None):
     False, the default value be returned.
 
     Any unexpected exceptions will be thrown.
-
-    See ticket:6307
     """
     rv = None
     try:
@@ -916,7 +912,7 @@ def edit_path(path_or_obj, start_text):
     f.write_text(start_text)
 
     # If absolute, then use the path
-    # as is (ticket:4246). Otherwise,
+    # Otherwise,
     # use which.py to find it.
     editor_parts = shlex.split(editor)
     editor = editor_parts[0]

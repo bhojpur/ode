@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+  <description>
+  sec-system.xml defines the interceptors for all methods which need
+  authentication and authorization as well as the core security system
+  classes.
+  </description>
+
+  <!-- Disabled the security system holder for the moment -->
+  <alias name="basicSecuritySystem" alias="securitySystem"/>
+
+  <bean id="securitySystemHolder" class="ode.security.SecuritySystemHolder">
+    <constructor-arg ref="basicSecuritySystem"/>
+    <constructor-arg ref="sharingSecuritySystem"/>
+  </bean>
+
+  <bean id="sharingSecuritySystem" class="ode.security.sharing.SharingSecuritySystem">
+    <constructor-arg ref="basicSecuritySystem"/>
+  </bean>
+
+  <bean id="basicSecuritySystem" class="ode.security.basic.BasicSecuritySystem">
+    <constructor-arg ref="odeInterceptor"/>
+    <constructor-arg ref="systemTypes"/>
+    <constructor-arg ref="currentDetails"/>
+    <constructor-arg ref="sessionManager"/>
+    <constructor-arg ref="sessionProvider"/>
+    <constructor-arg ref="eventProvider"/>
+    <constructor-arg ref="roles"/>
+    <constructor-arg ref="internalServiceFactory"/>
+    <constructor-arg ref="tokenHolder"/>
+    <constructor-arg>
+      <list>
+        <ref bean="securityFilterHolder"/>
+        <ref bean="&amp;LightAdminPrivilegesSecurityFilter"/>  <!-- filter is a factory -->
+      </list>
+    </constructor-arg>
+    <constructor-arg ref="policyService"/>
+    <constructor-arg ref="aclVoter"/>
+  </bean>
+
+  <bean id="basicSecuritySystemSubstituter" class="ode.services.util.BeanInstantiationSubstituter">
+    <constructor-arg ref="readOnlyStatus"/>
+    <constructor-arg value="basicSecuritySystem"/>
+    <constructor-arg value="ode.security.basic.BasicSecuritySystemReadOnly"/>
+    <property name="isWriteDb" value="true"/>  <!-- see SessionProviderInDb.isReadOnly -->
+  </bean>
+
+  <bean id="securityWiring" class="ode.security.basic.BasicSecurityWiring"
+   lazy-init="true">
+    <property name="principalHolder" ref="principalHolder"/>
+    <property name="methodSecurity" ref="methodSecurity"/>
+  </bean>
+
+  <bean id="eventHandler" class="ode.security.basic.EventHandler">
+    <description>
+    Scope: private
+    </description>
+    <constructor-arg ref="simpleSqlAction"/>
+    <constructor-arg ref="basicSecuritySystem"/>
+    <constructor-arg ref="odeSessionFactory"/>
+    <constructor-arg ref="transactionAttributeSource"/>
+    <constructor-arg ref="readOnlyStatus"/>
+  </bean>
+
+  <!-- These might should be moved to a third security tier -->
+
+  <bean id="eventListeners" class="ode.security.basic.EventListenersFactoryBean">
+    <description>
+    Used by hibernate.xml during the creation of SessionFactory.
+    </description>
+    <constructor-arg ref="aclVoter"/>
+    <constructor-arg ref="currentDetails"/>
+    <constructor-arg ref="tokenHolder"/>
+    <constructor-arg ref="odeInterceptor"/>
+    <property name="debugAll" value="false"/>
+  </bean>
+
+  <bean id="odeInterceptor" class="ode.security.basic.OdeInterceptor" depends-on="adminPrivilegesCleanup">
+    <description>
+    Scope: private
+    </description>
+    <constructor-arg ref="roles"/>
+    <constructor-arg ref="systemTypes"/>
+    <constructor-arg ref="currentDetails"/>
+    <constructor-arg ref="tokenHolder"/>
+    <constructor-arg ref="extendedMetadata"/>
+    <constructor-arg ref="delegatingStats"/>
+    <constructor-arg ref="adminPrivileges"/>
+    <constructor-arg ref="simpleSqlAction"/>
+    <constructor-arg ref="sqlQueryTransformer"/>
+    <constructor-arg ref="managedRepoUuids"/>
+    <constructor-arg ref="scriptRepoUuids"/>
+  </bean>
+
+  <bean id="adminPrivilegesCleanup" class="ode.security.basic.LightAdminPrivilegesCleanup">
+    <constructor-arg ref="simpleSqlAction"/>
+    <constructor-arg value="10"></constructor-arg>  <!-- seconds, matching cron expression below -->
+  </bean>
+
+  <bean id="adminPrivilegesCleanupTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+    <property name="jobDetail" ref="adminPrivilegesCleanupRun"/>
+    <property name="cronExpression" value="*/10 * * * * ?"/>
+  </bean>
+
+  <bean id="adminPrivilegesCleanupRun" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+    <property name="targetObject" ref="adminPrivilegesCleanup"/>
+    <property name="targetMethod" value="run"/>
+    <property name="concurrent" value="false"/>
+  </bean>
+
+  <bean id="adminPrivilegesCleanupTriggerGuard" class="ode.services.util.BeanInstantiationGuard">
+    <constructor-arg ref="readOnlyStatus"/>
+    <constructor-arg value="adminPrivilegesCleanupTrigger"/>
+    <property name="isWriteDb" value="true"/>
+  </bean>
+
+</beans>

@@ -162,7 +162,7 @@ class ShellControl(BaseControl):
             ns = {"client": client, "ode": ode}
 
         try:
-            # IPython 0.11 (see #7112)
+            # IPython 0.11
             from IPython import embed
             embed(user_ns=ns)
         except ImportError:

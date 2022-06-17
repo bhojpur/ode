@@ -218,7 +218,6 @@ class TempFileManager(object):
                 if "Operation not permitted" in str(e) or \
                    "Operation not supported" in str(e):
 
-                    # This is the issue described in ticket:1653
                     # To prevent printing the warning, we just continue
                     # here.
                     self.logger.debug("%s does not support locking.", target)

@@ -9,7 +9,7 @@
 
 <script>
 
-    if (typeof ODE === "undefined"){ OME = {}}
+    if (typeof ODE === "undefined"){ ODE = {}}
     ODE.showActivities = function() {
         $("#activities_panel").show();
         ODE.displayStatus(-1);  // reset new_results
@@ -103,9 +103,9 @@
         
         // if neither flag is showing, fade out the main icon
         if ($('#jobstatus').is(":visible") || $('#runningStatus').is(":visible")) {
-            // turning off, see #9154 $("#launch_activities").css('opacity', 1.0);
+            // turning off, $("#launch_activities").css('opacity', 1.0);
         } else {
-            // turning off, see #9154 $("#launch_activities").css('opacity', 0.5);
+            // turning off, $("#launch_activities").css('opacity', 0.5);
         }
     }
 
