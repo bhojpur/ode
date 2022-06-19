@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans default-lazy-init="false">
+
+  <!-- bean must exist for sec-primitives.xml -->
+  <bean id="dbPatchCheck" class="java.lang.Object"/>
+
+ <bean id="uuid_object" class="java.util.UUID" factory-method="randomUUID"/>
+ <bean id="uuid" factory-bean="uuid_object" factory-method="toString"/>
+
+ <bean id="roles" class="ode.system.Roles"/>
+
+ <bean id="mockDeclarer" class="ode.services.server.test.mock.MockDeclarer">
+   <constructor-arg>
+     <map>
+       <entry key="ode.api.IAdmin" value="ode.api.local.LocalAdmin"/>
+       <entry key="ode.api.IConfig"><null/></entry>
+       <entry key="ode.api.IDelete"><null/></entry>
+       <entry key="ode.api.ILdap"><null/></entry>
+       <entry key="ode.api.IPixels"><null/></entry>
+       <entry key="ode.api.IContainer"><null/></entry>
+       <entry key="ode.api.IQuery" value="ode.api.local.LocalQuery"/>
+       <entry key="ode.api.IRenderingSettings"><null/></entry>
+       <entry key="ode.api.IRepositoryInfo"><null/></entry>
+       <entry key="ode.api.ISession"><null/></entry>
+       <entry key="ode.api.IShare"><null/></entry>
+       <entry key="ode.api.ITypes"><null/></entry>
+       <entry key="ode.api.IUpdate" value="ode.api.local.LocalUpdate"/>
+       <!-- Stateful -->
+       <entry key="ode.api.JobHandle"><list><value>ode.api.JobHandle</value></list></entry>
+       <entry key="ode.api.RawFileStore"><list><value>ode.api.RawFileStore</value></list></entry>
+       <entry key="ode.api.RawPixelsStore"><list><value>ode.api.RawPixelsStore</value></list></entry>
+       <entry key="odeis.providers.re.RenderingEngine"><list><value>odeis.providers.re.RenderingEngine</value></list></entry>
+       <entry key="ode.api.Search"><list><value>ode.api.Search</value></list></entry>
+       <entry key="ode.api.ThumbnailStore"><list><value>ode.api.ThumbnailStore</value></list></entry>
+       <!-- Server only
+       <entry key="ode.api.Gateway" value=""/>
+       <entry key="ode.api.IScript" value=""/>
+       -->
+     </map>
+   </constructor-arg>
+ </bean>
+
+  <!--  from components/server/resources/ode/services/service-ode.io.nio.PixelsService.xml -->
+  <bean id="configuredTileSizes" class="ode.io.nio.ConfiguredTileSizes">
+    <constructor-arg index="0" value="${ode.pixeldata.tile_width}"/>
+    <constructor-arg index="1" value="${ode.pixeldata.tile_height}"/>
+    <constructor-arg index="2" value="${ode.pixeldata.max_plane_width}"/>
+    <constructor-arg index="3" value="${ode.pixeldata.max_plane_height}"/>
+  </bean>
+
+  <bean id="threadPool" class="ode.services.scheduler.ThreadPool">
+    <constructor-arg index="0" value="0"/>
+    <constructor-arg index="1" value="4"/>
+    <constructor-arg index="2" value="5000"/>
+  </bean>
+
+  <bean name="/ODE/Pixels" class="ode.io.nio.PixelsService"
+        parent="filesystem">
+  </bean>
+ <bean id="shareStore" class="ode.services.sharing.BlobShareStore"/>
+
+ <bean id="securitySystem" factory-bean="securityMock" factory-method="proxy"/>
+ <bean id="methodSecurity" factory-bean="methodMock" factory-method="proxy"/>
+  <bean id="executor"      factory-bean="executorMock" factory-method="proxy"/>
+ <!-- Here it is necessary to specify the HardWiredInterceptors instances
+ even if they are *not* specified in Spring -->
+ <bean id="securityWiring" class="ode.security.basic.BasicSecurityWiring">
+   <property name="principalHolder" ref="principalHolder"/>
+   <property name="methodSecurity"  ref="methodSecurity"/>
+ </bean>
+
+ <bean id="securityMock" class="org.jmock.Mock">
+   <constructor-arg value="ode.security.SecuritySystem" type="java.lang.Class"/>
+ </bean>
+
+ <bean id="methodMock" class="org.jmock.Mock">
+   <constructor-arg value="ode.security.MethodSecurity" type="java.lang.Class"/>
+ </bean>
+
+ <bean id="sqlActionMock" class="org.jmock.Mock">
+   <constructor-arg value="ode.util.SqlAction" type="java.lang.Class"/>
+ </bean>
+
+ <bean id="simpleSqlAction" factory-bean="sqlActionMock" factory-method="proxy"/>
+
+  <bean id="executorMock" class="ode.services.server.test.fixtures.ExecutorMockFactory"/>
+
+  <bean id="cacheManager" class="ode.tools.spring.ShutdownSafeEhcacheManagerFactoryBean"/>
+
+  <bean name="sessionCache" class="ode.services.sessions.state.SessionCache">
+    <property name="cacheManager"  ref="cacheManager"/>
+    <property name="updateInterval" value="1800000"/><!-- ms -->
+  </bean>
+
+  <bean id="principalHolder" class="ode.security.basic.CurrentDetails"/>
+  <alias alias="currentDetails" name="principalHolder"/>
+
+  <!-- ode.services.sessions.SessionManager with swappable implementation -->
+
+  <bean id="emMock" class="org.jmock.Mock">
+      <constructor-arg value="ode.tools.hibernate.ExtendedMetadata" type="java.lang.Class"/>
+  </bean>
+
+  <bean id="extendedMetadata" factory-bean="emMock" factory-method="proxy"/>
+
+  <bean id="sessionsMock" class="org.jmock.Mock">
+      <constructor-arg value="ode.services.sessions.SessionManager" type="java.lang.Class"/>
+  </bean>
+
+  <bean id="mockedSessionManager" factory-bean="sessionsMock" factory-method="proxy"/>
+
+  <bean id="swappableSessionManagerSource"
+      class="org.springframework.aop.target.HotSwappableTargetSource">
+      <constructor-arg ref="mockedSessionManager"/>
+  </bean>
+
+  <bean id="sessionManager" class="org.springframework.aop.framework.ProxyFactoryBean">
+      <property name="targetSource" ref="swappableSessionManagerSource"/>
+  </bean>
+
+  <bean id="ring" class="ode.services.server.fire.Ring">
+    <constructor-arg ref="uuid"/>
+    <constructor-arg ref="executor"/>
+  </bean>
+
+  <!--  TODO: it might be better to refactor all IO into one module -->
+  <bean name="filesystem"  abstract="true">
+    <constructor-arg value="${ode.data.dir}"/>
+  </bean>
+
+  <bean id="sfMock" class="ode.services.server.test.fixtures.SessionFactoryMockFactory"/>
+  <bean id="sessionFactory" factory-bean="sfMock" factory-method="proxy"/>
+
+  <!-- TODO: passing null for the moment. Will need to use a mock eventually -->
+  <bean id="odeSessionFactory" class="ode.tools.hibernate.SessionFactory">
+    <constructor-arg index="0" ref="sessionFactory"/>
+    <constructor-arg index="1"><null/></constructor-arg>
+  </bean>
+
+  <!-- For the request factories -->
+  <bean id="Ice.Communicator" factory-method="initialize" class="Ice.Util"/>
+
+  <bean id="registryMock" class="org.jmock.Mock">
+      <constructor-arg value="ode.services.server.fire.Registry" type="java.lang.Class"/>
+  </bean>
+
+  <bean id="Registry" factory-bean="registryMock" factory-method="proxy"/>
+
+  <bean id="repositoryDaoMock" class="org.jmock.Mock">
+      <constructor-arg value="ode.services.server.repo.RepositoryDao" type="java.lang.Class"/>
+  </bean>
+
+  <bean id="repositoryDao" factory-bean="repositoryDaoMock" factory-method="proxy"/>
+
+</beans>

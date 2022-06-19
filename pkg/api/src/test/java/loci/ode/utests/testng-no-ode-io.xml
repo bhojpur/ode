@@ -1,0 +1,9 @@
+<suite name="Missing Bhojpur ODE ReaderWriter Service Tests">
+    <test name="MissingODEReaderWriterService">
+        <groups/>
+        <classes>
+            <class name="loci.ode.utests.MissingODEReaderWriterServiceTest"/>
+        </classes>
+        <packages/>
+    </test>
+</suite>

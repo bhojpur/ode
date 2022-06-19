@@ -1,0 +1,9 @@
+<suite name="Bhojpur ODE ReaderWriter Service Tests">
+    <test name="ODEReaderWriterService">
+        <groups/>
+        <classes>
+            <class name="loci.ode.utests.ODEReaderWriterServiceTest"/>
+        </classes>
+        <packages/>
+    </test>
+</suite>
