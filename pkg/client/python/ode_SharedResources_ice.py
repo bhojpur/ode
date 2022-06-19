@@ -61,7 +61,7 @@ if 'SharedResources' not in _M_ode.grid.__dict__:
     _M_ode.grid.SharedResources = Ice.createTempClass()
     class SharedResources(Ice.Object):
         """
-        Resource manager provided by each Blitz session for acquiring
+        Resource manager provided by each Server session for acquiring
         shared resources in the OdeGrid. Unlike the other services
         provided by ServiceFactory instances, it is not guaranteed
         that a service instance returned from this interface will be

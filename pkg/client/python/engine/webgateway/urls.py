@@ -313,7 +313,7 @@ webgateway_listimages_json = url(
 """
 json method: returns list of Images belonging to specified Dataset. See
 L{views.listImages_json}. Returns E.g list of
-{"description": "", "author": "Will Moore", "date": 1291325060.0,
+{"description": "", "author": "Shashi bhushan Rai", "date": 1291325060.0,
  "thumb_url": "/webgateway/render_thumbnail/4701/", "type": "Image",
  "id": 4701, "name": "spim.png"}
     - webgateway/dataset/<did>/children params are:
@@ -334,8 +334,8 @@ webgateway_listwellimages_json = url(
 )
 """
 json method: returns list of Images belonging to specified Well. See
-L{views.listWellImages_json}. Returns E.g list of
-{"description": "", "author": "Will Moore", "date": 1291325060.0,
+L{views.listWellImages_json}. Returns e.g list of
+{"description": "", "author": "Shashi Bhushan Rai", "date": 1291325060.0,
  "thumb_url": "/webgateway/render_thumbnail/4701/", "type": "Image",
  "id": 4701, "name": "spim.png"}
     - webgateway/well/<did>/children params are:

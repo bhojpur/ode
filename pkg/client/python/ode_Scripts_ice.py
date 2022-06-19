@@ -104,7 +104,7 @@ if 'RInternal' not in _M_ode.__dict__:
     class RInternal(_M_ode.RType):
         """
         Base type for RTypes whose contents will not be parsed by
-        the server. This allows Blitz-specific types to be safely
+        the server. This allows Server-specific types to be safely
         passed in as the inputs/outputs of scripts.
         """
         def __init__(self, _val=None):
@@ -688,7 +688,7 @@ if 'ProcessCallback' not in _M_ode.grid.__dict__:
         def processFinished(self, returncode, current=None):
             """
             Process terminated normally. Return code provided.
-            In the case that a non-Blitz process sent a signal
+            In the case that a non-Server process sent a signal
             (KILL, TERM, ... ), that will represented in the
             return code.
             Arguments:
@@ -711,7 +711,7 @@ if 'ProcessCallback' not in _M_ode.grid.__dict__:
         def processKilled(self, success, current=None):
             """
             kill() was called on this Process. If this does not
-            succeed, there is nothing else that Blitz can do to
+            succeed, there is nothing else that Server can do to
             stop its execution.
             Arguments:
             success -- 
@@ -729,7 +729,7 @@ if 'ProcessCallback' not in _M_ode.grid.__dict__:
 
         """
         Process terminated normally. Return code provided.
-        In the case that a non-Blitz process sent a signal
+        In the case that a non-Server process sent a signal
         (KILL, TERM, ... ), that will represented in the
         return code.
         Arguments:
@@ -741,7 +741,7 @@ if 'ProcessCallback' not in _M_ode.grid.__dict__:
 
         """
         Process terminated normally. Return code provided.
-        In the case that a non-Blitz process sent a signal
+        In the case that a non-Server process sent a signal
         (KILL, TERM, ... ), that will represented in the
         return code.
         Arguments:
@@ -757,7 +757,7 @@ if 'ProcessCallback' not in _M_ode.grid.__dict__:
 
         """
         Process terminated normally. Return code provided.
-        In the case that a non-Blitz process sent a signal
+        In the case that a non-Server process sent a signal
         (KILL, TERM, ... ), that will represented in the
         return code.
         Arguments:
@@ -804,7 +804,7 @@ if 'ProcessCallback' not in _M_ode.grid.__dict__:
 
         """
         kill() was called on this Process. If this does not
-        succeed, there is nothing else that Blitz can do to
+        succeed, there is nothing else that Server can do to
         stop its execution.
         Arguments:
         success -- 
@@ -815,7 +815,7 @@ if 'ProcessCallback' not in _M_ode.grid.__dict__:
 
         """
         kill() was called on this Process. If this does not
-        succeed, there is nothing else that Blitz can do to
+        succeed, there is nothing else that Server can do to
         stop its execution.
         Arguments:
         success -- 
@@ -830,7 +830,7 @@ if 'ProcessCallback' not in _M_ode.grid.__dict__:
 
         """
         kill() was called on this Process. If this does not
-        succeed, there is nothing else that Blitz can do to
+        succeed, there is nothing else that Server can do to
         stop its execution.
         Arguments:
         success -- 

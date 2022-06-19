@@ -56,7 +56,7 @@ Examples:
 """
 
 DEPRECATION_MESSAGE = (
-    "This plugin is deprecated as of Bhojpur ODE.py 5.8.0. Use the plugin"
+    "This plugin is deprecated as of Bhojpur ODE.py. Use the plugin"
     " available from https://pypi.org/project/ode-cli-duplicate/"
     " instead.")
 

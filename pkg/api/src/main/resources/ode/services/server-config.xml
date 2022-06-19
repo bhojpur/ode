@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+  <bean id="configuration" class="ode.services.server.util.ServerConfiguration"
+    destroy-method="destroy">
+    <description>
+    Central configuration for the Bhojpur ODE server runtime. This is done within
+    a single object due to interdependencies which are complicated to express
+    in Spring. All created instances are available via getters.
+    </description>
+    <constructor-arg ref="sessionManager"/>
+    <constructor-arg ref="sessionProvider"/>
+    <constructor-arg ref="securitySystem"/>
+    <constructor-arg ref="executor"/>
+    <constructor-arg ref="ring"/>
+    <constructor-arg value="${ode.throttling.servants_per_session}"/>
+  </bean>
+
+  <bean id="ring" class="ode.services.server.fire.Ring">
+    <constructor-arg ref="uuid"/>
+    <constructor-arg ref="executor"/>
+    <constructor-arg ref="redirector"/>
+    <constructor-arg ref="scriptRepoHelper"/>
+    <constructor-arg ref="nodeProvider"/>
+  </bean>
+
+  <!-- Redirector configuration -->
+  <alias name="${ode.cluster.redirector}" alias="redirector"/>
+
+  <bean id="nullRedirector" class="ode.services.server.redirect.NullRedirector"/>
+
+  <bean id="configRedirector" class="ode.services.server.redirect.ConfigRedirector">
+    <constructor-arg ref="executor"/>
+  </bean>
+
+  <bean id="scaleRedirector" class="ode.services.server.redirect.ScaleRedirector">
+    <constructor-arg ref="executor"/>
+  </bean>
+
+  <!-- Storm configuration -->
+
+  <bean id="requestHeartBeatsRun" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+    <property name="targetObject" ref="ServerManager" />
+    <property name="targetMethod" value="requestHeartBeats" />
+  </bean>
+  <bean id="requestHeartBeatsTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+    <property name="cronExpression" value="0 0/3 * * * ?" />
+    <property name="jobDetail" ref="requestHeartBeatsRun"/>
+  </bean>
+
+  <bean id="clusterCheckRun" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+    <property name="targetObject" ref="ring" />
+    <property name="targetMethod" value="checkCluster" />
+  </bean>
+  <bean id="clusterCheckTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+    <property name="cronExpression" value="13 0/30 * * * ?" />
+    <property name="jobDetail" ref="clusterCheckRun"/>
+  </bean>
+
+  <bean id="checkAllJobsThread" class="ode.services.server.util.CheckAllJobs" lazy-init="false">
+    <constructor-arg ref="executor"/>
+    <constructor-arg ref="ServerAdapter"/>
+    <constructor-arg ref="TopicManager"/>
+    <constructor-arg value="120000"/> <!-- ms.; Give processor time to recover -->
+  </bean>
+  <bean id="checkAllJobsThreadGuard" class="ode.services.util.BeanInstantiationGuard">
+    <constructor-arg ref="readOnlyStatus"/>
+    <constructor-arg value="checkAllJobsThread"/>
+    <property name="isWriteDb" value="true"/>
+  </bean>
+
+  <!-- Lookups -->
+  <bean id="Ice.Communicator" factory-bean="configuration" factory-method="getCommunicator"/>
+  <bean id="ServerAdapter" factory-bean="configuration" factory-method="getServerAdapter"/>
+  <bean id="ServerManager" factory-bean="configuration" factory-method="getServerManager"/>
+  <bean id="ServerVerifier" factory-bean="configuration" factory-method="getServerVerifier"/>
+  <bean id="TopicManager" factory-bean="configuration" factory-method="getTopicManager"/>
+  <bean id="Registry" factory-bean="configuration" factory-method="getRegistry"/>
+
+</beans>

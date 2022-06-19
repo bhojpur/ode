@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+  <description>
+  Defines the contexts for the Bhojpur ODE server. Other beanRefFactory.xmls
+  may define other contexts.
+  </description>
+
+  <bean    id="OOE.server"
+           class="ode.system.OdeContext"
+           lazy-init="true">
+    <constructor-arg index="0">
+      <list>
+        <value>classpath:ode/config.xml</value>
+        <value>classpath:ode/services/messaging.xml</value>
+        <value>classpath:ode/services/objectfactories.xml</value>
+        <value>classpath:ode/services/throttling/throttling.xml</value>
+        <value>classpath*:ode/services/server-*.xml</value>
+      </list>
+    </constructor-arg>
+    <constructor-arg index="1" value="true"/>
+    <constructor-arg index="2" ref="ode.server"/>
+  </bean>
+
+  <bean   id="ODE.server.test"
+          class="ode.system.OdeContext"
+          lazy-init="true">
+    <constructor-arg index="0">
+      <list>
+        <value>classpath:ode/config.xml</value>
+        <value>classpath:ode/services/messaging.xml</value>
+        <value>classpath:ode/services/throttling/throttling.xml</value>
+        <value>classpath:ode/test.xml</value>
+        <value>classpath:ode/test2.xml</value>
+        <value>classpath:ode/services/sec-primitives.xml</value>
+        <value>classpath:ode/services/server-servantDefinitions.xml</value>
+        <value>classpath:ode/services/server-graph-rules.xml</value>
+      </list>
+    </constructor-arg>
+    <constructor-arg index="1" value="true"/>
+  </bean>
+
+  <bean   id="ODE.repository"
+          class="ode.system.OdeContext"
+          lazy-init="true">
+    <constructor-arg index="0">
+      <list>
+        <value>classpath:ode/config.xml</value>
+        <value>classpath:ode/services/messaging.xml</value>
+        <value>classpath:ode/services/datalayer.xml</value>
+        <value>classpath:ode/services/objectfactories.xml</value>
+        <!-- Primary reason for this context -->
+        <value>classpath:ode/services/repository/repository.xml</value>
+      </list>
+    </constructor-arg>
+  </bean>
+
+    <bean   id="ODE.security.test"
+          class="ode.system.OdeContext"
+          lazy-init="true">
+    <constructor-arg index="0">
+      <list>
+        <value>classpath:ode/config.xml</value>
+        <value>classpath:ode/services/datalayer.xml</value>
+      </list>
+    </constructor-arg>
+  </bean>
+
+</beans>

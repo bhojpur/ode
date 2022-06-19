@@ -103,7 +103,7 @@ class IWebTest(ITest):
         Imports fake image replacing tinyTest. Wavelength not supported yet
         """
         warnings.warn(
-            "This method is deprecated as of Bhojpur ODE 5.5.0. Use"
+            "This method is deprecated as of Bhojpur OD. Use"
             " engine.test_lib.import_fake_file",
             DeprecationWarning,
         )
@@ -230,7 +230,7 @@ def _post_response(
     **extra
 ):
     warnings.warn(
-        "This method is deprecated as of Bhojpur ODe 5.4.0. Use post_json", DeprecationWarning
+        "This method is deprecated as of Bhojpur ODE. Use post_json", DeprecationWarning
     )
     return _response(
         django_client,
@@ -251,7 +251,7 @@ def _post_response_json(
     **extra
 ):
     warnings.warn(
-        "This method is deprecated as of Bhojpur ODe 5.4.0. Use post_json", DeprecationWarning
+        "This method is deprecated as of Bhojpur ODE. Use post_json", DeprecationWarning
     )
     rsp = _response(
         django_client,
@@ -270,7 +270,7 @@ def _csrf_post_response(
     django_client, request_url, data, status_code=200, content_type=MULTIPART_CONTENT
 ):
     warnings.warn(
-        "This method is deprecated as of Bhojpur ODe 5.4.0. Use post_json", DeprecationWarning
+        "This method is deprecated as of Bhojpur ODE. Use post_json", DeprecationWarning
     )
     csrf_token = django_client.cookies["csrftoken"].value
     extra = {"HTTP_X_CSRFTOKEN": csrf_token}
@@ -285,7 +285,7 @@ def _csrf_post_response(
 
 def _csrf_post_response_json(django_client, request_url, query_string, status_code=200):
     warnings.warn(
-        "This method is deprecated as of Bhojpur ODE 5.4.0. Use post_json", DeprecationWarning
+        "This method is deprecated as of Bhojpur ODE. Use post_json", DeprecationWarning
     )
     rsp = _csrf_post_response(django_client, request_url, query_string, status_code)
     assert rsp.get("Content-Type") == "application/json"
@@ -296,7 +296,7 @@ def _csrf_post_json(
     django_client, request_url, data, status_code=200, content_type="application/json"
 ):
     warnings.warn(
-        "This method is deprecated as of Bhojpur ODE 5.4.0. Use post_json", DeprecationWarning
+        "This method is deprecated as of Bhojpur ODE. Use post_json", DeprecationWarning
     )
     csrf_token = django_client.cookies["csrftoken"].value
     extra = {"HTTP_X_CSRFTOKEN": csrf_token}
@@ -338,7 +338,7 @@ def _csrf_put_json(
     django_client, request_url, data, status_code=200, content_type="application/json"
 ):
     warnings.warn(
-        "This method is deprecated as of Bhojpur 5.4.0. Use put_json", DeprecationWarning
+        "This method is deprecated as of Bhojpur ODE. Use put_json", DeprecationWarning
     )
     csrf_token = django_client.cookies["csrftoken"].value
     extra = {"HTTP_X_CSRFTOKEN": csrf_token}
@@ -364,7 +364,7 @@ def _delete_response(
     **extra
 ):
     warnings.warn(
-        "This method is deprecated as of Bhojpur ODE 5.4.0. Use delete_json",
+        "This method is deprecated as of Bhojpur ODE. Use delete_json",
         DeprecationWarning,
     )
     return _response(
@@ -402,7 +402,7 @@ def _csrf_delete_response(
     django_client, request_url, data, status_code=200, content_type=MULTIPART_CONTENT
 ):
     warnings.warn(
-        "This method is deprecated as of Bhojpur ODE 5.4.0. Use delete_json",
+        "This method is deprecated as of Bhojpur ODE. Use delete_json",
         DeprecationWarning,
     )
     csrf_token = django_client.cookies["csrftoken"].value
@@ -418,7 +418,7 @@ def _csrf_delete_response(
 
 def _csrf_delete_response_json(django_client, request_url, data, status_code=200):
     warnings.warn(
-        "This method is deprecated as of Bhojpur ODE 5.4.0. Use delete_json",
+        "This method is deprecated as of Bhojpur ODE. Use delete_json",
         DeprecationWarning,
     )
     rsp = _csrf_delete_response(django_client, request_url, data, status_code)
@@ -466,7 +466,7 @@ def get_json(django_client, request_url, data=None, status_code=200, csrf=False)
 
 def _get_response(django_client, request_url, query_string, status_code=405):
     warnings.warn(
-        "This method is deprecated as of Bhojpur ODe 5.4.0. Use get", DeprecationWarning
+        "This method is deprecated as of Bhojpur ODE. Use get", DeprecationWarning
     )
     query_string = urlencode(list(query_string.items()), doseq=True)
     response = django_client.get("%s?%s" % (request_url, query_string))
@@ -475,7 +475,7 @@ def _get_response(django_client, request_url, query_string, status_code=405):
 
 def _csrf_get_response(django_client, request_url, query_string, status_code=200):
     warnings.warn(
-        "This method is deprecated as of Bhojpur ODE 5.4.0. Use get", DeprecationWarning
+        "This method is deprecated as of Bhojpur ODE. Use get", DeprecationWarning
     )
     csrf_token = django_client.cookies["csrftoken"].value
     query_string["csrfmiddlewaretoken"] = csrf_token
@@ -483,7 +483,7 @@ def _csrf_get_response(django_client, request_url, query_string, status_code=200
 
 def _get_response_json(django_client, request_url, query_string, status_code=200):
     warnings.warn(
-        "This method is deprecated as of Bhojpur ODE 5.4.0. Use get_json", DeprecationWarning
+        "This method is deprecated as of Bhojpur ODE. Use get_json", DeprecationWarning
     )
     rsp = _get_response(django_client, request_url, query_string, status_code)
     assert rsp.get("Content-Type") == "application/json"

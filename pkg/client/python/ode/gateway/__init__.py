@@ -1176,7 +1176,7 @@ class OdeObjectWrapper (object):
         Creates a dict representation of this object.
         e.g. for Image::
 
-            {'description': '', 'author': 'Will Moore', 'date': 1286332557.0,
+            {'description': '', 'author': 'Shashi Bhushan Rai', 'date': 1286332557.0,
             'type': 'Image', 'id': 3841L, 'name': 'cb_4_w500_t03_z01.tif'}
 
         :param xtra:        A dict of extra keys to include. E.g. 'childCount'
@@ -4038,7 +4038,7 @@ class _OdeGateway (object):
         """
         if ns is not None:
             warnings.warn(
-                "Deprecated in 5.4.0. The ns parameter was added in error"
+                "Deprecated in Bhojpur ODE. The ns parameter was added in error"
                 " and has always been ignored",
                 DeprecationWarning)
 
@@ -4106,12 +4106,12 @@ class _OdeGateway (object):
                                         OriginalFile. If None, use localPath
         :param mimetype:                The mimetype of the file. String.
                                         e.g. 'text/plain'
-        :param ns:                      Deprecated in 5.4.0. This is ignored
+        :param ns:                      Deprecated in Bhojpur ODE. This is ignored
         :return:                        New :class:`OriginalFileWrapper`
         """
         if ns is not None:
             warnings.warn(
-                "Deprecated in 5.4.0. The ns parameter was added in error"
+                "Deprecated in Bhojpur ODE. The ns parameter was added in error"
                 " and has always been ignored",
                 DeprecationWarning)
         if origFilePathAndName is None:
@@ -6141,8 +6141,8 @@ class _ExperimenterWrapper (OdeObjectWrapper):
 
     def getFullName(self):
         """
-        Gets full name of this experimenter. E.g. 'William James. Moore' or
-        'William Moore' if no middle name
+        Gets full name of this experimenter. e.g. 'Shashi Bhushan Rai' or
+        'Shashi Rai' if no middle name
 
         :return:    Full Name or None
         :rtype:     String
@@ -6167,7 +6167,7 @@ class _ExperimenterWrapper (OdeObjectWrapper):
 
     def getNameWithInitial(self):
         """
-        Returns first initial and Last name. E.g. 'W. Moore'
+        Returns first initial and Last name. e.g. 'S. Rai'
 
         :return:    Initial and last name
         :rtype:     String
@@ -7814,7 +7814,7 @@ class _ChannelWrapper (OdeObjectWrapper):
         return si.getGlobalMax().val
 
     def isReverseIntensity(self):
-        """Deprecated in 5.4.0. Use isInverted()."""
+        """Deprecated in Bhojpur ODE. Use isInverted()."""
         warnings.warn("Deprecated. Use isInverted()", DeprecationWarning)
         return self.isInverted()
 
@@ -9081,8 +9081,8 @@ class _ImageWrapper (OdeObjectWrapper, OdeRestrictionWrapper):
 
     @assert_re()
     def setReverseIntensity(self, channelIndex, reverse=True):
-        """Deprecated in 5.4.0. Use setChannelInverted()."""
-        warnings.warn("Deprecated in 5.4.0. Use setChannelInverted()",
+        """Deprecated in Bhojpur ODE. Use setChannelInverted()."""
+        warnings.warn("Deprecated in Bhojpur ODE. Use setChannelInverted()",
                       DeprecationWarning)
         self.setChannelInverted(channelIndex, reverse)
 

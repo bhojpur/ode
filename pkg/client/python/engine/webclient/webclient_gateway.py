@@ -625,7 +625,7 @@ class OdeWebGateway(ode.gateway.OdeGateway):
         @rtype:             L{ImageWrapper} generator
         """
         warnings.warn(
-            "Deprecated as of ODE 5.4.0. "
+            "Deprecated as of Bhojpur ODE. "
             "Use getObjects('Image', opts={'dataset': id})",
             DeprecationWarning,
         )
@@ -682,7 +682,7 @@ class OdeWebGateway(ode.gateway.OdeGateway):
     def createProject(self, name, description=None):
         """Creates new Project and returns ID"""
         warnings.warn(
-            "Deprecated as of ODE 5.4.0. Use createContainer()", DeprecationWarning
+            "Deprecated as of Bhojpur ODE. Use createContainer()", DeprecationWarning
         )
         pr = ode.model.ProjectI()
         pr.name = rstring(str(name))
@@ -693,7 +693,7 @@ class OdeWebGateway(ode.gateway.OdeGateway):
     def createScreen(self, name, description=None):
         """Creates new Screen and returns ID"""
         warnings.warn(
-            "Deprecated as of ODE 5.4.0. Use createContainer()", DeprecationWarning
+            "Deprecated as of Bhojpur ODE. Use createContainer()", DeprecationWarning
         )
         sc = ode.model.ScreenI()
         sc.name = rstring(str(name))
@@ -704,7 +704,7 @@ class OdeWebGateway(ode.gateway.OdeGateway):
     def createTag(self, name, description=None):
         """Creates new Tag and returns ID"""
         warnings.warn(
-            "Deprecated as of ODE 5.4.0. Use createContainer()", DeprecationWarning
+            "Deprecated as of Bhojpur ODE. Use createContainer()", DeprecationWarning
         )
         tag = ode.model.TagAnnotationI()
         tag.textValue = rstring(str(name))
@@ -715,7 +715,7 @@ class OdeWebGateway(ode.gateway.OdeGateway):
     def createTagset(self, name, description=None):
         """Creates new Tag Set and returns ID"""
         warnings.warn(
-            "Deprecated as of ODE 5.4.0. Use createContainer()", DeprecationWarning
+            "Deprecated as of Bhojpur ODE. Use createContainer()", DeprecationWarning
         )
         tag = ode.model.TagAnnotationI()
         tag.textValue = rstring(str(name))
@@ -2362,7 +2362,7 @@ class ExperimenterGroupWrapper(
                 yield ExperimenterWrapper(self._conn, gem.child)
 
     def getOwnersNames(self):
-        warnings.warn("getOwnersNames() deprecated in 5.7.0", DeprecationWarning)
+        warnings.warn("getOwnersNames() deprecated in Bhojpur ODE", DeprecationWarning)
         owners = list()
         for e in self.getOwners():
             owners.append(e.getFullName())

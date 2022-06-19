@@ -130,7 +130,7 @@ elif os.name == 'posix':
             fcntl.flock(fileno, flags)
         except IOError as exc_value:
             #  IOError: [Errno 11] Resource temporarily unavailable
-            #  Following added by Glencoe Software, Inc. using LOCK_NB|LOCK_EX on Mac 10.4
+            #  Following added by Bhojpur Consulting Private Limited, India using LOCK_NB|LOCK_EX on Mac 10.4
             #  IOError: [Errno 35] Resource temporarily unavailable
             if exc_value.args[0] == 11 or exc_value.args[0] == 35:
                 raise LockException(

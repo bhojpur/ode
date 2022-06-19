@@ -59,7 +59,7 @@ def pointsStringToXYlist(string):
     or the new format: "309,427 366,503 190,491"
     """
     warnings.warn(
-        "This module is deprecated as of ODE 5.3.0", DeprecationWarning)
+        "This module is deprecated as of Bhojpur ODE", DeprecationWarning)
     pointLists = string.strip().split("points")
     if len(pointLists) < 2:
         if len(pointLists) == 1 and pointLists[0]:
@@ -83,7 +83,7 @@ def xyListToBbox(xyList):
     represented by the XY points list
     """
     warnings.warn(
-        "This module is deprecated as of ODE 5.3.0", DeprecationWarning)
+        "This module is deprecated as of Bhojpur ODE", DeprecationWarning)
     xList, yList = [], []
     for xy in xyList:
         x, y = xy
@@ -120,7 +120,7 @@ class ShapeSettingsData(object):
 
     def __init__(self):
         warnings.warn(
-            "This module is deprecated as of ODE 5.3.0", DeprecationWarning)
+            "This module is deprecated as of Bhojpur ODE", DeprecationWarning)
         self.WHITE = 16777215
         self.BLACK = 0
         self.GREY = 11184810
@@ -139,7 +139,7 @@ class ShapeSettingsData(object):
     #
     def setROIShapeSettings(self, shape):
         warnings.warn(
-            "This module is deprecated as of ODE 5.3.0", DeprecationWarning)
+            "This module is deprecated as of Bhojpur ODE", DeprecationWarning)
         shape.setStrokeColor(self.strokeColour)
         shape.setStrokeWidth(self.strokeWidth)
         shape.setStrokeDashArray(self.strokeDashArray)
@@ -153,7 +153,7 @@ class ShapeSettingsData(object):
     #
     def setStrokeSettings(self, colour, width=1):
         warnings.warn(
-            "This module is deprecated as of ODE 5.3.0", DeprecationWarning)
+            "This module is deprecated as of Bhojpur ODE", DeprecationWarning)
         self.strokeColour = rint(colour)
         self.strokeWidth = LengthI()
         self.strokeWidth.setValue(width)
@@ -164,7 +164,7 @@ class ShapeSettingsData(object):
     # @param colour The fill colour of the shape.
     def setFillSettings(self, colour):
         warnings.warn(
-            "This module is deprecated as of ODE 5.3.0", DeprecationWarning)
+            "This module is deprecated as of Bhojpur ODE", DeprecationWarning)
         self.fillColour = rstring(colour)
 
     ##
@@ -173,7 +173,7 @@ class ShapeSettingsData(object):
     #
     def getStrokeSettings(self):
         warnings.warn(
-            "This module is deprecated as of ODE 5.3.0", DeprecationWarning)
+            "This module is deprecated as of Bhojpur ODE", DeprecationWarning)
         return (self.strokeColour.getValue(), self.strokeWidth.getValue())
 
     ##
@@ -182,7 +182,7 @@ class ShapeSettingsData(object):
     #
     def getFillSettings(self):
         warnings.warn(
-            "This module is deprecated as of ODE 5.3.0", DeprecationWarning)
+            "This module is deprecated as of Bhojpur ODE", DeprecationWarning)
         return (self.fillColour.getValue())
 
     ##
@@ -191,7 +191,7 @@ class ShapeSettingsData(object):
     #
     def getSettings(self):
         warnings.warn(
-            "This module is deprecated as of ODE 5.3.0", DeprecationWarning)
+            "This module is deprecated as of Bhojpur ODE", DeprecationWarning)
         return (self.getStrokeSettings(), self.getFillSettings())
 
     ##
@@ -200,7 +200,7 @@ class ShapeSettingsData(object):
     #
     def getShapeSettingsFromROI(self, roi):
         warnings.warn(
-            "This module is deprecated as of ODE 5.3.0", DeprecationWarning)
+            "This module is deprecated as of Bhojpur ODE", DeprecationWarning)
         self.strokeColour = roi.getStrokeColor()
         self.strokeWidth = roi.getStrokeWidth()
         self.strokeDashArray = roi.getStrokeDashArray()
@@ -220,7 +220,7 @@ class ROICoordinate(object):
 
     def __init__(self, z=0, t=0):
         warnings.warn(
-            "This module is deprecated as of ODE 5.3.0", DeprecationWarning)
+            "This module is deprecated as of Bhojpur ODE", DeprecationWarning)
         self.theZ = rint(z)
         self.theT = rint(t)
 
@@ -230,7 +230,7 @@ class ROICoordinate(object):
     #
     def setROICoord(self, roi):
         warnings.warn(
-            "This module is deprecated as of ODE 5.3.0", DeprecationWarning)
+            "This module is deprecated as of Bhojpur ODE", DeprecationWarning)
         roi.setTheZ(self.theZ)
         roi.setTheT(self.theT)
 
@@ -240,7 +240,7 @@ class ROICoordinate(object):
     #
     def setCoordFromROI(self, roi):
         warnings.warn(
-            "This module is deprecated as of ODE 5.3.0", DeprecationWarning)
+            "This module is deprecated as of Bhojpur ODE", DeprecationWarning)
         self.theZ = roi.getTheZ()
         self.theT = roi.getTheT()
 
@@ -253,7 +253,7 @@ class ROIDrawingI(object):
 
     def acceptVisitor(self, visitor):
         warnings.warn(
-            "This module is deprecated as of ODE 5.3.0", DeprecationWarning)
+            "This module is deprecated as of Bhojpur ODE", DeprecationWarning)
         abstract()
 
 ##
@@ -268,7 +268,7 @@ class ShapeData(object):
 
     def __init__(self):
         warnings.warn(
-            "This module is deprecated as of ODE 5.3.0", DeprecationWarning)
+            "This module is deprecated as of Bhojpur ODE", DeprecationWarning)
         self.coord = ROICoordinate()
         self.shapeSettings = ShapeSettingsData()
         self.ROI = None
@@ -279,7 +279,7 @@ class ShapeData(object):
     #
     def setCoord(self, coord):
         warnings.warn(
-            "This module is deprecated as of ODE 5.3.0", DeprecationWarning)
+            "This module is deprecated as of Bhojpur ODE", DeprecationWarning)
         self.coord = coord
 
     ##
@@ -288,7 +288,7 @@ class ShapeData(object):
     #
     def setROICoord(self, roi):
         warnings.warn(
-            "This module is deprecated as of ODE 5.3.0", DeprecationWarning)
+            "This module is deprecated as of Bhojpur ODE", DeprecationWarning)
         self.coord.setROICoord(roi)
 
     ##
@@ -297,7 +297,7 @@ class ShapeData(object):
     #
     def setROIGeometry(self, roi):
         warnings.warn(
-            "This module is deprecated as of ODE 5.3.0", DeprecationWarning)
+            "This module is deprecated as of Bhojpur ODE", DeprecationWarning)
         abstract()
 
     ##
@@ -306,7 +306,7 @@ class ShapeData(object):
     #
     def setShapeSettings(self, settings):
         warnings.warn(
-            "This module is deprecated as of ODE 5.3.0", DeprecationWarning)
+            "This module is deprecated as of Bhojpur ODE", DeprecationWarning)
         self.shapeSettings = settings
 
     ##
@@ -315,7 +315,7 @@ class ShapeData(object):
     #
     def setROIShapeSettings(self, roi):
         warnings.warn(
-            "This module is deprecated as of ODE 5.3.0", DeprecationWarning)
+            "This module is deprecated as of Bhojpur ODE", DeprecationWarning)
         self.shapeSettings.setROIShapeSettings(roi)
 
     ##
@@ -324,7 +324,7 @@ class ShapeData(object):
     #
     def acceptVisitor(self, visitor):
         warnings.warn(
-            "This module is deprecated as of ODE 5.3.0", DeprecationWarning)
+            "This module is deprecated as of Bhojpur ODE", DeprecationWarning)
         abstract()
 
     ##
@@ -332,7 +332,7 @@ class ShapeData(object):
     #
     def createBaseType(self):
         warnings.warn(
-            "This module is deprecated as of ODE 5.3.0", DeprecationWarning)
+            "This module is deprecated as of Bhojpur ODE", DeprecationWarning)
         abstract()
 
     ##
@@ -342,7 +342,7 @@ class ShapeData(object):
     #
     def getROI(self):
         warnings.warn(
-            "This module is deprecated as of ODE 5.3.0", DeprecationWarning)
+            "This module is deprecated as of Bhojpur ODE", DeprecationWarning)
         if(self.roi is not None):
             return self.roi
         self.roi = self.createBaseType()
@@ -357,7 +357,7 @@ class ShapeData(object):
     #
     def getShapeSettingsFromROI(self, roi):
         warnings.warn(
-            "This module is deprecated as of ODE 5.3.0", DeprecationWarning)
+            "This module is deprecated as of Bhojpur ODE", DeprecationWarning)
         self.shapeSettings.getShapeSettingsFromROI(roi)
 
     ##
@@ -366,7 +366,7 @@ class ShapeData(object):
     #
     def getCoordFromROI(self, roi):
         warnings.warn(
-            "This module is deprecated as of ODE 5.3.0", DeprecationWarning)
+            "This module is deprecated as of Bhojpur ODE", DeprecationWarning)
         self.coord.setCoordFromROI(roi)
 
     ##
@@ -375,7 +375,7 @@ class ShapeData(object):
     #
     def getGeometryFromROI(self, roi):
         warnings.warn(
-            "This module is deprecated as of ODE 5.3.0", DeprecationWarning)
+            "This module is deprecated as of Bhojpur ODE", DeprecationWarning)
         abstract()
 
     ##
@@ -384,7 +384,7 @@ class ShapeData(object):
     #
     def fromROI(self, roi):
         warnings.warn(
-            "This module is deprecated as of ODE 5.3.0", DeprecationWarning)
+            "This module is deprecated as of Bhojpur ODE", DeprecationWarning)
         self.roi = roi
         self.getShapeSettingsFromROI(roi)
         self.getCoordFromROI(roi)
@@ -409,7 +409,7 @@ class EllipseData(ShapeData, ROIDrawingI):
     def __init__(self, roicoord=ROICoordinate(), x=0, y=0, radiusX=0,
                  radiusY=0):
         warnings.warn(
-            "This module is deprecated as of ODE 5.3.0", DeprecationWarning)
+            "This module is deprecated as of Bhojpur ODE", DeprecationWarning)
         ShapeData.__init__(self)
         self.x = rdouble(x)
         self.y = rdouble(y)
@@ -422,7 +422,7 @@ class EllipseData(ShapeData, ROIDrawingI):
     #
     def setROIGeometry(self, ellipse):
         warnings.warn(
-            "This module is deprecated as of ODE 5.3.0", DeprecationWarning)
+            "This module is deprecated as of Bhojpur ODE", DeprecationWarning)
         ellipse.setTheZ(self.coord.theZ)
         ellipse.setTheT(self.coord.theT)
         ellipse.setX(self.x)
@@ -435,7 +435,7 @@ class EllipseData(ShapeData, ROIDrawingI):
     #
     def getGeometryFromROI(self, roi):
         warnings.warn(
-            "This module is deprecated as of ODE 5.3.0", DeprecationWarning)
+            "This module is deprecated as of Bhojpur ODE", DeprecationWarning)
         self.x = roi.getX()
         self.y = roi.getY()
         self.radiusX = roi.getRadiusX()
@@ -446,7 +446,7 @@ class EllipseData(ShapeData, ROIDrawingI):
     #
     def createBaseType(self):
         warnings.warn(
-            "This module is deprecated as of ODE 5.3.0", DeprecationWarning)
+            "This module is deprecated as of Bhojpur ODE", DeprecationWarning)
         return EllipseI()
 
     ##
@@ -454,7 +454,7 @@ class EllipseData(ShapeData, ROIDrawingI):
     #
     def acceptVisitor(self, visitor):
         warnings.warn(
-            "This module is deprecated as of ODE 5.3.0", DeprecationWarning)
+            "This module is deprecated as of Bhojpur ODE", DeprecationWarning)
         visitor.drawEllipse(
             self.x.getValue(), self.y.getValue(), self.radiusX.getValue(),
             self.radiusY.getValue(), self.shapeSettings.getSettings())
@@ -477,7 +477,7 @@ class RectangleData(ShapeData, ROIDrawingI):
 
     def __init__(self, roicoord=ROICoordinate(), x=0, y=0, width=0, height=0):
         warnings.warn(
-            "This module is deprecated as of ODE 5.3.0", DeprecationWarning)
+            "This module is deprecated as of Bhojpur ODE", DeprecationWarning)
         ShapeData.__init__(self)
         self.x = rdouble(x)
         self.y = rdouble(y)
@@ -490,7 +490,7 @@ class RectangleData(ShapeData, ROIDrawingI):
     #
     def setGeometry(self, rectangle):
         warnings.warn(
-            "This module is deprecated as of ODE 5.3.0", DeprecationWarning)
+            "This module is deprecated as of Bhojpur ODE", DeprecationWarning)
         rectangle.setTheZ(self.coord.theZ)
         rectangle.setTheT(self.coord.theT)
         rectangle.setX(self.x)
@@ -503,7 +503,7 @@ class RectangleData(ShapeData, ROIDrawingI):
     #
     def getGeometryFromROI(self, roi):
         warnings.warn(
-            "This module is deprecated as of ODE 5.3.0", DeprecationWarning)
+            "This module is deprecated as of Bhojpur ODE", DeprecationWarning)
         self.x = roi.getX()
         self.y = roi.getY()
         self.width = roi.getWidth()
@@ -514,7 +514,7 @@ class RectangleData(ShapeData, ROIDrawingI):
     #
     def createBaseType(self):
         warnings.warn(
-            "This module is deprecated as of ODE 5.3.0", DeprecationWarning)
+            "This module is deprecated as of Bhojpur ODE", DeprecationWarning)
         return RectangleI()
 
     ##
@@ -522,7 +522,7 @@ class RectangleData(ShapeData, ROIDrawingI):
     #
     def acceptVisitor(self, visitor):
         warnings.warn(
-            "This module is deprecated as of ODE 5.3.0", DeprecationWarning)
+            "This module is deprecated as of Bhojpur ODE", DeprecationWarning)
         visitor.drawRectangle(
             self.x, self.y, self.width, self.height,
             self.shapeSettings.getSettings())
@@ -544,7 +544,7 @@ class LineData(ShapeData, ROIDrawingI):
 
     def __init__(self, roicoord=ROICoordinate(), x1=0, y1=0, x2=0, y2=0):
         warnings.warn(
-            "This module is deprecated as of ODE 5.3.0", DeprecationWarning)
+            "This module is deprecated as of Bhojpur ODE", DeprecationWarning)
         ShapeData.__init__(self)
         self.x1 = rdouble(x1)
         self.y1 = rdouble(y1)
@@ -557,7 +557,7 @@ class LineData(ShapeData, ROIDrawingI):
     #
     def setGeometry(self, line):
         warnings.warn(
-            "This module is deprecated as of ODE 5.3.0", DeprecationWarning)
+            "This module is deprecated as of Bhojpur ODE", DeprecationWarning)
         line.setTheZ(self.coord.theZ)
         line.setTheT(self.coord.theT)
         line.setX1(self.x1)
@@ -570,7 +570,7 @@ class LineData(ShapeData, ROIDrawingI):
     #
     def getGeometryFromROI(self, roi):
         warnings.warn(
-            "This module is deprecated as of ODE 5.3.0", DeprecationWarning)
+            "This module is deprecated as of Bhojpur ODE", DeprecationWarning)
         self.x1 = roi.getX1()
         self.y1 = roi.getY1()
         self.x2 = roi.getX2()
@@ -581,7 +581,7 @@ class LineData(ShapeData, ROIDrawingI):
     #
     def createBaseType(self):
         warnings.warn(
-            "This module is deprecated as of ODE 5.3.0", DeprecationWarning)
+            "This module is deprecated as of Bhojpur ODE", DeprecationWarning)
         return LineI()
 
     ##
@@ -589,7 +589,7 @@ class LineData(ShapeData, ROIDrawingI):
     #
     def acceptVisitor(self, visitor):
         warnings.warn(
-            "This module is deprecated as of ODE 5.3.0", DeprecationWarning)
+            "This module is deprecated as of Bhojpur ODE", DeprecationWarning)
         visitor.drawLine(
             self.x1.getValue(), self.y1.getValue(), self.x2.getValue(),
             self.y2.getValue(), self.shapeSettings.getSettings())
@@ -614,7 +614,7 @@ class MaskData(ShapeData, ROIDrawingI):
     def __init__(self, roicoord=ROICoordinate(), bytes=None,
                  x=0, y=0, width=0, height=0):
         warnings.warn(
-            "This module is deprecated as of ODE 5.3.0", DeprecationWarning)
+            "This module is deprecated as of Bhojpur ODE", DeprecationWarning)
         ShapeData.__init__(self)
         self.x = rdouble(x)
         self.y = rdouble(y)
@@ -628,7 +628,7 @@ class MaskData(ShapeData, ROIDrawingI):
     #
     def setGeometry(self, mask):
         warnings.warn(
-            "This module is deprecated as of ODE 5.3.0", DeprecationWarning)
+            "This module is deprecated as of Bhojpur ODE", DeprecationWarning)
         mask.setTheZ(self.coord.theZ)
         mask.setTheT(self.coord.theT)
         mask.setX(self.x)
@@ -642,7 +642,7 @@ class MaskData(ShapeData, ROIDrawingI):
     #
     def getGeometryFromROI(self, roi):
         warnings.warn(
-            "This module is deprecated as of ODE 5.3.0", DeprecationWarning)
+            "This module is deprecated as of Bhojpur ODE", DeprecationWarning)
         self.x = roi.getX()
         self.y = roi.getY()
         self.width = roi.getWidth()
@@ -654,7 +654,7 @@ class MaskData(ShapeData, ROIDrawingI):
     #
     def createBaseType(self):
         warnings.warn(
-            "This module is deprecated as of ODE 5.3.0", DeprecationWarning)
+            "This module is deprecated as of Bhojpur ODE", DeprecationWarning)
         return MaskI()
 
     ##
@@ -662,7 +662,7 @@ class MaskData(ShapeData, ROIDrawingI):
     #
     def acceptVisitor(self, visitor):
         warnings.warn(
-            "This module is deprecated as of ODE 5.3.0", DeprecationWarning)
+            "This module is deprecated as of Bhojpur ODE", DeprecationWarning)
         visitor.drawMask(
             self.x.getValue(), self.y.getValue(),
             self.width.getValue(), self.height.getValue(),
@@ -684,7 +684,7 @@ class PointData(ShapeData, ROIDrawingI):
 
     def __init__(self, roicoord=ROICoordinate(), x=0, y=0):
         warnings.warn(
-            "This module is deprecated as of ODE 5.3.0", DeprecationWarning)
+            "This module is deprecated as of Bhojpur ODE", DeprecationWarning)
         ShapeData.__init__(self)
         self.x = rdouble(x)
         self.y = rdouble(y)
@@ -695,7 +695,7 @@ class PointData(ShapeData, ROIDrawingI):
     #
     def setGeometry(self, point):
         warnings.warn(
-            "This module is deprecated as of ODE 5.3.0", DeprecationWarning)
+            "This module is deprecated as of Bhojpur ODE", DeprecationWarning)
         point.setTheZ(self.coord.theZ)
         point.setTheT(self.coord.theT)
         point.setX(self.x)
@@ -706,7 +706,7 @@ class PointData(ShapeData, ROIDrawingI):
     #
     def getGeometryFromROI(self, roi):
         warnings.warn(
-            "This module is deprecated as of ODE 5.3.0", DeprecationWarning)
+            "This module is deprecated as of Bhojpur ODE", DeprecationWarning)
         self.x = roi.getX()
         self.y = roi.getY()
 
@@ -715,7 +715,7 @@ class PointData(ShapeData, ROIDrawingI):
     #
     def createBaseType(self):
         warnings.warn(
-            "This module is deprecated as of ODE 5.3.0", DeprecationWarning)
+            "This module is deprecated as of Bhojpur ODE", DeprecationWarning)
         return PointI()
 
     ##
@@ -723,7 +723,7 @@ class PointData(ShapeData, ROIDrawingI):
     #
     def acceptVisitor(self, visitor):
         warnings.warn(
-            "This module is deprecated as of ODE 5.3.0", DeprecationWarning)
+            "This module is deprecated as of Bhojpur ODE", DeprecationWarning)
         visitor.drawEllipse(
             self.x.getValue(), self.y.getValue(), 3, 3,
             self.shapeSettings.getSettings())
@@ -744,7 +744,7 @@ class PolygonData(ShapeData, ROIDrawingI):
 
     def __init__(self, roicoord=ROICoordinate(), pointsList=(0, 0)):
         warnings.warn(
-            "This module is deprecated as of ODE 5.3.0", DeprecationWarning)
+            "This module is deprecated as of Bhojpur ODE", DeprecationWarning)
         ShapeData.__init__(self)
         self.points = rstring(self.listToString(pointsList))
         self.setCoord(roicoord)
@@ -754,7 +754,7 @@ class PolygonData(ShapeData, ROIDrawingI):
     #
     def setGeometry(self, polygon):
         warnings.warn(
-            "This module is deprecated as of ODE 5.3.0", DeprecationWarning)
+            "This module is deprecated as of Bhojpur ODE", DeprecationWarning)
         polygon.setTheZ(self.coord.theZ)
         polygon.setTheT(self.coord.theT)
         polygon.setPoints(self.points)
@@ -764,7 +764,7 @@ class PolygonData(ShapeData, ROIDrawingI):
     #
     def getGeometryFromROI(self, roi):
         warnings.warn(
-            "This module is deprecated as of ODE 5.3.0", DeprecationWarning)
+            "This module is deprecated as of Bhojpur ODE", DeprecationWarning)
         self.points = roi.getPoints()
 
     ##
@@ -773,7 +773,7 @@ class PolygonData(ShapeData, ROIDrawingI):
     # @return The pointsList converted to a string.
     def listToString(self, pointsList):
         warnings.warn(
-            "This module is deprecated as of ODE 5.3.0", DeprecationWarning)
+            "This module is deprecated as of Bhojpur ODE", DeprecationWarning)
         string = ''
         cnt = 0
         for element in pointsList:
@@ -789,7 +789,7 @@ class PolygonData(ShapeData, ROIDrawingI):
     # @return The tuple list converted from a string.
     def stringToTupleList(self, pointString):
         warnings.warn(
-            "This module is deprecated as of ODE 5.3.0", DeprecationWarning)
+            "This module is deprecated as of Bhojpur ODE", DeprecationWarning)
         elements = []
         list = pointString.split(',')
         numTokens = len(list)
@@ -803,7 +803,7 @@ class PolygonData(ShapeData, ROIDrawingI):
     #
     def createBaseType(self):
         warnings.warn(
-            "This module is deprecated as of ODE 5.3.0", DeprecationWarning)
+            "This module is deprecated as of Bhojpur ODE", DeprecationWarning)
         return PolygonI()
 
     ##
@@ -811,7 +811,7 @@ class PolygonData(ShapeData, ROIDrawingI):
     #
     def acceptVisitor(self, visitor):
         warnings.warn(
-            "This module is deprecated as of ODE 5.3.0", DeprecationWarning)
+            "This module is deprecated as of Bhojpur ODE", DeprecationWarning)
         visitor.drawPolygon(self.stringToTupleList(
             self.points.getValue()), self.shapeSettings.getSettings())
 
@@ -831,7 +831,7 @@ class PolylineData(ShapeData, ROIDrawingI):
 
     def __init__(self, roicoord=ROICoordinate(), pointsList=(0, 0)):
         warnings.warn(
-            "This module is deprecated as of ODE 5.3.0", DeprecationWarning)
+            "This module is deprecated as of Bhojpur ODE", DeprecationWarning)
         ShapeData.__init__(self)
         self.points = rstring(self.listToString(pointsList))
         self.setCoord(roicoord)
@@ -841,7 +841,7 @@ class PolylineData(ShapeData, ROIDrawingI):
     #
     def setGeometry(self, point):
         warnings.warn(
-            "This module is deprecated as of ODE 5.3.0", DeprecationWarning)
+            "This module is deprecated as of Bhojpur ODE", DeprecationWarning)
         point.setTheZ(self.coord.theZ)
         point.setTheT(self.coord.theT)
         point.setPoints(self.points)
@@ -851,7 +851,7 @@ class PolylineData(ShapeData, ROIDrawingI):
     #
     def getGeometryFromROI(self, roi):
         warnings.warn(
-            "This module is deprecated as of ODE 5.3.0", DeprecationWarning)
+            "This module is deprecated as of Bhojpur ODE", DeprecationWarning)
         self.points = roi.getPoints()
 
     ##
@@ -860,7 +860,7 @@ class PolylineData(ShapeData, ROIDrawingI):
     # @return The pointsList converted to a string.
     def listToString(self, pointsList):
         warnings.warn(
-            "This module is deprecated as of ODE 5.3.0", DeprecationWarning)
+            "This module is deprecated as of Bhojpur ODE", DeprecationWarning)
         string = ''
         cnt = 0
         for element in pointsList:
@@ -876,7 +876,7 @@ class PolylineData(ShapeData, ROIDrawingI):
     # @return The tuple list converted from a string.
     def stringToTupleList(self, pointString):
         warnings.warn(
-            "This module is deprecated as of ODE 5.3.0", DeprecationWarning)
+            "This module is deprecated as of Bhojpur ODE", DeprecationWarning)
         elements = []
         list = pointString.split(',')
         numTokens = len(list)
@@ -890,7 +890,7 @@ class PolylineData(ShapeData, ROIDrawingI):
     #
     def createBaseType(self):
         warnings.warn(
-            "This module is deprecated as of ODE 5.3.0", DeprecationWarning)
+            "This module is deprecated as of Bhojpur ODE", DeprecationWarning)
         return PolylineI()
 
     ##
@@ -898,6 +898,6 @@ class PolylineData(ShapeData, ROIDrawingI):
     #
     def acceptVisitor(self, visitor):
         warnings.warn(
-            "This module is deprecated as of ODE 5.3.0", DeprecationWarning)
+            "This module is deprecated as of Bhojpur ODE", DeprecationWarning)
         visitor.drawPolyline(self.stringToTupleList(
             self.points.getValue()), self.shapeSettings.getSettings())

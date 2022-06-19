@@ -922,7 +922,7 @@ if 'Session' not in _M_ode.cmd.__dict__:
     _M_ode.cmd.Session = Ice.createTempClass()
     class Session(_M_Glacier2.Session):
         """
-        Starting point for all command-based ode.blitz interaction.
+        Starting point for all command-based ode.server interaction.
         """
         def __init__(self):
             if Ice.getType(self) == _M_ode.cmd.Session:

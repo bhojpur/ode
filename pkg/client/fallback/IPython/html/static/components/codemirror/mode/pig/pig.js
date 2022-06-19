@@ -1,7 +1,5 @@
 /*
  *      Pig Latin Mode for CodeMirror 2
- *      @author Prasanth Jayachandran
- *      @link   https://github.com/prasanthj/pig-codemirror-2
  *  This implementation is adapted from PL/SQL mode in CodeMirror 2.
  */
 CodeMirror.defineMode("pig", function(_config, parserConfig) {

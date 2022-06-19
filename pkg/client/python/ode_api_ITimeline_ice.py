@@ -102,7 +102,7 @@ if 'ITimeline' not in _M_ode.api.__dict__:
         map = timeline.getByPeriod(types, params, False)
         }
         At this point, map will not contain more than 200 objects.
-        This service is defined only in Blitz and so no javadoc is available
+        This service is defined only in Server and so no javadoc is available
         in the ode.api package.
         TODOS: binning, stateful caching, ...
         """

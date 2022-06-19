@@ -52,7 +52,7 @@ if 'Details' not in _M_ode.model.__dict__:
     _M_ode.model.Details = Ice.createTempClass()
     class Details(Ice.Object):
         """
-        Embedded component of every ode.blitz type. Since this is
+        Embedded component of every ode.server type. Since this is
         not an IObject subclass, no attempt is made to hide the state
         of this object, since it cannot be ""unloaded"".
         Members:

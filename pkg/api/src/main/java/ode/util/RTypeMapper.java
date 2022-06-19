@@ -1,0 +1,62 @@
+package ode.util;
+
+// Copyright (c) 2018 Bhojpur Consulting Private Limited, India. All rights reserved.
+
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+// THE SOFTWARE.
+
+import ode.ApiUsageException;
+import ode.RCollection;
+import ode.RMap;
+import ode.util.IceMapper.ReturnMapping;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+/**
+ * Extension of {@link IceMapper} which guarantees that {@link RCollection} and
+ * {@link RMap} instances are properly created.
+ */
+public class RTypeMapper extends IceMapper {
+
+    private static Logger log = LoggerFactory.getLogger(RTypeMapper.class);
+
+    public RTypeMapper(ReturnMapping mapping) {
+        super(mapping);
+    }
+
+
+    @Override
+    public Object findKeyTarget(Object current) {
+        if (!(current instanceof String)) {
+            throw new ode.conditions.ApiUsageException("Non-string key");
+        }
+        return current;
+    }
+
+    @Override
+    public Object findCollectionTarget(Object current) {
+        Object rv = super.findCollectionTarget(current);
+        try {
+            return toRType(rv);
+        } catch (ApiUsageException aue) {
+            throw new ode.conditions.ApiUsageException(aue.message);
+        }
+    }
+
+}

@@ -485,7 +485,7 @@ class WebControl(DiagnosticsControl):
             return False
         return True
 
-    # TODO: to be removed in 5.3
+    # TODO: to be removed in Bhojpur ODE
     def _deprecated_args(self, args, settings):
         d_args = {}
         try:

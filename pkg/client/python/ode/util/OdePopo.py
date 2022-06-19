@@ -53,7 +53,7 @@ def toCSV(list):
     @return See above.
     """
     warnings.warn(
-        "This module is deprecated as of ODE 5.3.0", DeprecationWarning)
+        "This module is deprecated as of Bhojpur ODE", DeprecationWarning)
     lenList = len(list)
     cnt = 0
     str = ""
@@ -71,7 +71,7 @@ def toList(csvString):
     @return See above.
     """
     warnings.warn(
-        "This module is deprecated as of ODE 5.3.0", DeprecationWarning)
+        "This module is deprecated as of Bhojpur ODE", DeprecationWarning)
     list = csvString.split(',')
     for index in range(len(list)):
         list[index] = list[index].strip()
@@ -89,7 +89,7 @@ class DataObject(object):
 
     def __init__(self):
         warnings.warn(
-            "This module is deprecated as of ODE 5.3.0", DeprecationWarning)
+            "This module is deprecated as of Bhojpur ODE", DeprecationWarning)
         self.value = None
         self.dirty = False
 

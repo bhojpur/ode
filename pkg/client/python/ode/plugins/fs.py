@@ -519,7 +519,7 @@ template. By default the original files and import log are also
 moved.
 """
         # When reenabling, also reenable testRenameAdminOnly.
-        self.ctx.die(30, 'disabled since Bhojpur ODE 5.4.7 due to Pixels.path bug')
+        self.ctx.die(30, 'disabled since Bhojpur ODE due to Pixels.path bug')
         # Keep privilege imports used until @admin_only decorator restored.
         [AdminPrivilegeWriteOwned, AdminPrivilegeWriteManagedRepo,
          AdminPrivilegeDeleteOwned, AdminPrivilegeDeleteManagedRepo]

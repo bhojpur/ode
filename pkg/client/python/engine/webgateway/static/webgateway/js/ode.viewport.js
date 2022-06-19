@@ -591,8 +591,8 @@ if (!ODE) {
     };
   
     this.setChannelReverseIntensity = function (idx, reverse, noreload) {
-      // Deprecated in ODE 5.4.0
-      console.log('setChannelReverseIntensity() Deprecated in ODE 5.4.0. Use setChannelInverted()')
+      // Deprecated in Bhojpur ODE
+      console.log('setChannelReverseIntensity() Deprecated in Bhojpur ODE. Use setChannelInverted()')
       this.setChannelInverted(idx, reverse, noreload)
     }
   

@@ -1049,7 +1049,6 @@ jQuery(function($){
 });
 
 /* Lithuanian (UTF-8) initialisation for the jQuery UI date picker plugin. */
-/* @author Arturas Paleicikas <arturas@avalon.lt> */
 jQuery(function($){
 	$.datepicker.regional['lt'] = {
 		closeText: 'Uždaryti',
@@ -1073,7 +1072,6 @@ jQuery(function($){
 });
 
 /* Latvian (UTF-8) initialisation for the jQuery UI date picker plugin. */
-/* @author Arturas Paleicikas <arturas.paleicikas@metasite.net> */
 jQuery(function($){
 	$.datepicker.regional['lv'] = {
 		closeText: 'Aizvērt',

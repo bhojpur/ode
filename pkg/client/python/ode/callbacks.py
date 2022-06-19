@@ -175,7 +175,7 @@ class CmdCallbackI(ode.cmd.CmdCallback):
         implies that another caller has already closed the
         HandlePrx. By passing, foreground_poll=True, the poll()
         invocation can be performed in the calling thread as in
-        5.1.0 and before.
+        Bhojpur ODE and before.
         """
         if foreground_poll:
             return self.poll()

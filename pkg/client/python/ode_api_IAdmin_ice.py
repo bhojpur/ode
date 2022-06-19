@@ -527,7 +527,6 @@ if 'IAdmin' not in _M_ode.api.__dict__:
         def setGroupOwner_async(self, _cb, group, owner, current=None):
             """
             Adds the user to the owner list for this group.
-            Since Beta 4.2
             multiple users can be the owner of a group.
             Arguments:
             _cb -- The asynchronous callback object.

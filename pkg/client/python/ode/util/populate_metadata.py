@@ -72,7 +72,7 @@ from .populate_roi import ThreadPool
 log = logging.getLogger("ode.util.populate_metadata")
 
 warnings.warn(
-    "This module is deprecated as of ODE 5.4.8. Use the module"
+    "This module is deprecated as of Bhojpur ODE. Use the module"
     " in the ode-metadata project available from"
     " https://pypi.org/project/ode-metadata/ instead.",
     DeprecationWarning)

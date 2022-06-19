@@ -99,7 +99,7 @@ class ConfigXml(object):
     in etc/grid. For a copy of the dict, use "as_map"
     """
     KEY = "ode.config.version"
-    VERSION = "5.1.0"
+    VERSION = "1.0.0"
     INTERNAL = "__ACTIVE__"
     DEFAULT = "ode.config.profile"
     IGNORE = (KEY, DEFAULT)

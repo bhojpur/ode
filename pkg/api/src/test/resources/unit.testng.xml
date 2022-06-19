@@ -1,0 +1,31 @@
+<!DOCTYPE suite SYSTEM "http://beust.com/testng/testng-1.0.dtd" >
+
+<suite name="server.unit" time-out="1000">
+
+  <test name="server.unit.active">
+    <groups>
+      <run>
+        <exclude name="broken"/>
+        <exclude name="ignore"/>
+        <exclude name="integration"/>
+      </run>
+    </groups>
+    <packages>
+      <package name="ode.formats.*">
+      <exclude name="ode.formats.test.util"/>
+      <exclude name="ode.formats.utests"/>
+      </package>
+      <package name="ode.services.*">
+        <!--  included via the jar -->
+        <exclude name="ode.services.server.test.utests"/>
+        <exclude name="ode.services.repo.test"/>
+        <exclude name="ode.services.roi.test"/>
+      </package>
+      <package name="ode.cmd.graphs.*"/>
+      <package name="ode.model.*"/>
+      <package name="ode.util.*"/>
+      <package name="ode.ClientDefaultRouterTest"/>
+    </packages>
+  </test>
+
+</suite>

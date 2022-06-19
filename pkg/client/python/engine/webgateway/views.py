@@ -892,7 +892,7 @@ def _get_prepared_image(
     invert_flags = None
     if "maps" in r:
         reverses = _get_maps_enabled(r, "reverse", img.getSizeC())
-        # 'reverse' is now deprecated (5.4.0). Also check for 'invert'
+        # 'reverse' is now deprecated (Bhojpur ODE). Also check for 'invert'
         invert_flags = _get_maps_enabled(r, "inverted", img.getSizeC())
         # invert is True if 'invert' OR 'reverse' is enabled
         if reverses is not None and invert_flags is not None:

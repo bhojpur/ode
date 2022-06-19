@@ -90,7 +90,7 @@ def drawTextOverlay(draw, x, y, text, colour='0xffffff'):
     @param colour The colour as a PIL colour string to draw the text in.
     """
     warnings.warn(
-        "This method is deprecated as of ODE 5.3.0", DeprecationWarning)
+        "This method is deprecated as of Bhojpur ODE", DeprecationWarning)
     draw.text((x, y), text, fill=colour)
 
 def drawLineOverlay(draw, x0, y0, x1, y1, colour='0xffffff'):
@@ -104,7 +104,7 @@ def drawLineOverlay(draw, x0, y0, x1, y1, colour='0xffffff'):
     @param colour The colour as a PIL colour fill in the line.
     """
     warnings.warn(
-        "This method is deprecated as of ODE 5.3.0", DeprecationWarning)
+        "This method is deprecated as of Bhojpur ODE", DeprecationWarning)
     draw.line([(x0, y0), (x1, y1)], fill=colour)
 
 def rgbToRGBInt(red, green, blue):
@@ -116,7 +116,7 @@ def rgbToRGBInt(red, green, blue):
     @return See above.
     """
     warnings.warn(
-        "This method is deprecated as of ODE 5.3.0", DeprecationWarning)
+        "This method is deprecated as of Bhojpur ODE", DeprecationWarning)
     RGBInt = (red << 16) + (green << 8) + blue
     return int(RGBInt)
 
@@ -127,7 +127,7 @@ def RGBToPIL(RGB):
     @return See above.
     """
     warnings.warn(
-        "This method is deprecated as of ODE 5.3.0", DeprecationWarning)
+        "This method is deprecated as of Bhojpur ODE", DeprecationWarning)
     hexval = hex(int(RGB))
     return '#' + (6 - len(hexval[2:])) * '0' + hexval[2:]
 
@@ -138,7 +138,7 @@ def rangeToStr(range):
     @return See above.
     """
     warnings.warn(
-        "This method is deprecated as of ODE 5.3.0", DeprecationWarning)
+        "This method is deprecated as of Bhojpur ODE", DeprecationWarning)
     first = 1
     string = ""
     for value in range:
@@ -151,7 +151,7 @@ def rangeToStr(range):
 
 def rmdir_recursive(dir):
     warnings.warn(
-        "This method is deprecated as of ODE 5.3.0", DeprecationWarning)
+        "This method is deprecated as of Bhojpur ODE", DeprecationWarning)
     for name in os.listdir(dir):
         full_name = os.path.join(dir, name)
         # on Windows, if we don't have write permission we can't remove
@@ -166,7 +166,7 @@ def rmdir_recursive(dir):
 
 def calcSha1(filename):
     warnings.warn(
-        "This method is deprecated as of ODE 5.3.0. Use calc_sha1 instead",
+        "This method is deprecated as of Bhojpur ODE. Use calc_sha1 instead",
         DeprecationWarning)
     """
     Returns a hash of the file identified by filename
@@ -193,7 +193,7 @@ def calc_sha1(filename):
 
 def calcSha1FromData(data):
     warnings.warn(
-        "This method is deprecated as of ODE 5.3.0", DeprecationWarning)
+        "This method is deprecated as of Bhojpur ODE", DeprecationWarning)
     """
     Calculate the Sha1 Hash from a data array
     @param data The data array.
@@ -206,7 +206,7 @@ def calcSha1FromData(data):
 
 def getFormat(queryService, format):
     warnings.warn(
-        "This method is deprecated as of ODE 5.3.0", DeprecationWarning)
+        "This method is deprecated as of Bhojpur ODE", DeprecationWarning)
     return queryService.findByQuery(
         "from Format as f where f.value='" + format + "'", None)
 
@@ -226,7 +226,7 @@ def createFile(updateService, filename, mimetype=None, origFilePathName=None):
                             server
     """
     warnings.warn(
-        "This method is deprecated as of ODE 5.3.0. Use create_file instead",
+        "This method is deprecated as of Bhojpur ODE. Use create_file instead",
         DeprecationWarning)
     return create_file(updateService, filename, mimetype,
                        origFilePathName)
@@ -273,7 +273,7 @@ def uploadFile(rawFileStore, originalFile, filePath=None):
                         If None, use originalFile.getName().getValue()
     """
     warnings.warn(
-        "This method is deprecated as of ODE 5.3.0, Use upload_file instead",
+        "This method is deprecated as of Bhojpur ODE, Use upload_file instead",
         DeprecationWarning)
     upload_file(rawFileStore, originalFile, filePath)
 
@@ -316,7 +316,7 @@ def downloadFile(rawFileStore, originalFile, filePath=None):
                         If None, use originalFile.getName().getValue()
     """
     warnings.warn(
-        "This method is deprecated as of ODE 5.3.0.\
+        "This method is deprecated as of Bhojpur ODE.\
         Use download_file instead.", DeprecationWarning)
     return download_file(rawFileStore, originalFile, filePath)
 
@@ -369,7 +369,7 @@ def attachFileToParent(updateService, parent, originalFile,
                                 (* = Project, Dataset or Image)
     """
     warnings.warn(
-        "This method is deprecated as of ODE 5.3.0", DeprecationWarning)
+        "This method is deprecated as of Bhojpur ODE", DeprecationWarning)
     fa = ode.model.FileAnnotationI()
     fa.setFile(originalFile)
     if description:
@@ -413,7 +413,7 @@ def uploadAndAttachFile(queryService, updateService, rawFileStore, parent,
     @return:                The originalFileLink child. (FileAnnotationI)
     """
     warnings.warn(
-        "This method is deprecated as of ODE 5.3.0", DeprecationWarning)
+        "This method is deprecated as of Bhojpur ODE", DeprecationWarning)
     filename = localName
     if origFilePathName is None:
         origFilePathName = localName
@@ -447,7 +447,7 @@ def createLinkFileAnnotation(conn, localPath, parent, output="Output",
                             and a log message
     """
     warnings.warn(
-        "This method is deprecated as of ODE 5.3.0. \
+        "This method is deprecated as of Bhojpur ODE. \
         Use create_link_file_annotation instead",
         DeprecationWarning)
     return create_link_file_annotation(conn, localPath, parent, output,
@@ -504,7 +504,7 @@ def getObjects(conn, params):
     @return:                The valid objects and a log message
     """
     warnings.warn(
-        "This method is deprecated as of ODE 5.3.0. Use get_objects instead",
+        "This method is deprecated as of Bhojpur ODE. Use get_objects instead",
         DeprecationWarning)
     return get_objects(conn, params)
 
@@ -545,7 +545,7 @@ def addAnnotationToImage(updateService, image, annotation):
     @return The new annotationlink object
     """
     warnings.warn(
-        "This method is deprecated as of ODE 5.3.0", DeprecationWarning)
+        "This method is deprecated as of Bhojpur ODE", DeprecationWarning)
     l = ode.model.ImageAnnotationLinkI()
     l.setParent(image)
     l.setChild(annotation)
@@ -561,7 +561,7 @@ def readFromOriginalFile(rawFileService, iQuery, fileId, maxBlockSize=10000):
     @return The OriginalFile object contents as a string
     """
     warnings.warn(
-        "This method is deprecated as of ODE 5.3.0", DeprecationWarning)
+        "This method is deprecated as of Bhojpur ODE", DeprecationWarning)
     fileDetails = iQuery.findByQuery(
         "from OriginalFile as o where o.id = " + str(fileId), None)
     rawFileService.setFileId(fileId)
@@ -588,7 +588,7 @@ def readFileAsArray(rawFileService, iQuery, fileId, row, col, separator=' '):
     @return The file as an NumPy array.
     """
     warnings.warn(
-        "This method is deprecated as of ODE 5.3.0", DeprecationWarning)
+        "This method is deprecated as of Bhojpur ODE", DeprecationWarning)
     textBlock = readFromOriginalFile(rawFileService, iQuery, fileId)
     arrayFromFile = fromstring(textBlock, sep=separator)
     return reshape(arrayFromFile, (row, col))
@@ -601,7 +601,7 @@ def readFlimImageFile(rawPixelsStore, pixels):
     @return The Contents of the image for z = 0, t = 0, all channels;
     """
     warnings.warn(
-        "This method is deprecated as of ODE 5.3.0", DeprecationWarning)
+        "This method is deprecated as of Bhojpur ODE", DeprecationWarning)
     sizeC = pixels.getSizeC().getValue()
     sizeX = pixels.getSizeX().getValue()
     sizeY = pixels.getSizeY().getValue()
@@ -629,7 +629,7 @@ def downloadPlane(rawPixelsStore, pixels, z, c, t):
     @return The Plane of the image for z, c, t
     """
     warnings.warn(
-        "This method is deprecated as of ODE 5.3.0.\
+        "This method is deprecated as of Bhojpur ODE.\
         Use download_plane instead",
         DeprecationWarning)
     return download_plane(rawPixelsStore, pixels, z, c, t)
@@ -666,7 +666,7 @@ def getPlaneFromImage(imagePath, rgbIndex=None):
     @param imagePath   Path to image.
     """
     warnings.warn(
-        "This method is deprecated as of ODE 5.3.0", DeprecationWarning)
+        "This method is deprecated as of Bhojpur ODE", DeprecationWarning)
     i = Image.open(imagePath)
     a = asarray(i)
     if rgbIndex is None:
@@ -688,7 +688,7 @@ def uploadDirAsImages(sf, queryService, updateService,
                     ode.model.DatasetI
     """
     warnings.warn(
-        "This method is deprecated as of ODE 5.3.0", DeprecationWarning)
+        "This method is deprecated as of Bhojpur ODE", DeprecationWarning)
     import re
 
     regex_token = re.compile(r'(?P<Token>.+)\.')
@@ -956,7 +956,7 @@ def createFileFromData(updateService, queryService, filename, data):
     @return The newly created OriginalFile.
     """
     warnings.warn(
-        "This method is deprecated as of ODE 5.3.0", DeprecationWarning)
+        "This method is deprecated as of Bhojpur ODE", DeprecationWarning)
     tempFile = ode.model.OriginalFileI()
     tempFile.setName(ode.rtypes.rstring(filename))
     tempFile.setPath(ode.rtypes.rstring(filename))
@@ -975,7 +975,7 @@ def attachArrayToImage(updateService, image, file, nameSpace):
     @return
     """
     warnings.warn(
-        "This method is deprecated as of ODE 5.3.0", DeprecationWarning)
+        "This method is deprecated as of Bhojpur ODE", DeprecationWarning)
     fa = ode.model.FileAnnotationI()
     fa.setFile(file)
     fa.setNs(ode.rtypes.rstring(nameSpace))
@@ -999,7 +999,7 @@ def uploadArray(rawFileStore, updateService, queryService, image,
     @return The newly created file.
     """
     warnings.warn(
-        "This method is deprecated as of ODE 5.3.0", DeprecationWarning)
+        "This method is deprecated as of Bhojpur ODE", DeprecationWarning)
     data = arrayToCSV(array)
     file = createFileFromData(updateService, queryService, filename, data)
     rawFileStore.setFileId(file.getId().getValue())
@@ -1025,7 +1025,7 @@ def arrayToCSV(data):
     @return The CSV string.
     """
     warnings.warn(
-        "This method is deprecated as of ODE 5.3.0", DeprecationWarning)
+        "This method is deprecated as of Bhojpur ODE", DeprecationWarning)
     size = data.shape
     row = size[0]
     col = size[1]
@@ -1050,7 +1050,7 @@ def uploadPlane(rawPixelsStore, plane, z, c, t):
     @param t The T-Section of the plane.
     """
     warnings.warn(
-        "This method is deprecated as of ODE 5.3.0.\
+        "This method is deprecated as of Bhojpur ODE.\
         Use upload_plane instead",
         DeprecationWarning)
     upload_plane(rawPixelsStore, plane, z, c, t)
@@ -1082,7 +1082,7 @@ def uploadPlaneByRow(rawPixelsStore, plane, z, c, t):
     @param t The T-Section of the plane.
     """
     warnings.warn(
-        "This method is deprecated as of ODE 5.3.0.\
+        "This method is deprecated as of Bhojpur ODE.\
         Use upload_plane_by_row",
         DeprecationWarning)
     upload_plane_by_row(rawPixelsStore, plane, z, c, t)
@@ -1114,7 +1114,7 @@ def getRenderingEngine(session, pixelsId):
     @return The renderingEngine Service for the pixels.
     """
     warnings.warn(
-        "This method is deprecated as of ODE 5.3.0", DeprecationWarning)
+        "This method is deprecated as of Bhojpur ODE", DeprecationWarning)
     renderingEngine = session.createRenderingEngine()
     renderingEngine.lookupPixels(pixelsId)
     if(renderingEngine.lookupRenderingDef(pixelsId) == 0):
@@ -1131,7 +1131,7 @@ def createPlaneDef(z, t):
     @return The RenderingDef Object.
     """
     warnings.warn(
-        "This method is deprecated as of ODE 5.3.0", DeprecationWarning)
+        "This method is deprecated as of Bhojpur ODE", DeprecationWarning)
     planeDef = ode.romio.PlaneDef()
     planeDef.t = t
     planeDef.z = z
@@ -1148,7 +1148,7 @@ def getPlaneAsPackedInt(renderingEngine, z, t):
     @param t The Timepoint.
     """
     warnings.warn(
-        "This method is deprecated as of ODE 5.3.0", DeprecationWarning)
+        "This method is deprecated as of Bhojpur ODE", DeprecationWarning)
     planeDef = createPlaneDef(z, t)
     return renderingEngine.renderAsPackedInt(planeDef)
 
@@ -1159,7 +1159,7 @@ def getRawPixelsStore(session, pixelsId):
     @return The rawPixelsStore service.
     """
     warnings.warn(
-        "This method is deprecated as of ODE 5.3.0", DeprecationWarning)
+        "This method is deprecated as of Bhojpur ODE", DeprecationWarning)
     rawPixelsStore = session.createRawPixelsStore()
     rawPixelsStore.setPixelsId(pixelsId)
     return rawPixelsStore
@@ -1171,7 +1171,7 @@ def getRawFileStore(session, fileId):
     @return The rawFileStore service.
     """
     warnings.warn(
-        "This method is deprecated as of ODE 5.3.0", DeprecationWarning)
+        "This method is deprecated as of Bhojpur ODE", DeprecationWarning)
     rawFileStore = session.createRawFileStore()
     rawFileStore.setFileId(fileId)
     return rawFileStore
@@ -1185,7 +1185,7 @@ def getPlaneInfo(iQuery, pixelsId, asOrderedList=True):
     @return list of planeInfoTimes or map[z:t:c:]
     """
     warnings.warn(
-        "This method is deprecated as of ODE 5.3.0", DeprecationWarning)
+        "This method is deprecated as of Bhojpur ODE", DeprecationWarning)
     query = "from PlaneInfo as Info where pixels.id='" + \
         str(pixelsId) + "' orderby info.deltaT"
     infoList = iQuery.findAllByQuery(query, None)
@@ -1219,7 +1219,7 @@ def resetRenderingSettings(renderingEngine, pixelsId, cIndex,
                            (r,g,b,a) tuple.
     """
     warnings.warn(
-        "This method is deprecated as of ODE 5.3.0. \
+        "This method is deprecated as of Bhojpur ODE. \
         Use reset_rendering_settings",
         DeprecationWarning)
     reset_rendering_settings(renderingEngine, pixelsId, cIndex,
@@ -1276,7 +1276,7 @@ def createNewImage(session, plane2Dlist, imageName, description, dataset=None):
     @return The new ODE image: ode.model.ImageI
     """
     warnings.warn(
-        "This method is deprecated as of ODE 5.3.0", DeprecationWarning)
+        "This method is deprecated as of Bhojpur ODE", DeprecationWarning)
     queryService = session.getQueryService()
     pixelsService = session.getPixelsService()
     rawPixelStore = session.createRawPixelsStore()
@@ -1340,7 +1340,7 @@ def parseInputs(client, session=None, processFn=IdentityFn):
     @return Parsed inputs as defined by ProcessFn.
     """
     warnings.warn(
-        "This method is deprecated as of ODE 5.3.0", DeprecationWarning)
+        "This method is deprecated as of Bhojpur ODE", DeprecationWarning)
     if session:
         warnings.warn(
             "argument `session' is no longer required and may be removed from "
@@ -1356,7 +1356,7 @@ def getROIFromImage(iROIService, imageId):
     @return See above.
     """
     warnings.warn(
-        "This method is deprecated as of ODE 5.3.0", DeprecationWarning)
+        "This method is deprecated as of Bhojpur ODE", DeprecationWarning)
     roiOpts = ode.api.RoiOptions()
     return iROIService.findByImage(imageId, roiOpts)
 
@@ -1367,7 +1367,7 @@ def toCSV(list):
     @return See above.
     """
     warnings.warn(
-        "This method is deprecated as of ODE 5.3.0", DeprecationWarning)
+        "This method is deprecated as of Bhojpur ODE", DeprecationWarning)
     lenList = len(list)
     cnt = 0
     str = ""
@@ -1385,7 +1385,7 @@ def toList(csvString):
     @return See above.
     """
     warnings.warn(
-        "This method is deprecated as of ODE 5.3.0", DeprecationWarning)
+        "This method is deprecated as of Bhojpur ODE", DeprecationWarning)
     list = csvString.split(',')
     for index in range(len(list)):
         list[index] = list[index].strip()
@@ -1403,10 +1403,10 @@ def registerNamespace(iQuery, iUpdate, namespace, keywords):
     @return see above.
     """
     warnings.warn(
-        "This method is deprecated as of ODE 5.3.0", DeprecationWarning)
+        "This method is deprecated as of Bhojpur ODE", DeprecationWarning)
     from ode.util.OdePopo import WorkflowData as WorkflowData
     warnings.warn(
-        "This method is deprecated as of ODE 5.3.0", DeprecationWarning)
+        "This method is deprecated as of Bhojpur ODE", DeprecationWarning)
     # Support rstring and str namespaces
     namespace = unwrap(namespace)
     keywords = unwrap(keywords)
@@ -1437,10 +1437,10 @@ def findROIByImage(roiService, image, namespace):
     @return see above.
     """
     warnings.warn(
-        "This method is deprecated as of ODE 5.3.0", DeprecationWarning)
+        "This method is deprecated as of Bhojpur ODE", DeprecationWarning)
     from ode.util.OdePopo import ROIData as ROIData
     warnings.warn(
-        "This method is deprecated as of ODE 5.3.0", DeprecationWarning)
+        "This method is deprecated as of Bhojpur ODE", DeprecationWarning)
     roiOptions = ode.api.RoiOptions()
     roiOptions.namespace = ode.rtypes.rstring(namespace)
     results = roiService.findByImage(image, roiOptions)

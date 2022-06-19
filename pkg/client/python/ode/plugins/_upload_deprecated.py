@@ -68,7 +68,7 @@ class UploadControl(BaseControl):
 
     def upload(self, args):
         self.ctx.err(
-            "This module is deprecated as of Bhojpur ODE 5.5.0. Use the module"
+            "This module is deprecated as of Bhojpur ODE. Use the module"
             " available from https://pypi.org/project/ode-upload/"
             " instead.", DeprecationWarning)
         client = self.ctx.conn(args)
@@ -90,7 +90,7 @@ class UploadControl(BaseControl):
 try:
     if "ODE_NO_DEPRECATED_PLUGINS" not in os.environ:
         warnings.warn(
-            "This plugin is deprecated as of Bhojpur ODE 5.5.0. Use the upload"
+            "This plugin is deprecated as of Bhojpur ODE. Use the upload"
             " CLI plugin available from"
             " https://pypi.org/project/ode-upload/ instead.",
             DeprecationWarning)

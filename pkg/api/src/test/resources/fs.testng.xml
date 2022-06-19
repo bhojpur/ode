@@ -1,0 +1,13 @@
+<!DOCTYPE suite SYSTEM "http://beust.com/testng/testng-1.0.dtd" >
+<suite name="server.fs" >
+  <test name="server.fs">
+    <groups>
+      <run>
+        <include name="fs"/>
+      </run>
+    </groups>
+    <packages>
+      <package name="ode.services.server.test.utests"/>
+    </packages>
+  </test>
+</suite>

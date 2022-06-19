@@ -56,14 +56,14 @@ in project [WebGL Volume Rendering](https://github.com/lebarba/WebGLVolumeRender
 The `Bhojpur ODE` platform core components is developed using several software technologies
 (e.g. [Ivy](https://ant.apache.org/ivy/), [Groovy](https://groovy-lang.org), [Gradle](https://gradle.org),
 [Ice](https://zeroc.com/products/ice), [Python](https://www.python.org),
-[Node.js](https://nodejs.org), [Java](https://www.java.com)).
+[Node.js](https://nodejs.org), [Java](https://www.java.com)), [Spring](https://spring.io).
 
 Based on a Gradle [ice builder plugin](https://github.com/zeroc-ice/ice-builder-gradle),
 we have created a custom Gradle plugin for the Bhojpur ODE.
 
 ### Pre-requisites
 
-You need to install [Zero-C ICE](https://doc.zeroc.com/ice/) middleware for compiling 
+You need to install [ZeroC ICE](https://doc.zeroc.com/ice/) middleware for compiling 
 `.ice` interface definition language files. For example, on a `macOS` operating system
 
 ```bash
@@ -78,13 +78,32 @@ brew install --cask zeroc-ice/tap/icegridgui
 export ODEDIR==$(pwd)
 ```
 
-### Code Generator
+The ICE tools generate `Java` source code for the *server-side* and `Python` source code
+for the *client-side* frameworks.
 
-You need to install `Python` >= 3.8, `Django`, `Pillow`, `numpy`, `tables`, `mox3`, and
-other software libraries.
+### Source Code Generator
+
+You need to install `Python` >= 3.8, `Django`, `appdirs`, `Pillow`, `numpy`, `tables`,
+`mox3`, and other software libraries.
 
 ```bash
+sudo pip3 install appdirs django Pillow numpy tables mox3
 sudo pip3 install -U -r requirements.txt
+```
+
+### Server-side Framework
+
+It is based on `Java` >= 1.8 and `Spring Framework`. The Bhojpur ODE server is designed
+to securely store, retrieve, and process digital images efficiently.
+
+### Client-side Framework
+
+It is based on `Python` >= 3.8 and `Ice` >= 3.7. The client is designed to serve image
+data efficiently using web-based APIs. You could use the [odectl](/cmd/odectl) tool as
+a starting point to interact with the Bhojpur ODE server.
+
+```bash
+export ODE_HOME==$(pwd)
 ```
 
 ### Web Forms

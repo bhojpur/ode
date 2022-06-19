@@ -1,0 +1,21 @@
+<!DOCTYPE suite SYSTEM "http://beust.com/testng/testng-1.0.dtd" >
+  
+<suite name="server.integration" time-out="10000">
+  
+  <test name="server.integration.active">
+    <groups>
+      <run>
+        <exclude name="broken"/>
+        <exclude name="ignore"/>
+        <exclude name="manual"/>
+        <exclude name="longrunning"/>
+      </run>
+    </groups>
+    <packages>
+      <package name="ode.formats.*"/>
+      <package name="ode.services.*"/>
+      <package name="ode.util.*"/>
+    </packages>
+  </test>
+
+</suite>

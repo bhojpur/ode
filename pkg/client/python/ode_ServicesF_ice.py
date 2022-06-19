@@ -129,7 +129,7 @@ if 'StatefulServiceInterface' not in _M_ode.api.__dict__:
 
         def passivate_async(self, _cb, current=None):
             """
-            Causes the blitz server to store the service implementation to disk
+            Causes the ODE server to store the service implementation to disk
             to free memory. This is typically done automatically by the server
             when a pre-defined memory limit is reached, but can be used by the
             client if it clear that a stateful service will not be used for some
@@ -189,7 +189,7 @@ if 'StatefulServiceInterface' not in _M_ode.api.__dict__:
     class StatefulServiceInterfacePrx(_M_ode.api.ServiceInterfacePrx):
 
         """
-        Causes the blitz server to store the service implementation to disk
+        Causes the ODE server to store the service implementation to disk
         to free memory. This is typically done automatically by the server
         when a pre-defined memory limit is reached, but can be used by the
         client if it clear that a stateful service will not be used for some
@@ -203,7 +203,7 @@ if 'StatefulServiceInterface' not in _M_ode.api.__dict__:
             return _M_ode.api.StatefulServiceInterface._op_passivate.invoke(self, ((), _ctx))
 
         """
-        Causes the blitz server to store the service implementation to disk
+        Causes the ODE server to store the service implementation to disk
         to free memory. This is typically done automatically by the server
         when a pre-defined memory limit is reached, but can be used by the
         client if it clear that a stateful service will not be used for some
@@ -221,7 +221,7 @@ if 'StatefulServiceInterface' not in _M_ode.api.__dict__:
             return _M_ode.api.StatefulServiceInterface._op_passivate.begin(self, ((), _response, _ex, _sent, _ctx))
 
         """
-        Causes the blitz server to store the service implementation to disk
+        Causes the ODE server to store the service implementation to disk
         to free memory. This is typically done automatically by the server
         when a pre-defined memory limit is reached, but can be used by the
         client if it clear that a stateful service will not be used for some

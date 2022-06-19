@@ -192,8 +192,6 @@ class HdfStorage(object):
         self.logger = logging.getLogger("ode.tables.HdfStorage")
 
         self.__hdf_path = path(file_path)
-        # Locking first as described at:
-        # http://www.pytables.org/trac/ticket/185
         self.__hdf_file = HDFLIST.addOrThrow(file_path, self, read_only)
         self.__tables = []
 
@@ -235,7 +233,7 @@ class HdfStorage(object):
                     mode = "r"
 
             return tables.openFile(str(self.__hdf_path), mode=mode,
-                                   title="OMERO HDF Measurement Storage",
+                                   title="Bhojpur ODE HDF Measurement Storage",
                                    rootUEP="/")
         except (tables.HDF5ExtError, IOError) as e:
             msg = "HDFStorage initialized with bad path: %s: %s" % (
@@ -283,7 +281,7 @@ class HdfStorage(object):
 
     def __getversion(self):
         """
-        In OMERO.tables v2 the version attribute name was changed to __version
+        In ODE.tables v2 the version attribute name was changed to __version
         """
         self.__initcheck()
         k = '__version'
@@ -448,7 +446,7 @@ class HdfStorage(object):
                 # Metadata methods were generally broken for v1 tables so
                 # the introduction of internal metadata attributes is unlikely
                 # to affect anyone.
-                msg = 'Tables metadata is only supported for OMERO.tables >= 2'
+                msg = 'Tables metadata is only supported for ODE.tables >= 2'
                 self.logger.error(msg)
                 raise ode.ApiUsageException(None, None, msg)
 

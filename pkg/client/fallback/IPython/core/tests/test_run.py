@@ -172,13 +172,11 @@ class TestMagicRunPass(tt.TempFileMixin):
     def run_tmpfile(self):
         _ip = get_ipython()
         # This fails on Windows if self.tmpfile.name has spaces or "~" in it.
-        # See below and ticket https://bugs.launchpad.net/bugs/366353
         _ip.magic('run %s' % self.fname)
         
     def run_tmpfile_p(self):
         _ip = get_ipython()
         # This fails on Windows if self.tmpfile.name has spaces or "~" in it.
-        # See below and ticket https://bugs.launchpad.net/bugs/366353
         _ip.magic('run -p %s' % self.fname)
 
     def test_builtins_id(self):
@@ -248,7 +246,6 @@ class TestMagicRunSimple(tt.TempFileMixin):
         """Test that namespace cleanup is not too aggressive GH-238
 
         Returning from another run magic deletes the namespace"""
-        # see ticket https://github.com/ipython/ipython/issues/238
         class secondtmp(tt.TempFileMixin): pass
         empty = secondtmp()
         empty.mktmp('')

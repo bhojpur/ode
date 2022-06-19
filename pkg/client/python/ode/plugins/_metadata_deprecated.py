@@ -59,7 +59,7 @@ GUI clients.
 """
 
 DEPRECATION_MESSAGE = (
-    "This plugin is deprecated as of Bhojpur ODE 5.4.8. Use the plugin"
+    "This plugin is deprecated as of Bhojpur ODE. Use the plugin"
     " available from https://pypi.org/project/ode-metadata/"
     " instead.")
 
