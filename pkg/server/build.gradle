@@ -22,12 +22,14 @@ plugins {
     id "java-library"
     // id "net.bhojpur.ode.api" version "1.0.0"
     // id "net.bhojpur.ode.dsl" version "1.0.0"
-    // id "net.bhojpur.ode.core" version "1.0.0"
+    // id "net.bhojpur.ode.server" version "1.0.0"
     // id "net.bhojpur.ode.project" version "1.0.0"
-    // id "net.bhojpur.ode.gradle.ice-builder.slice" version "1.0.0"
+    // id "net.bhojpur.gradle.icebuilder.slice" // version "1.0.0"
 }
 
-group = "net.bhojpur.gradle.ice-builder"
+description = "Bhojpur ODE server engine source code"
+
+group = "net.bhojpur.gradle.icebuilder"
 version = "1.0.0"
 
 repositories {
@@ -222,8 +224,8 @@ task compileIcedoc(type: net.bhojpur.gradle.icebuilder.slice.IceDocsTask, depend
     outputDir = file("${iceOutputDir}")
     includeDirs = files("${generatedSliceDir}", "api/v1")
     sourceDirs = files("${generatedSliceDir}", "api/v1")
-    header = file("api/resources/header.txt")
-    footer = file("api/resources/footer.txt")
+    header = file("api/src/main/resources/header.txt")
+    footer = file("api/src/main/resources/footer.txt")
 }
 
 gradlePlugin {
