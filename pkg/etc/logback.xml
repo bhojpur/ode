@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration scan="true" debug="false">
+
+  <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>${ode.logfile}</file>
+      <!-- Exclude debug level logging from ode.services.server.repo.ManagedImportRequestI -->
+      <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
+        <evaluator> <!-- defaults to type ch.qos.logback.classic.boolex.JaninoEventEvaluator -->
+          <expression>return Level.DEBUG.equals(Level.toLevel(level)) &amp;&amp; logger.equals("ode.services.server.repo.ManagedImportRequestI");</expression>
+        </evaluator>
+        <OnMismatch>NEUTRAL</OnMismatch>
+        <OnMatch>DENY</OnMatch>
+      </filter>
+      <!-- Exclude debug level logging from ode.* (except allow ode.cmd.*) -->
+      <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
+        <evaluator> <!-- defaults to type ch.qos.logback.classic.boolex.JaninoEventEvaluator -->
+          <expression>return Level.DEBUG.equals(Level.toLevel(level)) &amp;&amp; logger.startsWith("ode.") &amp;&amp; !logger.startsWith("ode.cmd.");</expression>
+        </evaluator>
+        <OnMismatch>NEUTRAL</OnMismatch>
+        <OnMatch>DENY</OnMatch>
+      </filter>
+      <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+      <fileNamePattern>${ode.logfile}.%i</fileNamePattern>
+      <minIndex>1</minIndex>
+      <maxIndex>9</maxIndex>
+    </rollingPolicy>
+    <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+      <maxFileSize>500MB</maxFileSize>
+    </triggeringPolicy>
+    <encoder>
+      <pattern>%date %-5level [%40.40logger{40}] \(%10.10thread\) %msg%n</pattern>
+    </encoder>
+  </appender>
+
+  <appender name="SIFT" class="ode.util.logback.SiftingWhileRejectingDefaultAppender">
+    <!-- in the absence of the class attribute, it is assumed that the
+         desired discriminator type is
+         ch.qos.logback.classic.sift.MDCBasedDiscriminator -->
+    <discriminator>
+      <key>fileset</key>
+      <defaultValue>default</defaultValue>
+    </discriminator>
+    <sift>
+      <appender name="FILE-${fileset}" class="ch.qos.logback.core.FileAppender">
+        <!-- The first part of this path needs to come from somewhere else -->
+        <file>${ode.managed.dir}/${fileset}</file>
+        <append>false</append>
+        <encoder>
+          <pattern>%date %-5level [%40.40logger{40}] \(%10.10thread\) %msg%n</pattern>
+        </encoder>
+      </appender>
+    </sift>
+    <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+      <level>DEBUG</level>
+    </filter>
+  </appender>
+
+  <!-- PERF4J ///////////////////////////////////////////////////////////////// -->
+  <appender name="Perf4jJmxAppender" class="org.perf4j.logback.JmxAttributeStatisticsAppender">
+    <param name="TagNamesToExpose" value="ode.call.success,ode.call.exception,ode.session"/>
+  </appender>
+
+  <appender name="CoalescingStatistics" class="org.perf4j.logback.AsyncCoalescingStatisticsAppender">
+    <param name="TimeSlice" value="30000"/>
+    <appender-ref ref="Perf4jJmxAppender"/>
+  </appender>
+
+  <logger name="org.perf4j.TimingLogger">
+    <level value="INFO"/>
+    <appender-ref ref="CoalescingStatistics"/>
+  </logger>
+
+  <!-- All below are ROOT loggers -->
+
+  <!-- INTERNAL /////////////////////////////////////////////////////////////// -->
+  <logger name="ode" level="INFO"/>
+  <logger name="ode.formats" level="INFO"/>
+  <logger name="odeis" level="INFO"/>
+  <logger name="ODE" level="INFO"/>
+  <!-- Inherit from Spring/etc and so are a bit verbose -->
+  <logger name="ode.system.OdeContext" level="WARN"/>
+  <logger name="ode.system.PreferenceContext" level="WARN"/>
+  <logger name="ode.security.basic.CurrentDetails" level="INFO"/>
+  <logger name="ode.services.server.impl.ServiceFactoryI" level="INFO"/>
+  <logger name="ode.services.server.impl.OdeMetadata" level="INFO"/>
+  <logger name="ode.services.server.util.ShutdownSafeEhcacheManagerFactoryBean" level="WARN"/>
+  <!-- Often useful to change to DEBUG -->
+  <logger name="ode.cmd" level="INFO"/>
+  <logger name="ode.cmd.graphs" level="INFO"/>
+  <logger name="ode.services.graphs" level="INFO"/>
+  <logger name="ode.services.delete" level="INFO"/>
+  <!-- Adapters are also too so is a bit verbose -->
+  <logger name="ode.adapters" level="ERROR"/>
+
+  <!-- THIRD PARTY //////////////////////////////////////////////////////////// -->
+  <logger name="org.apache" level="WARN"/>
+  <logger name="org.jgroups" level="WARN"/>
+  <logger name="org.quartz" level="WARN"/>
+  <logger name="org.hibernate" level="WARN"/>
+  <logger name="org.springframework" level="WARN"/>
+  <!-- Suppressing "Warning missing properties files" -->
+  <logger name="org.springframework.beans" level="ERROR"/>
+  <!-- Whether or not to print jamon timing INFO. ERROR or TRACE -->
+  <logger name="org.springframework.aop.interceptor.JamonPerformanceMonitorInterceptor" level="TRACE"/>
+  <!-- Quieting server startup -->
+  <logger name="net.sf.ehcache" level="ERROR"/>
+  <logger name="loci" level="INFO"/><!-- Bio-Formats -->
+  <logger name="loci.formats.Memoizer" level="DEBUG"/>
+  <logger name="ucar" level="WARN"/><!-- NetCDF -->
+
+  <!-- BUILD ////////////////////////////////////////////////////////////////// -->
+  <logger name="org.hibernate.tool.hbm2x.POJOExporter" level="ERROR"/>
+  <logger name="velocity" level="ERROR"/>
+  <logger name="ode.dsl.utests" level="WARN"/>
+  <logger name="ode.util.utests.PojoOptionsTest" level="WARN"/>
+
+  <!-- IMAGEJ /////////////////////////////////////////////////////////////// -->
+  <!-- These categories are omitted by ImageJ components which pick up our
+       slf4j/logback configuration during scripting -->
+  <logger name="org.bushe" level="INFO"/>
+
+  <!-- DATABASE /////////////////////////////////////////////////////////////// -->
+  <logger name="bitronix" level="WARN"/>
+  <!-- Limit memory WARNing -->
+  <logger name="org.hibernate.hql.ast.QueryTranslatorImpl" level="ERROR"/>
+  <!-- Limit fail-safe cleanup -->
+  <logger name="org.hibernate.engine.loading.LoadContexts" level="ERROR"/>
+  <!-- This is bogus, and will be caught by our exception handlers anyway -->
+  <logger name="org.hibernate.util.JDBCExceptionReporter" level="OFF" additivity="false"/>
+  <!-- Printed on startup -->
+  <logger name="org.hibernate.search.engine.DocumentBuilderContainedEntity" level="ERROR"/>
+  <!-- Other overly verbose messages -->
+  <logger name="org.hibernate.SQL" level="ERROR"/>
+  <logger name="org.hibernate.cfg" level="ERROR"/>
+  <logger name="org.hibernate.engine" level="ERROR"/>
+  <logger name="org.hibernate.hql" level="WARN"/> <!-- for first/max in memory -->
+  <logger name="org.hibernate.hql.PARSER" level="OFF" additivity="false"/>
+  <logger name="org.hibernate.loader" level="ERROR"/>
+  <logger name="org.hibernate.persister" level="ERROR"/>
+  <logger name="org.hibernate.pretty" level="ERROR"/>
+  <logger name="org.hibernate.type" level="ERROR"/>
+  <logger name="org.hibernate.validator" level="ERROR"/>
+  <!-- Thrown from BinaryAccessPolicy -->
+  <logger name="org.hibernate.AssertionFailure" level="OFF" additivity="false"/>
+
+    <!-- Import logs //////////////////////////////////////////////////////////// -->
+  <logger name="ode.services.server.repo.ManagedImportRequestI">
+    <level value="DEBUG"/>
+    <appender-ref ref="SIFT"/>
+  </logger>
+
+  <logger name="org.perf4j">
+    <level value="DEBUG"/>
+    <appender-ref ref="SIFT"/>
+  </logger>
+
+  <logger name="ode.annotations">
+    <level value="INFO"/>
+    <appender-ref ref="SIFT"/>
+  </logger>
+
+  <logger name="ode.formats">
+    <level value="INFO"/>
+    <appender-ref ref="SIFT"/>
+  </logger>
+
+  <logger name="ode.logic">
+    <level value="INFO"/>
+    <appender-ref ref="SIFT"/>
+  </logger>
+
+  <logger name="ode.security">
+    <level value="INFO"/>
+    <appender-ref ref="SIFT"/>
+  </logger>
+
+  <logger name="ode.tools">
+    <level value="INFO"/>
+    <appender-ref ref="SIFT"/>
+  </logger>
+
+  <logger name="ode">
+    <level value="DEBUG"/>
+    <appender-ref ref="SIFT"/>
+  </logger>
+
+  <logger name="loci">
+    <level value="INFO"/>
+    <appender-ref ref="SIFT"/>
+  </logger>
+
+  <root level="OFF">
+    <appender-ref ref="FILE"/>
+  </root>
+
+</configuration>

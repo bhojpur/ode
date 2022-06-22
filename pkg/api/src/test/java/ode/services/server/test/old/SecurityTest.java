@@ -48,13 +48,13 @@ public class SecurityTest extends IceTest {
     private ode.client createUser() throws ServerError,
             CannotCreateSessionException, PermissionDeniedException {
         ode.model.Experimenter e = new ode.model.ExperimenterI();
-        e.setOmeName(rstring(UUID.randomUUID().toString()));
+        e.setOdeName(rstring(UUID.randomUUID().toString()));
         e.setFirstName(rstring("ticket"));
         e.setLastName(rstring("645"));
         root.getSession().getAdminService().createUser(e, "default");
 
         ode.client user = new ode.client();
-        user.createSession(e.getOmeName().getValue(), "");
+        user.createSession(e.getOdeName().getValue(), "");
         return user;
     }
 

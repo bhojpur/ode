@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<!--
+	Configuration to test OdeContext itself.
+-->
+
+<beans>	
+
+	<bean id="placeholderConfig"
+              class="org.springframework.beans.factory.config.PreferencesPlaceholderConfigurer">
+		<property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_FALLBACK"/>
+	</bean>    
+    
+   <bean id="map" class="java.util.HashMap">
+     <constructor-arg>
+			<map>
+        <entry key="collector">
+          <bean class="ode.system.utests.Collector"/>
+        </entry>
+      </map>       
+     </constructor-arg>
+   </bean>
+    
+   <bean id="parentListener" class="ode.system.utests.ParentListener">
+		<constructor-arg index="0" ref="map"/>
+	</bean>	
+    
+</beans>

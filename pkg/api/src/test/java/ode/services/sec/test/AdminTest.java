@@ -134,7 +134,7 @@ public class AdminTest extends AbstractAccountTest {
         newgrp.setId(rlong(gid));
 
         Experimenter user = createNewUser(rootAdmin); // in default group
-        Login ul = new Login(user.getOmeName().getValue(), "");
+        Login ul = new Login(user.getOdeName().getValue(), "");
         ServiceFactoryPrx usf = c.createSession(ul.getName(), ul.getPassword());
         IAdminPrx ua = usf.getAdminService();
 
@@ -143,7 +143,7 @@ public class AdminTest extends AbstractAccountTest {
 
         // Let's make sure this still works properly
         Experimenter admin = createNewSystemUser(rootAdmin);
-        Login al = new Login(admin.getOmeName().getValue(), "");
+        Login al = new Login(admin.getOdeName().getValue(), "");
         ServiceFactoryPrx asf =c.createSession(al.getName(), al.getPassword());
         IAdminPrx aa = asf.getAdminService();
         ExperimenterGroup currgrp = aa.getDefaultGroup(user.getId().getValue());
@@ -196,7 +196,7 @@ public class AdminTest extends AbstractAccountTest {
         Long id;
         String on, fn, mn, ln, em, in, uuid;
         id = self.getId().getValue();
-        on = self.getOmeName().getValue();
+        on = self.getOdeName().getValue();
         fn = self.getFirstName().getValue();
         mn = self.getMiddleName().getValue();
         ln = self.getLastName().getValue();
@@ -206,7 +206,7 @@ public class AdminTest extends AbstractAccountTest {
         uuid = java.util.UUID.randomUUID().toString();
 
         self.setId(rlong(-1L));
-        self.setOmeName(rstring(uuid));
+        self.setOdeName(rstring(uuid));
         self.setFirstName(rstring(uuid));
         self.setMiddleName(rstring(uuid));
         self.setLastName(rstring(uuid));
@@ -222,7 +222,7 @@ public class AdminTest extends AbstractAccountTest {
 
         // Should be changed
         Assert.assertEquals(id, self.getId());
-        Assert.assertEquals(name, self.getOmeName());
+        Assert.assertEquals(name, self.getOdeName());
         Assert.assertFalse(fn.equals(self.getFirstName()));
         Assert.assertNull(mn);
         Assert.assertNotNull(self.getMiddleName());
@@ -249,7 +249,7 @@ public class AdminTest extends AbstractAccountTest {
         ExperimenterGroup userGrp = new ExperimenterGroupI(1L, false);
 
         Experimenter e = new ExperimenterI();
-        e.setOmeName(rstring(UUID.randomUUID().toString()));
+        e.setOdeName(rstring(UUID.randomUUID().toString()));
         e.setFirstName(rstring("ticket:1104"));
         e.setLastName(rstring("ticket:1104"));
         long eid = rootAdmin.createExperimenterWithPassword(e, rstring("password"),
@@ -274,7 +274,7 @@ public class AdminTest extends AbstractAccountTest {
         try
         {        
             Experimenter e = createNewUser(rootAdmin);
-            Login l = new Login(e.getOmeName().getValue(), "");
+            Login l = new Login(e.getOdeName().getValue(), "");
             ServiceFactoryPrx u;
             u = c.createSession(l.getName(), l.getPassword());
             return u;

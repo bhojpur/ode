@@ -1,0 +1,39 @@
+*** Variables ***
+
+# ODE config
+${ODE HOST}           %(HOST)s
+${ODE PORT}           %(PORT)s
+
+${ROOT USERNAME}        root
+${ROOT PASSWORD}        %(ROOTPASS)s
+${ROOT FULL NAME}		root root
+
+${USERNAME}             %(USER)s
+${PASSWORD}             %(PASS)s
+${LAST NAME}            %(USER)s
+${FULL NAME}            %(USER)s %(USER)s
+
+# Web config
+${WEB HOST}             %(WEBHOST)s
+${WEB PREFIX}           %(WEBPREFIX)s
+${SERVER_ID}            1
+
+${REMOTE_URL}           %(REMOTEURL)s
+${DC}                   %(DC)s
+${BROWSER}              Firefox
+${DELAY}                0
+${WAIT}                 50
+${TIMEOUT}              60
+${INTERVAL}             5
+
+${LOGIN URL}            %(PROTOCOL)s://${WEB HOST}${WEB PREFIX}/webclient/login/
+${WELCOME URL}          %(PROTOCOL)s://${WEB HOST}${WEB PREFIX}/webclient/
+
+${WEBADMIN WELCOME URL}     %(PROTOCOL)s://${WEB HOST}${WEB PREFIX}/webadmin/
+${WEBADMIN LOGIN URL}       ${LOGIN URL}?url=%(QWEBPREFIX)s%(QSEP)swebadmin%(QSEP)s
+${WEBCLIENT LOGIN URL}      ${LOGIN URL}?url=%(QWEBPREFIX)s%(QSEP)swebclient%(QSEP)s
+
+${USERS URL}            ${WEBADMIN WELCOME URL}experimenters/
+${GROUPS URL}           ${WEBADMIN WELCOME URL}groups/
+
+${COMMAND}       		bin/ode

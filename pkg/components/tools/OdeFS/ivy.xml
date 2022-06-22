@@ -1,0 +1,19 @@
+<ivy-module version="2.0" xmlns:e="http://ant.apache.org/ivy/extra">
+
+  <info
+      organisation="net.bhojpur.ode"
+      module="OdeFS"
+      status="integration"/>
+  <configurations>
+    <conf name="server"/>
+  </configurations>
+  <publications>
+    <artifact name="OdeFS" type="egg"/>
+  </publications>
+  <dependencies>
+    <!-- Internal -->
+    <dependency org="net.bhojpur.ode" name="ode-server" rev="${versions.ode-server}" transitive="false">
+	    <artifact name="ode-server" type="zip" ext="zip" e:classifier="python"/>
+    </dependency>
+  </dependencies>
+</ivy-module>

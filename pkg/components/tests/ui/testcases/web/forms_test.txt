@@ -1,0 +1,162 @@
+*** Settings ***
+Documentation     Tests submission of forms.
+
+Resource          ../../resources/config.txt
+Resource          ../../resources/web/login.txt
+Resource          ../../resources/web/tree.txt
+
+Suite Setup         User "${USERNAME}" logs in with password "${PASSWORD}"
+
+*** Test Cases ***
+
+Test Script Run
+    [Documentation]     Tests form based on base_custom_dialog.html and script_ui.html
+
+    # Clear any activities from earlier tests etc.
+    Click Element                               id=launch_activities
+    Click Element                               id=clear_activities
+    ${imageId}=                                 Select And Expand Image
+
+    # First Test 'custom' script forms
+    # Tricky to handle popup window. Just go to script dialog URL instead
+    Go To                                       ${WELCOME URL}figure_script/Thumbnail/?Image=${imageId}
+    Wait Until Page Contains Element            id=script_form
+    Submit Form                                 id=script_form
+    Sleep                                       5                   # make sure script added to Activities
+    Go To                                       ${WELCOME URL}
+    Click Element                               id=launch_activities
+    Wait Until Page Contains                    Thumbnail Figure
+
+    # Now Test 'Batch Image Export' (script UI on-the-fly)
+    Click Element                               id=scriptButton
+    Wait Until Page Contains Element            xpath=//a[contains(text(),'export_scripts')]
+    # If extra /ode/ script level, click() it. Will fail silently if not needed
+    Execute Javascript                          $("#scriptList>ul>li>a:contains('ode')").click()
+    Click Link                                  export_scripts
+    ${script_url}=                              Get Element Attribute       xpath=//a[contains(text(),'Batch Image Export...')]    attribute=href
+    Go To                                       ${script_url}?Image=${imageId}
+    Wait Until Page Contains Element            id=script_form
+    Submit Form                                 id=script_form
+    Sleep                                       5                   # make sure script added to Activities
+    Go To                                       ${WELCOME URL}
+    Click Element                               id=launch_activities
+    Wait Until Page Contains                    Batch Image Export
+
+Test Channel Rename
+    [Documentation]     Select User, Project, Dataset, Image and checks
+    ...                 whether the toolbar/right-click menu options for
+    ...                 creating various containers are enabled.
+
+    Tree Should Be Visible
+    ${imageId}=                                 Select And Expand Image
+    Wait Until Page Contains Element            id=editChannelNames
+    Click Element                               id=editChannelNames
+    ${chName}=                                  Get Time    epoch
+    Input Text                                  channel0    ch${chName}
+    Submit Form                                 channel_names_edit
+    Wait Until Keyword Succeeds                 ${TIMEOUT}  ${INTERVAL}   Element Should Not Be Visible     channel0
+    Wait Until Page Contains Element            xpath=//div[@id='channel_names_display']/span[contains(text(), "ch${chName}")]      ${WAIT}
+
+Test Share
+    [Documentation]     Tests creating and editing share
+
+    # Go To                                       ${WELCOME URL}
+    ${imageId}=                                 Select And Expand Image
+    Click Element                               createshareButton
+    Wait Until Element Is Visible               id_message      ${WAIT}
+    Input Text                                  id_message      Created via Selenium Test
+    Click Element                               xpath=//div[@id='id_members_chosen']/ul[@class='chosen-choices']
+    Page Should Contain Element                 xpath=//div[@id='id_members_chosen']/div[@class='chosen-drop']/ul[@class='chosen-results']
+    Click Element                               xpath=//div[@id='id_members_chosen']/div[@class='chosen-drop']/ul[@class='chosen-results']/li[@data-option-array-index='1']
+
+    Submit Form                                 create_share_form
+    Wait Until Element Is Visible               id=share_dialog_form    ${WAIT}
+    ${shareId}=                                 Get Text                    id=shareCreatedId
+    Click Dialog Button                         OK
+
+    # Check Share has been created
+    Go To                                       ${WELCOME URL}public/
+    Wait Until Element Is Visible               id=Public   ${WAIT}
+    ${shareNodeId}=                             Wait For Share Node         ${shareId}
+    # Created share should be first in tree
+    ${firstShareId}=                            Select First Share
+    Should Be Equal                             ${shareId}                  ${firstShareId}
+
+    # Test Editing of Share.
+    Wait Until Element Is Visible               id=editshareButton      ${WAIT}
+    Click Element                               id=editshareButton
+    Wait Until Element Is Visible               id_message      ${WAIT}
+    Input Text                                  id_message      Edited Share Message
+    Click Dialog Button                         Accept
+    Wait Until Page Contains                    Edited Share Message    ${WAIT}
+    # Add Comment
+    Input Text                                  id_comment      New Discussion Comment
+    Submit Form                                 add_share_comment_form
+    Wait Until Element Is Visible               xpath=//div[contains(@class, "commentText")][contains(text(), "New Discussion Comment")]    ${WAIT}
+
+Test Annotate
+    [Documentation]     Test Annotation of a Project that we create
+
+    Go To                                       ${WELCOME URL}
+    Select Experimenter
+    ${pid}=                                     Create Project      robot test annotate
+
+    # Comment Form
+    Click Element                               xpath=//h1[@data-name='comments']
+    Input Text                                  comment     test add comment
+    Submit Form                                 add_comment_form
+    Wait Until Page Contains                    test add comment
+
+    # Files
+    Click Element                               xpath=//h1[@data-name='attachments']
+    Click Element                               choose_file_anns
+    Wait Until Page Contains Element            id_files
+    Click Element                               xpath=//select[@id='id_files']/option    # just pick first file
+    Submit Form                                 choose_attachments_form
+    Wait Until Page Contains Element            xpath=//li[@class='file_ann_wrapper']   # check for any file annotation
+
+Test Batch Annotate
+    [Documentation]     Test Batch Annotation of 2 Projects that we create
+
+    Go To                                       ${WELCOME URL}
+    Select Experimenter
+    ${projectId}=                               Create Project      robot test batch annotate
+    ${pId}=                                     Create Project      robot test batch annotate
+    Go To                                       ${WELCOME URL}?show=project-${projectId}|project-${pId}
+    Wait Until Page Contains Element            id=batch_ann_title
+
+    # Comment Form
+    Click Element                               xpath=//*[@id="metadata_general"]//div/h1[contains(text(), 'Comments')]
+    Wait Until Element Is Visible               id=id_comment
+    Input Text                                  comment     test add comment
+    Submit Form                                 add_comment_form
+    Wait Until Page Contains                    test add comment
+
+    # Files
+    Click Element                               xpath=//*[@id="metadata_general"]//div/h1[contains(text(), 'Attachments')]
+    Wait Until Element Is Visible               id=choose_file_anns
+    Click Element                               choose_file_anns
+    Wait Until Page Contains Element            id_files
+    Click Element                               xpath=//select[@id='id_files']/option    # just pick first file
+    Submit Form                                 choose_attachments_form
+    Wait Until Page Contains Element            xpath=//li[@class='file_ann_wrapper']   # check for any file annotation
+
+Test Search
+    [Documentation]     Test basic search submission from header field or search page
+    ...                 Searching e.g. for the Projects we just created above
+
+    Go To                                   ${WELCOME URL}
+    Input Text                              id_search_query     test
+    Submit Form                             id=search
+
+    Wait Until Page Contains Element        dataTable       ${WAIT}
+    # We don't care about results, just check we get *some* results in dataTable
+    Location Should Be                      ${WELCOME URL}search/?search_query=test
+    # Repeat search
+    Submit Form                             searching_form
+    Wait Until Page Contains                Loading data...
+    Wait Until Page Contains Element        dataTable       ${WAIT}
+    ${rows}=    Get Matching XPath Count    xpath=//table[@id="DataTable"]/tr
+    Wait Until Page Contains Element        xpath=//table[@id="dataTable"][@data-result-count!='${rows}']       ${WAIT}
+
+[Teardown]    Close Browser

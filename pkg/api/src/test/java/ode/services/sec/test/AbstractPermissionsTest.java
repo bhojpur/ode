@@ -165,7 +165,7 @@ public abstract class AbstractPermissionsTest extends AbstractSecurityTest {
         Login piLogin = new Login(UUID.randomUUID().toString(), "empty", gname,
                 "Test");
         p = c.createSession(piLogin.getName(), piLogin.getPassword());
-        pi.setOmeName(rstring(piLogin.getName()));
+        pi.setOdeName(rstring(piLogin.getName()));
         pi.setFirstName(rstring("read"));
         pi.setLastName(rstring("security -- leader of user_other_group"));
         pi = new ExperimenterI(rootAdmin.createUser(pi, gname), false);
@@ -186,7 +186,7 @@ public abstract class AbstractPermissionsTest extends AbstractSecurityTest {
         Login userLogin = new Login(UUID.randomUUID().toString(), "empty",
                 gname, "Test");
         u = c.createSession(userLogin.getName(), userLogin.getPassword());
-        user.setOmeName(rstring(userLogin.getName()));
+        user.setOdeName(rstring(userLogin.getName()));
         user.setFirstName(rstring("read"));
         user.setLastName(rstring("security"));
         user = new ExperimenterI(rootAdmin.createUser(user, gname), false);
@@ -196,7 +196,7 @@ public abstract class AbstractPermissionsTest extends AbstractSecurityTest {
         Login otherLogin = new Login(UUID.randomUUID().toString(), "empty",
                 gname, "Test");
         o = c.createSession(otherLogin.getName(), otherLogin.getPassword());
-        other.setOmeName(rstring(otherLogin.getName()));
+        other.setOdeName(rstring(otherLogin.getName()));
         other.setFirstName(rstring("read"));
         other.setLastName(rstring("security2"));
         other = new ExperimenterI(rootAdmin.createUser(other, gname), false);
@@ -208,7 +208,7 @@ public abstract class AbstractPermissionsTest extends AbstractSecurityTest {
          * gname!
          */);
         w = c.createSession(worldLogin.getName(), worldLogin.getPassword());
-        world.setOmeName(rstring(worldLogin.getName()));
+        world.setOdeName(rstring(worldLogin.getName()));
         world.setFirstName(rstring("read"));
         world.setLastName(rstring("Security -- not in their group"));
         world = new ExperimenterI(rootAdmin.createUser(world, cname), false);
@@ -356,7 +356,7 @@ public abstract class AbstractPermissionsTest extends AbstractSecurityTest {
         return "user can modify:" + UUID.randomUUID();
     }
 
-    //TODO ticket:1478
+    //TODO
     protected void assertSameRights(Permissions p1, Permissions p2) {
         IceMapper mapper = new IceMapper();
         ode.model.internal.Permissions _p1 = mapper.convert(p1);

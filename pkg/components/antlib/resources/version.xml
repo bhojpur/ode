@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<project name="version" default="version" basedir=".">
+    <description>
+        Provides git-based version strings. These can be overwritten on the
+        command-line by setting the following properties:
+
+        ode.version           1.0.0-ice37-b10, etc.
+        ode.plainversion      e.g. 1.0.0-SNAPSHOT
+        ode.shortversion      e.g. 1.0.0
+
+        ode.vcs.revision      git commit hash
+        ode.vcs.shortrevision git commit hash (short form)
+        ode.vcs.date          git commit date (string)
+        ode.vcs.date_unix     git commit date (UNIX time)
+
+        The ode.v namespace is for properties internal to this build file
+        and should not be modified.
+    </description>
+
+    <property name="gitmatch" value="v*[0-9]*.[0-9]*.[0-9]*"/>
+    <property name="ode.v.regexp" value="^(v\.?)?(.*?)(-[0-9]+)?((-)g(.*?))?$"/>
+
+    <!-- Unset from etc/local.properties -->
+    <if>
+        <equals arg1="${ode.version}" arg2="UNKNOWN"/>
+        <then>
+            <var name="ode.version" unset="true"/>
+        </then>
+    </if>
+
+    <macrodef name="ode_v_was_preset">
+        <attribute name="property"/>
+        <sequential>
+            <if>
+                <isset property="@{property}"/>
+                <then>
+                    <property name="@{property}.source" value="preset"/>
+                </then>
+            </if>
+        </sequential>
+    </macrodef>
+
+    <trycatch>
+        <try>
+            <!-- *EITHER* these values are preset -->
+            <ode_v_was_preset property="ode.version"/>
+            <ode_v_was_preset property="ode.plainversion"/>
+            <ode_v_was_preset property="ode.shortversion"/>
+            <ode_v_was_preset property="ode.vcs.shortrevision"/>
+            <ode_v_was_preset property="ode.vcs.revision"/>
+            <ode_v_was_preset property="ode.vcs.date"/>
+            <ode_v_was_preset property="ode.vcs.date_unix"/>
+
+            <!-- *OR* they'll be set by git -->
+            <git command="describe" output="ode.v.git" failonerror="true">
+                <args>
+                    <arg value="--match"/>
+                    <arg value="${gitmatch}"/>
+                    <arg line="--dirty"/>
+                </args>
+            </git>
+
+            <propertyregex property="ode.shortversion"
+                input="${ode.v.git}" regexp="${ode.v.regexp}" select="\2"/>
+            <propertyregex property="ode.plainversion"
+                input="${ode.v.git}" regexp="${ode.v.regexp}" select="\2\3\5\6"/>
+            <property name="ant.script.dir" value="${import.dir}/../scripts"/>
+            <exec executable = "python" dir = "${ant.script.dir}"
+                outputproperty = "ode.version"
+                failonerror = "true">
+                <arg value = "parse_version" />
+                <arg value = "${ode.plainversion}-ice${versions.ice_lib}"/>
+            </exec>
+            <property name="ode.version.source" value="git"/>
+            <property name="ode.plainversion.source" value="git"/>
+            <property name="ode.shortversion.source" value="git"/>
+            <git command="log" output="ode.vcs.shortrevision" failonerror="true">
+              <args>
+                <arg value="-1"/>
+                <arg value="HEAD"/>
+                <arg value="--pretty=%h"/>
+              </args>
+            </git>
+            <git command="log" output="ode.vcs.revision" failonerror="true">
+              <args>
+                <arg value="-1"/>
+                <arg value="HEAD"/>
+                <arg value="--pretty=%H"/>
+              </args>
+            </git>
+            <git command="log" output="ode.vcs.date" failonerror="true">
+              <args>
+                <arg value="-1"/>
+                <arg value="${ode.vcs.revision}"/>
+                <arg value="--pretty=%ai"/>
+              </args>
+            </git>
+            <git command="log" output="ode.vcs.date_unix" failonerror="true">
+              <args>
+                <arg value="-1"/>
+                <arg value="${ode.vcs.revision}"/>
+                <arg value="--pretty=%at"/>
+              </args>
+            </git>
+            <property name="ode.vcs.shortrevision.source" value="git"/>
+            <property name="ode.vcs.revision.source" value="git"/>
+            <property name="ode.vcs.date.source" value="git"/>
+        </try>
+        <catch>
+            <!-- *OR* we'll finally fall back to UNKNOWN -->
+            <property name="ode.plainversion" value="UNKNOWN"/>
+            <property name="ode.shortversion" value="UNKNOWN"/>
+            <property name="ode.vcs.shortrevision" value="UNKNOWN"/>
+            <property name="ode.vcs.revision" value="UNKNOWN"/>
+            <property name="ode.vcs.date" value="UNKNOWN"/>
+            <property name="ode.vcs.date_unix" value="UNKNOWN"/>
+
+            <!-- And compose ode.version from those -->
+            <property name="ode.version" value="${ode.plainversion}-ice${versions.ice_lib}"/>
+
+            <property name="ode.plainversion.source" value="ant"/>
+            <property name="ode.shortversion.source" value="ant"/>
+            <property name="ode.version.source" value="ant"/>
+            <property name="ode.vcs.revision.source" value="ant"/>
+            <property name="ode.vcs.shortrevision.source" value="ant"/>
+            <property name="ode.vcs.date.source" value="ant"/>
+            <property name="ode.vcs.date_unix.source" value="ant"/>
+        </catch>
+    </trycatch>
+
+    <target name="version-info">
+        <echo>Git describe output:      ${ode.v.git}</echo>
+        <echo>Official:                 ${ode.version} (${ode.version.source})</echo>
+        <echo>Plain:                    ${ode.plainversion} (${ode.plainversion.source})</echo>
+        <echo>Short:                    ${ode.shortversion} (${ode.shortversion.source})</echo>
+        <echo>Git short revision:       ${ode.vcs.shortrevision} (${ode.vcs.shortrevision.source})</echo>
+        <echo>Git revision:             ${ode.vcs.revision} (${ode.vcs.revision.source})</echo>
+        <echo>Git revision date:        ${ode.vcs.date} (${ode.vcs.date.source})</echo>
+        <echo>Git revision date (UNIX): ${ode.vcs.date_unix} (${ode.vcs.date_unix.source})</echo>
+    </target>
+
+</project>

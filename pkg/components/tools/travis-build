@@ -1,0 +1,188 @@
+#!/bin/bash
+
+# Copyright (c) 2018 Bhojpur Consulting Private Limited, India. All rights reserved.
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+# THE SOFTWARE.
+
+# This script is used for testing the build, primarily for use
+# with travis, but may be used by hand as well.
+
+set -e
+set -x
+
+if [ -z "$ICE_HOME" ]; then
+  export ICE_HOME=/usr/share/Ice-3.6.4
+fi
+
+fold()
+{
+    printf "travis_fold:$1:$NAME.$2\n"
+}
+
+# Clean up
+clean()
+{
+    ant clean
+}
+
+java_build()
+{
+    NAME=java_build
+    fold start default
+        TEST="-p" ant build-default -Dpackage-extra=false
+    fold end default
+    fold start tests
+        TEST="-p" ant test-compile
+    fold end tests
+}
+
+java_test()
+{
+    NAME=java_test
+    for dir in tools/OdeJava
+    do
+        fold start $dir
+        ant -f components/$dir/build.xml test -Dtest.with.fail=true -Dtestng.useDefaultListeners=true
+        fold end $dir
+    done
+
+    # Check for the use of '%' in the SQL templates. Since they are later passed through a python
+    # format statement, any use must be escaped as '%%'. FIXME: this needs migrating
+    if [[ "2" -ne $(git grep -E '[^%]%[^%]' components/dsl/resources/ode/dsl/  | wc -l) ]]; then exit 2; fi
+
+    # Check for IDE auto-import of certainly unintended Java package.
+    git grep -q '^import edu\.emory\.mathcs\.backport\.' && exit 2
+
+    # make sure that the current db script has no code-generated
+    # foreign key names in it
+    dist/bin/ode db script --password ode -f- | grep -LiE "fk[a-z]*[0-9]+[a-z0-9]{5}" && {
+        echo generated FKs found
+        exit 2
+    } || {
+        echo SQL clean
+    }
+}
+
+py_flake8()
+{
+    flake8 .
+}
+
+py_build()
+{
+    NAME=py_build
+    fold start default
+        ant build-default -Dpackage-extra=false
+    fold end default
+}
+
+py_test()
+{
+    NAME=py_test
+    for dir in OdePy OdeFS OdeWeb
+    do
+        fold start $dir
+        ant -f components/tools/$dir/build.xml test -Dtest.with.fail=true
+        fold end $dir
+    done
+
+    fold start modules
+    # make sure all OdeWeb Python modules can be imported
+    # (this will find invalid imports that flake8 does not check for)
+    echo Checking OdeWeb Python imports
+    export PYTHONPATH=$PYTHONPATH:../target/lib/python
+    ! ( cd components/tools/OdeWeb ;
+        find engine -name "*.py" |
+        cut -d "." -f -1 |
+        grep -v __init__ |
+        tr / . |
+        xargs -n 1 echo import |
+        tee /dev/stderr |
+        python3 engine/manage.py shell 2>&1 >/dev/null |
+        grep -B2 ImportError
+      )
+    test $? = 0
+    fold end modules
+}
+
+build_cpp()
+{
+    (
+        cd components/tools/OdeCpp
+        mkdir build
+        cd build
+        (
+            mkdir gtest
+            cd gtest
+            cmake /usr/src/gtest
+            make
+        )
+        GTEST_ROOT=$(pwd)/gtest cmake ..
+        make
+#        make test
+        make DESTDIR=../install install
+#        make doc
+    )
+}
+
+integration()
+{
+    fold start integration
+    ./build.py test-integration
+    fold end integration
+}
+
+if [ $# -eq 0 ]
+then
+    clean
+    java_build
+    py_build
+fi
+
+for arg in "$@"
+do
+    case $arg in
+        clean)
+            clean ;;
+        build-cpp)
+            build_cpp ;;
+        build-java)
+            java_build && java_test ;;
+        build-python)
+            py_flake8 && py_build && py_test ;;
+        java-build)
+            java_build ;;
+        java-test)
+            java_test ;;
+        py-flake8)
+            py_flake8;;
+        py-build)
+            py_build ;;
+        py-test)
+            py_test ;;
+        integration | all)
+            py_flake8 java_build java_test py_test ;;
+        *)
+            echo "Invalid argument: \"$arg\"" >&2
+            exit 1
+            ;;
+    esac
+done
+
+exit 0

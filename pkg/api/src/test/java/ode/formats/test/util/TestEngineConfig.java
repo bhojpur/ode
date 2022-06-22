@@ -70,7 +70,7 @@ public class TestEngineConfig extends IniPreferences
     /** Feedback url to be used */
     public static final String CONFIG_FEEDBACK = "feedback_url";
 
-    public static final String DEFAULT_FEEDBACK = "http://qa.openmicroscopy.org.uk";
+    public static final String DEFAULT_FEEDBACK = "http://qa.bhojpur.net";
 
     public static final String CONFIG_FEEDBACK_LOGIN_URL = "login_url";
 
@@ -82,7 +82,7 @@ public class TestEngineConfig extends IniPreferences
 
     public static final String CONFIG_FEEDBACK_COMMENT_URL = "comment_url";
 
-    public static final String DEFAULT_COMMENT_URL = "http://qa.openmicroscopy.org.uk/qa/initial/";
+    public static final String DEFAULT_COMMENT_URL = "http://qa.bhojpur.net/qa/initial/";
 
 	/**
 	 * Test engine configuration, backed by an initiation file.

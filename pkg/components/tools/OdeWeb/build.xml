@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<project name="OdeWeb" default="install" basedir=".">
+    <echo>Entering ${basedir}...</echo>
+
+    <description>
+        Bhojpur ODE web engine - A django-based client
+    </description>
+
+    <dirname property="up-two"        file="${basedir}"/>
+    <dirname property="up-one"        file="${up-two}"/>
+    <property name="import.dir"       value="${up-one}/antlib/resources"/>
+
+    <import file="${import.dir}/global.xml"/>
+    <import file="${up-two}/common.xml"/>
+    <import file="${up-two}/python.xml"/>
+
+    <target name="test" depends="python-test" unless="env.NOPYTHON"/>
+
+    <target name="integration" depends="python-integration" unless="env.NOPYTHON"/>
+
+    <target name="tools-init"/>
+
+    <target name="tools-build" depends="tools-init"/>
+
+    <target name="tools-dist" depends="tools-build" description="Copies files into target">
+        <copy todir="${basedir}/../target/lib/python/engine">
+            <fileset dir="${basedir}/engine" excludes="**/*.pyc,media/**,logs,log,db.sqlite3,custom_settings.py,initial_data.json"/>
+            <fileset dir="${basedir}/engine" includes="media/engine/**"/>
+        </copy>
+    </target>
+
+   <target name="tools-clean" depends="python-clean">
+        <delete dir="${basedir}/engine/custom_settings.py"/>
+        <delete dir="${basedir}/engine/initial_data.json"/>
+        <delete dir="${basedir}/engine/db.sqlite3"/>
+        <delete dir="${basedir}/engine/django"/>
+        <delete dir="${basedir}/engine/logs"/>
+        <delete dir="${basedir}/engine/log"/>
+        <delete>
+            <fileset dir="${basedir}" includes="**/*.pyc"/>
+        </delete>
+    </target>
+
+    <target name="findbugs">
+        <echo>Not yet implemented</echo>
+    </target>
+
+</project>

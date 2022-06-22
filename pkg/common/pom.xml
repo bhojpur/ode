@@ -1,0 +1,432 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+    http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>net.bhojpur.ode</groupId>
+  <artifactId>common</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
+
+  <name>Bhojpur ODE Common Library</name>
+  <description>The Bhojpur ODE common classes used by Java client/server programs.</description>
+  <url>http://www.bhojpur.net/products/ode</url>
+  <inceptionYear>2018</inceptionYear>
+  <organization>
+    <name>Bhojpur Consulting</name>
+    <url>https://www.bhojpur-consulting.com/</url>
+  </organization>
+  <licenses>
+    <license>
+      <name>Simplified BSD License</name>
+      <url>https://opensource.org/licenses/BSD-2-Clause</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+
+  <developers>
+    <developer>
+      <name>Bhojpur ODE Team</name>
+      <email>product@bhojpur-consulting.com</email>
+    </developer>
+  </developers>
+  <contributors>
+    <contributor><name>Shashi Bhushan Rai</name></contributor>
+    <contributor><name>Bimla Pandey</name></contributor>
+  </contributors>
+
+  <mailingLists>
+    <mailingList>
+      <name>ODE-users</name>
+      <subscribe>http://lists.bhojpur.net/mailman/listinfo/ode-users/</subscribe>
+      <unsubscribe>http://lists.bhojpur.net/mailman/listinfo/ode-users/</unsubscribe>
+      <post>ode-users@lists.bhojpur.net</post>
+      <archive>http://lists.bhojpur.net/pipermail/ode-users/</archive>
+    </mailingList>
+    <mailingList>
+      <name>ODE-devel</name>
+      <subscribe>http://lists.bhojpur.net/mailman/listinfo/ode-devel/</subscribe>
+      <unsubscribe>http://lists.bhojpur.net/mailman/listinfo/ode-devel/</unsubscribe>
+      <post>ode-devel@lists.bhojpur.net</post>
+      <archive>http://lists.bhojpur.net/pipermail/ode-devel/</archive>
+    </mailingList>
+  </mailingLists>
+
+  <scm>
+    <connection>scm:git:https://github.com/bhojpur/ode/</connection>
+    <developerConnection>scm:git:git@github.com:bhojpur/ode</developerConnection>
+    <tag>HEAD</tag>
+    <url>http://github.com/bhojpur/ode</url>
+  </scm>
+  <issueManagement>
+    <system>Trac</system>
+    <url>https://trac.bhojpur.net/ode</url>
+  </issueManagement>
+  <ciManagement>
+    <system>Jenkins</system>
+    <url>https://ci.bhojpur.net/</url>
+  </ciManagement>
+  <distributionManagement>
+    <snapshotRepository>
+      <id>ossrh</id>
+      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+    </snapshotRepository>
+    <repository>
+      <id>ossrh</id>
+      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+    </repository>
+  </distributionManagement>
+
+  <dependencies>
+    <dependency>
+     <groupId>io.minio</groupId>
+     <artifactId>minio</artifactId>
+     <version>5.0.2</version>
+     <exclusions>
+       <exclusion>
+         <groupId>commons-codec</groupId>
+         <artifactId>commons-codec</artifactId>
+       </exclusion>
+       <exclusion>
+         <groupId>commons-logging</groupId>
+         <artifactId>commons-logging</artifactId>
+       </exclusion>
+       <exclusion>
+         <groupId>com.google.code.findbugs</groupId>
+         <artifactId>annotations</artifactId>
+       </exclusion>
+       <exclusion>
+         <groupId>com.google.code.findbugs</groupId>
+         <artifactId>jsr305</artifactId>
+       </exclusion>
+     </exclusions>
+    </dependency>
+    <dependency>
+     <groupId>com.esotericsoftware</groupId>
+     <artifactId>kryo</artifactId>
+     <version>4.0.2</version>
+    </dependency>
+    <dependency>
+      <groupId>joda-time</groupId>
+      <artifactId>joda-time</artifactId>
+      <version>2.2</version>
+    </dependency>
+    <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+      <version>29.0-jre</version>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>1.7.6</version>
+    </dependency>
+
+    <!-- NB: dependency:analyze has false warning about xml-apis:xml-apis. -->
+
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-core</artifactId>
+      <version>1.2.9</version>
+    </dependency>
+    <dependency>
+      <!-- NB: We want this, despite warning from dependency:analyze. -->
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+      <version>1.2.0</version>
+    </dependency>
+    <dependency>
+      <!-- NB: We want this, despite warning from dependency:analyze. -->
+      <groupId>xalan</groupId>
+      <artifactId>serializer</artifactId>
+      <version>2.7.2</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <!-- NB: We want this, despite warning from dependency:analyze. -->
+      <groupId>xalan</groupId>
+      <artifactId>xalan</artifactId>
+      <version>2.7.2</version>
+      <scope>runtime</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.testng</groupId>
+      <artifactId>testng</artifactId>
+      <version>6.8</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <properties>
+    <!-- NB: Avoid platform encoding warning when copying resources. -->
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+    <!-- NB: Specify formatting of the maven.build.timestamp property. -->
+    <maven.build.timestamp.format>d MMMMM yyyy</maven.build.timestamp.format>
+
+    <!-- NB: Override argLine property for extra maven-surefire-plugin args. -->
+    <argLine/>
+  </properties>
+
+  <build>
+    <!-- It is nice for "mvn" with no arguments to do something reasonable. -->
+    <defaultGoal>install</defaultGoal>
+
+    <resources>
+      <resource>
+        <directory>src/main/java</directory>
+        <includes>
+          <include>**/*.properties</include>
+        </includes>
+      </resource>
+    </resources>
+
+    <plugins>
+      <plugin>
+	<groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.7.0</version>
+        <!-- Require the Java 8 platform. -->
+        <configuration>
+          <source>1.8</source>
+          <target>1.8</target>
+        </configuration>
+      </plugin>
+
+      <!-- Enable 'license:' goals. -->
+      <!-- License Maven plugin -
+           http://mojo.codehaus.org/license-maven-plugin/
+           This plugin manages project licenses and source file headers. -->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>license-maven-plugin</artifactId>
+        <version>1.16</version>
+        <configuration>
+          <licenseName>bsd_2</licenseName>
+          <organizationName>Bhojpur Consulting:
+  - Research &amp; Development</organizationName>
+          <projectName>The Bhojpur ODE application programming interface and related utilities</projectName>
+          <addJavaLicenseAfterPackage>false</addJavaLicenseAfterPackage>
+          <canUpdateDescription>true</canUpdateDescription>
+          <!-- NB: Avoid stomping on variant copyright holders. -->
+          <canUpdateCopyright>false</canUpdateCopyright>
+          <roots>
+            <root>src</root>
+          </roots>
+          <extraExtensions>
+            <bsh>java</bsh>
+            <config>properties</config>
+            <ijm>java</ijm>
+          </extraExtensions>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>2.22.0</version>
+        <configuration>
+          <suiteXmlFiles>
+            <suiteXmlFile>src/test/java/ode/test.xml</suiteXmlFile>
+          </suiteXmlFiles>
+          <systemPropertyVariables>
+            <testng.runHttpRemoteTests>0</testng.runHttpRemoteTests>
+            <testng.runS3RemoteTests>0</testng.runS3RemoteTests>
+          </systemPropertyVariables>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <version>3.1.0</version>
+      </plugin>
+
+      <plugin>
+        <artifactId>maven-clean-plugin</artifactId>
+        <version>3.1.0</version>
+      </plugin>
+
+      <plugin>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <version>3.1.1</version>
+      </plugin>
+
+      <plugin>
+        <artifactId>maven-deploy-plugin</artifactId>
+        <version>2.8.2</version>
+      </plugin>
+
+      <plugin>
+        <artifactId>maven-install-plugin</artifactId>
+        <version>2.5.2</version>
+      </plugin>
+
+      <plugin>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>3.1.0</version>
+        <!-- Always add classpath to JAR manifests. -->
+        <configuration>
+          <skipIfEmpty>true</skipIfEmpty>
+          <archive>
+            <manifest>
+              <addClasspath>true</addClasspath>
+              <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+              <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+            </manifest>
+            <manifestEntries>
+              <!-- Add SCM revision from buildnumber plugin, if available. -->
+              <Implementation-Build>${buildNumber}</Implementation-Build>
+              <!-- Add a formatted timestamp for the build. -->
+              <Implementation-Date>${maven.build.timestamp}</Implementation-Date>
+            </manifestEntries>
+          </archive>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>test-jar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <!-- NB: The same version declaration and configuration block also
+             appears in the <reporting> section, and must be kept in sync. -->
+        <version>3.0.1</version>
+        <configuration>
+          <failOnError>false</failOnError>
+          <links>
+            <link>http://docs.oracle.com/javase/8/docs/api/</link>
+          </links>
+        </configuration>
+        <executions>
+          <execution>
+            <id>attach-javadocs</id>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <artifactId>maven-plugin-plugin</artifactId>
+        <version>3.5.2</version>
+      </plugin>
+
+      <plugin>
+        <artifactId>maven-release-plugin</artifactId>
+        <version>2.5.3</version>
+        <dependencies>
+          <dependency>
+            <groupId>org.apache.maven.scm</groupId>
+            <artifactId>maven-scm-provider-gitexe</artifactId>
+            <version>1.9</version>
+          </dependency>
+        </dependencies>
+      </plugin>
+
+      <plugin>
+        <artifactId>maven-resources-plugin</artifactId>
+        <version>3.1.0</version>
+      </plugin>
+
+      <plugin>
+        <artifactId>maven-site-plugin</artifactId>
+        <version>3.7.1</version>
+      </plugin>
+
+      <!-- Create -sources.jar when building. -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+        <version>3.0.1</version>
+        <!-- Build source artifact in addition to main artifact. -->
+        <executions>
+          <execution>
+            <id>attach-sources</id>
+            <goals>
+              <goal>jar-no-fork</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- Build Number Maven plugin -
+           http://mojo.codehaus.org/buildnumber-maven-plugin/
+           This plugin embeds a build number in the JAR manifest. -->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>buildnumber-maven-plugin</artifactId>
+        <version>1.4</version>
+        <!-- Record SCM revision in manifest. -->
+        <executions>
+          <execution>
+            <phase>validate</phase>
+            <goals>
+              <goal>create</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <getRevisionOnlyOnce>true</getRevisionOnlyOnce>
+          <revisionOnScmFailure>UNKNOWN</revisionOnScmFailure>
+        </configuration>
+      </plugin>
+
+      <!-- Versions Maven plugin -
+           http://mojo.codehaus.org/versions-maven-plugin/
+           Check for new plugin versions using
+           "mvn versions:display-plugin-updates" -->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>versions-maven-plugin</artifactId>
+        <version>2.5</version>
+      </plugin>
+
+    </plugins>
+  </build>
+
+  <profiles>
+    <profile>
+      <id>release</id>
+      <build>
+        <plugins>
+          <!-- Stage releases with nexus -->
+          <plugin>
+            <groupId>org.sonatype.plugins</groupId>
+            <artifactId>nexus-staging-maven-plugin</artifactId>
+            <version>1.6.8</version>
+            <extensions>true</extensions>
+            <configuration>
+              <serverId>ossrh</serverId>
+              <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+              <autoReleaseAfterClose>false</autoReleaseAfterClose>
+            </configuration>
+          </plugin>
+
+          <!-- gpg release signing -->
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-gpg-plugin</artifactId>
+            <version>1.6</version>
+            <executions>
+              <execution>
+                <id>sign-artifacts</id>
+                <phase>verify</phase>
+                <goals>
+                  <goal>sign</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+</project>

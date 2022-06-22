@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<description>
+		Testing configuration for use from the client side. This uses the
+		driver jar (scope=test) defined in ODE_HOME/pom.xml. Available are:
+		
+		 - dataSource : local data source.
+		 - data  : utility to query a Bhojpur ODE database for test data.
+	</description>
+	
+	<bean id="dataSource" lazy-init="true" destroy-method="close"
+	  class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="${hibernate.connection.driver_class}"/>
+		<property name="url" value="${hibernate.connection.url}"/>
+		<property name="username" value="${hibernate.connection.username}"/>
+		<property name="password" value="${hibernate.connection.password}"/>
+	</bean>
+	
+	<bean id="data" class="ode.testing.ODEData" lazy-init="true">
+		<property name="dataSource" ref="dataSource"/>
+	</bean>
+	
+	  <!-- properly configured principal for login -->
+	<bean id="rootLogin" class="ode.system.Login" lazy-init="true">
+		<constructor-arg index="0" value="root"/>
+		<constructor-arg index="1" value="${ode.rootpass}"/>     
+		<constructor-arg index="2" value="system"/>
+		<constructor-arg index="3" value="Test"/>
+	</bean>
+	
+</beans>

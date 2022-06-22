@@ -1,0 +1,24 @@
+<!DOCTYPE suite SYSTEM "http://beust.com/testng/testng-1.0.dtd" >
+
+<suite name="OdeJava.integration" time-out="120000" configfailurepolicy="continue">
+  <test name="integration">
+    <groups>
+      <run>
+        <exclude name="broken"/>
+      </run>
+    </groups>
+    <packages>
+      <package name="integration.*"/>
+    </packages>
+  </test>
+  <test name="broken">
+    <groups>
+      <run>
+        <include name="broken"/>
+      </run>
+    </groups>
+    <packages>
+      <package name="integration.*"/>
+    </packages>
+  </test>
+</suite>

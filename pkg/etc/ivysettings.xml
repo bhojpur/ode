@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ivysettings>
+  <properties file="${ivy.settings.dir}/build.properties"/>
+  <properties file="${ivy.settings.dir}/local.properties"/>
+  <properties file="${ivy.settings.dir}/../target/ode.version"/>
+  <property name="local-maven2-dir" value="${user.home}/.m2/repository/"
+      override="false"/> <!-- deprecated - use maven.repo.local instead -->
+  <property name="maven.repo.local" value="${local-maven2-dir}"
+      override="false"/>
+
+  <settings defaultResolver="${ode.resolver}"/>
+
+  <credentials host="${artifactory.host}" realm="Artifactory Realm"
+               username="${artifactory.username}" passwd="${artifactory.password}"/>
+
+  <caches default="local" defaultCacheDir="${ivy.settings.dir}/../lib/cache">
+      <!-- local is intended for all products built from this repository,
+           while maven is for any stable, unchanging jar that is being
+           downloaded -->
+      <cache name="local" basedir="${ivy.settings.dir}/../lib/cache"
+        artifactPattern="[orgPath]/[module]/[revision]/[artifact]-[revision](-[classifier]).[ext]"/>
+      <cache name="maven" basedir="${maven.repo.local}"
+        artifactPattern="[orgPath]/[module]/[revision]/[artifact]-[revision](-[classifier]).[ext]"
+        ivyPattern="[orgPath]/[module]/[revision]/[artifact]-[revision].xml"
+        lockStrategy="artifact-lock"
+        defaultTTL="0ms"/>
+  </caches>
+
+  <resolvers>
+    <!-- Build-internal repositories -->
+    <filesystem name="main" checkmodified="true" changingMatcher="regexp" changingPattern=".*SNAPSHOT.*" cache="local">
+        <artifact pattern="${ivy.settings.dir}/../target/repository/[organisation]/[module]/[revision]/[artifact]-[revision](-[classifier]).[ext]" />
+        <ivy pattern="${ivy.settings.dir}/../target/repository/[organisation]/[module]/[revision]/[module]-[revision](-[classifier]).xml"/>
+    </filesystem>
+    <filesystem name="repo" cache="local">
+        <artifact pattern="${ivy.settings.dir}/../lib/repository/[artifact]-[revision](-[classifier]).[type]" />
+        <ivy pattern="${ivy.settings.dir}/../lib/repository/[module]-[revision].ivy"/>
+    </filesystem>
+    <filesystem name="test" checkmodified="true" changingMatcher="regexp" changingPattern=".*SNAPSHOT.*" cache="local">
+        <artifact pattern="${ivy.settings.dir}/../target/test-repository/[artifact]-[revision](-[classifier]).[type]" />
+        <ivy pattern="${ivy.settings.dir}/../target/test-repository/[module]-[revision].xml"/>
+    </filesystem>
+
+      <!-- Lookup via maven cache -->
+      <filesystem name="user-maven" m2compatible="true" force="false"
+          checkmodified="true" changingMatcher="regexp"
+          changingPattern=".*SNAPSHOT.*"
+          cache="local" descriptor="required">
+        <artifact pattern="${maven.repo.local}/[orgPath]/[module]/[revision]/[artifact]-[revision](-[classifier]).[ext]"/>
+        <ivy pattern="${maven.repo.local}/[orgPath]/[module]/[revision]/[artifact]-[revision].xml"/>
+        <!-- Ivy pattern for artifacts installed locally via Maven -->
+        <ivy pattern="${maven.repo.local}/[orgPath]/[module]/[revision]/[module]-[revision].pom"/>
+      </filesystem>
+
+      <!-- Remote downloads; cached to '~/.m2/repository' -->
+      <ibiblio name="maven" m2compatible="true" cache="maven"
+          usepoms="true" useMavenMetadata="false"/>
+      <ibiblio name="ode-simple-artifactory"
+          usepoms="true" useMavenMetadata="true"
+          m2compatible="true"
+          root="${artifactory.baseurl}/simple/${simple.repository}/"/>
+      <ibiblio name="ode-artifactory" cache="maven"
+          usepoms="true" useMavenMetadata="true"
+          m2compatible="true"
+          pattern="[orgPath]/[module]/[revision]/[artifact]-[revision](-[classifier]).[ext]"
+          root="${artifactory.baseurl}/${artifactory.repo}/"/>
+      <ibiblio name="unidata.releases" cache="maven"
+          usepoms="true" useMavenMetadata="true"
+          m2compatible="true"
+          root="https://artifacts.unidata.ucar.edu/repository/unidata-releases"/>
+      <ibiblio name="bc.releases" cache="maven"
+          usepoms="true" useMavenMetadata="true"
+          m2compatible="true"
+          root="https://nexus.senbox.net/nexus/content/groups/public/"/>
+
+    <!-- Main resolver which has as its first resolver the location
+    where all our jars will be published -->
+    <chain name="ode-resolver" returnFirst="true">
+        <resolver ref="main"/>
+        <resolver ref="repo"/>
+        <resolver ref="user-maven"/>
+        <resolver ref="maven"/>
+        <resolver ref="ode-artifactory"/>
+    </chain>
+
+    <!-- Resolver for Bhojpur ODE dependencies-->
+    <chain name="ode-resolver">
+        <resolver ref="user-maven"/>
+        <resolver ref="ode-artifactory"/>
+    </chain>
+
+    <!-- Resolver for Unidata dependencies-->
+    <chain name="unidata-resolver" returnFirst="true">
+        <resolver ref="user-maven"/>
+        <resolver ref="unidata.releases"/>
+    </chain>
+
+    <!-- Spring resolver which has as its first resolver the location
+    where all our jars will be published -->
+    <chain name="maven-resolver" returnFirst="true">
+        <resolver ref="user-maven"/>
+        <resolver ref="maven"/>
+    </chain>
+
+   <!-- Resolver for all the test jars which should not be shipped -->
+    <chain name="test-resolver" returnFirst="true">
+      <resolver ref="test"/>
+      <resolver ref="ode-resolver"/>
+    </chain>
+
+    <chain name="bc-resolver" returnFirst="true">
+      <resolver ref="bc.releases"/>
+    </chain>
+
+    <!-- Hudson resolver. Used by hudson to build a central repository -->
+    <filesystem name="hudson-repository" cache="local">
+        <ivy pattern="${user.home}/.hudson/repository/[organisation]/[module]/ivys/ivy-[revision].xml"/>
+        <artifact pattern="${user.home}/.hudson/repository/[organisation]/[module]/[type]s/[artifact]-[revision](-[classifier]).[ext]"/>
+    </filesystem>
+
+    <url name="artifactory-publish">
+        <artifact pattern="${artifactory.baseurl}/${artifactory.repository}/[organization]/[module]/[revision]/[artifact]-[revision](-[classifier]).[ext]"/>
+        <ivy pattern="${artifactory.baseurl}/${artifactory.repository}/[organization]/[module]/[revision]/ivy-[revision](-[classifier]).xml" />
+    </url>
+  </resolvers>
+
+  <modules>
+    <module organisation="edu.ucar" name="grib" resolver="ode-resolver"/>
+    <module organisation="edu.ucar" name="bufr" resolver="maven-resolver"/>
+    <module organisation="edu.ucar" name="thredds-parent" resolver="unidata-resolver"/>
+    <module organisation="edu.ucar" name="netcdf" resolver="unidata-resolver"/>
+    <module organisation="edu.ucar" name="cdm" resolver="unidata-resolver"/>
+    <module organisation="edu.ucar" name="httpservices" resolver="unidata-resolver"/>
+    <module organisation="edu.ucar" name="cdm-core" resolver="unidata-resolver"/>
+    <module organisation="net.bhojpur.ode" name="odejava" resolver="ode-resolver" />
+    <module organisation="net.bhojpur.ode" name="*-test" resolver="test-resolver" matcher="glob"/>
+    <module organisation="org.springframework" resolver="maven-resolver"/>
+    <module organisation="com.panayotis" name="appbundler" resolver="maven-resolver"/>
+    <module organisation="zeroc" resolver="ode-resolver"/>
+    <module organisation="net.bhojpur.ode" name="jxrlib-all" resolver="ode-resolver"/>
+    <module organisation="net.bhojpur.ode" resolver="${ode.resolver}"/>
+    <module organisation="com.bc.zarr" name="jzarr" resolver="bc-resolver"/>
+  </modules>
+
+  <triggers/>
+
+</ivysettings>

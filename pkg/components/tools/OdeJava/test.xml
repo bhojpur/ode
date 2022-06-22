@@ -1,0 +1,20 @@
+<ivy-module version="1.0">
+  <info
+      organisation="net.bhojpur.ode"
+      module="OdeJava-test"
+      status="integration"/>
+  <configurations>
+    <conf name="test"/>
+  </configurations>
+  <publications>
+    <artifact name="OdeJava-test" type="jar"/>
+  </publications>
+  <dependencies defaultconfmapping="test->*">
+    <dependency org="net.bhojpur.ode" name="ode-server" rev="${versions.ode-server}"/>
+    <dependency org="net.bhojpur.ode" name="ode-common" rev="${versions.ode-common-test}"/>
+    <dependency org="net.bhojpur.ode" name="ode-gateway" rev="${versions.ode-gateway}"/>
+    <dependency org="velocity" name="velocity-dep" rev="${versions.velocity}"/>
+    <dependency org="org.testng" name="testng" rev="${versions.testng}"/>
+    <dependency org="org.uncommons" name="reportng" rev="${versions.reportng}"/>
+  </dependencies>
+</ivy-module>

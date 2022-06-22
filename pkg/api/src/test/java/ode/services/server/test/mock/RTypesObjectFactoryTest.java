@@ -49,7 +49,7 @@ public class RTypesObjectFactoryTest extends MockObjectTestCase {
 
         Experimenter e = new Experimenter();
         e.setId(1L);
-        e.setOmeName("name");
+        e.setOdeName("name");
         e.setLdap(false);
         fixture.mock("mock-ode.api.IAdmin").expects(once()).method(
                 "getExperimenter").will(returnValue(e));

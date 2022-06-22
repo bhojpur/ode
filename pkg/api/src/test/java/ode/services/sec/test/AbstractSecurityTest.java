@@ -63,7 +63,7 @@ public class AbstractSecurityTest {
     // in their beforeTestClass i.e. super.setup(); ...
     protected void init() throws Exception {
 
-        // See ticket:10560 for issues with ode.db.poolsize
+        // See for issues with ode.db.poolsize
         context = OdeContext.getInstance("ODE.security.test");
 
         // TODO: Make work

@@ -35,5 +35,4 @@ pluginManagement {
 }
 
 rootProject.name = 'ode'
-include('pkg:api')
-// include('pkg:server')
+include('pkg:common', 'pkg:api', 'pkg:server')

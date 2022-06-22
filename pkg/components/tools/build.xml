@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project name="tools" default="help" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant">
+
+	<dirname property="up-one" file="${basedir}"/>
+	<property name="import.dir" value="${up-one}/antlib/resources"/>
+
+	<import file="${import.dir}/global.xml"/>
+	<import file="${import.dir}/lifecycle.xml"/>
+
+	<target name="help" description="This help message">
+		<echo>
+			The tools/ directory is a special repository
+			for loosely coupled Bhojpur ODE components. Each of
+			these tools depends on a completed "dist" of Bhojpur ODE.
+		</echo>
+	</target>
+
+	<target name="buildlist" unless="deps.build.path">
+		<installIvy/>
+		<ivy:buildlist settingsRef="ivy.${ant.project.name}" reference="deps.build.path">
+			<fileset dir="${tools.comp}" includes="*/build.xml"/>
+		</ivy:buildlist>
+	</target>
+
+	<target name="build" depends="buildlist" description="Calls 'tools-build' on all components to fill target">
+		<mkdir dir="${tools.classes}"/>
+		<iterate target="tools-dist"/>
+	</target>
+
+	<target name="dist" description="Copies target onto an existing dist">
+		<mkdir dir="${tools.classes}/META-INF"/>
+		<echo file="${tools.classes}/META-INF/README.txt">
+			This jar was created by the tools/build.xml script's dist target
+			and contains non-core classes, including both server and client
+			side code for use with Bhojpur ODE.
+		</echo>
+		<mkdir dir="target/lib/server"/>
+		<jar update="true" destfile="target/lib/server/services.jar" basedir="${tools.classes}" includes="**/*"/>
+		<mkdir dir="${dist.dir}/bin/"/>
+		<copy todir="${dist.dir}">
+			<fileset dir="target" includes="*.war,var/**/*,bin/**/*,etc/**/*,lib/**/*,include/**/*" followsymlinks="false">
+				<depend targetdir="${dist.dir}"/>
+			</fileset>
+		</copy>
+		<chmod perm="a+x">
+			<fileset dir="${dist.dir}/bin" includes="ode"/>
+		</chmod>
+	</target>
+
+	<target name="clean" depends="buildlist" description="Calls 'tools-clean' on all components.">
+		<iterate target="tools-clean"/>
+		<delete dir="${tools.dest}"/>
+	</target>
+
+	<target name="findbugs" depends="buildlist">
+		<iterate target="findbugs"/>
+	</target>
+
+</project>

@@ -592,7 +592,7 @@ public class ODEMetadataStoreClient
      * session. When finished with this instance, close all resources via
      * {@link #logout}
      *
-     * @param username User's omename.
+     * @param username User's odename.
      * @param password User's password.
      * @param server Server hostname.
      * @param port Server port.
@@ -617,7 +617,7 @@ public class ODEMetadataStoreClient
      * or unsecure sessions. When finished with this instance, close all resources via
      * {@link #logout}
      *
-     * @param username User's omename.
+     * @param username User's odename.
      * @param password User's password.
      * @param server Server hostname.
      * @param port Server port.
@@ -643,7 +643,7 @@ public class ODEMetadataStoreClient
      * When finished with this instance, close all resources via
      * {@link #logout}
      *
-     * @param username User's omename.
+     * @param username User's odename.
      * @param password User's password.
      * @param server Server hostname.
      * @param port Server port.
@@ -669,7 +669,7 @@ public class ODEMetadataStoreClient
      * When finished with this instance, close all resources via
      * {@link #logout}
      *
-     * @param username User's omename.
+     * @param username User's odename.
      * @param password User's password.
      * @param server Server hostname.
      * @param port Server port.
@@ -1962,7 +1962,7 @@ public class ODEMetadataStoreClient
         } catch (Exception e) {
             // Because this method is evolving, we're going to
             // permit an exception to not stop import. Eventually,
-            // this could be dangerous. ~Josh.
+            // this could be dangerous.
             log.warn("Failed to launch post-processing", e);
             return null;
         }

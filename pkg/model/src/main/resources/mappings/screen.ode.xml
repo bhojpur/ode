@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<types>
+<!-- Main types -->
+	<type id="ode.model.screen.Screen" named="true" described="true" annotated="true">
+		<!-- Note: Name is optional in model-->
+		<properties>
+			<optional name="type" type="string"/>
+			<optional name="protocolIdentifier" type="string"/>
+			<optional name="protocolDescription" type="text"/>
+			<optional name="reagentSetIdentifier" type="string"/>
+			<optional name="reagentSetDescription" type="text"/>
+			<child name="plateLinks" type="ode.model.screen.ScreenPlateLink" target="ode.model.screen.Plate"/>
+			<zeromany name="reagents" type="ode.model.screen.Reagent" inverse="screen"/>
+		</properties>
+	</type>
+	<type id="ode.model.screen.PlateAcquisition" described="true" annotated="true">
+		<properties>
+			<optional name="name" type="text"/>
+			<optional name="startTime" type="timestamp"/>
+			<optional name="endTime" type="timestamp"/>
+			<optional name="maximumFieldCount" type="int"/>
+			<manyone name="plate" type="ode.model.screen.Plate" inverse="plateAcquisition"/>
+			<zeromany name="wellSample" type="ode.model.screen.WellSample" inverse="plateAcquisition"/>
+		</properties>
+	</type>
+	<type id="ode.model.screen.Plate" named="true" described="true" annotated="true">
+		<!-- Note: Name is optional in model-->
+		<properties>
+			<!-- Note: the following are not (yet) in model -->
+			<optional name="defaultSample" type="int"/><!-- index of well sample which is currently selected-->
+			<optional name="columnNamingConvention" type="string"/><!-- first column name to indicate naming convention-->
+			<optional name="rowNamingConvention" type="string"/><!-- first row name to indicate naming convention-->
+			<optional name="wellOriginX" type="ode.model.units.Length"/><!-- percent width offset from top left-->
+			<optional name="wellOriginY" type="ode.model.units.Length"/><!-- percent height offset from top left-->
+			<optional name="rows" type="int"/>
+			<optional name="columns" type="int"/>
+			<!-- end not in model -->
+			<optional name="status" type="text"/>
+			<optional name="externalIdentifier" type="string"/>
+			<parent name="screenLinks" type="ode.model.screen.ScreenPlateLink" target="ode.model.screen.Screen"/>
+			<zeromany name="wells" type="ode.model.screen.Well" inverse="plate"/>
+			<zeromany name="plateAcquisitions" type="ode.model.screen.PlateAcquisition" inverse="plate"/>
+		</properties>
+	</type>
+	<type id="ode.model.screen.Well" annotated="true">
+		<properties>
+			<optional name="status" type="string"/>
+			<optional name="column" type="int"/>
+			<optional name="row" type="int"/>
+			<!-- Note: the following are not (yet) in model -->
+                        <!-- Color options for well. See the description for explanation
+                        of what a given color means -->
+                        <optional name="red" type="int"/>
+                        <optional name="green" type="int"/>
+                        <optional name="blue" type="int"/>
+                        <optional name="alpha" type="int"/>
+                        <!-- end not in model -->
+			<child name="reagentLinks" type="ode.model.screen.WellReagentLink" target="ode.model.screen.Reagent"/>
+			<!-- Note: only one reagent per well in model-->
+			<optional name="externalDescription" type="text"/>
+			<optional name="externalIdentifier" type="string"/>
+			<optional name="type" type="string"/>
+			<zeromany name="wellSamples" type="ode.model.screen.WellSample" inverse="well" ordered="true"/>
+			<manyone name="plate" type="ode.model.screen.Plate" inverse="well"/>
+		</properties>
+	</type>
+<!-- A WellSample is effectively a WellImageLink -->
+	<type id="ode.model.screen.WellSample">
+		<properties>
+			<optional name="posX" type="ode.model.units.Length"/>
+			<optional name="posY" type="ode.model.units.Length"/>
+			<optional name="timepoint" type="timestamp"/>
+			<optional name="plateAcquisition" type="ode.model.screen.PlateAcquisition"/>
+			<manyone name="well" type="ode.model.screen.Well" inverse="wellSamples" ordered="true"/>
+			<manyone name="image" type="ode.model.core.Image" inverse="wellSamples"/>
+		</properties>
+	</type>
+	<type id="ode.model.screen.Reagent" annotated="true" described="true">
+		<!-- Note: Name is optional in model-->
+		<properties>
+			<optional name="name" type="text"/>
+			<optional name="reagentIdentifier" type="string"/>
+			<manyone name="screen" type="ode.model.screen.Screen" inverse="reagent"/>
+			<parent name="wellLinks" type="ode.model.screen.WellReagentLink" target="ode.model.screen.Well"/>
+		</properties>
+	</type>
+<!-- Links -->
+	<link id="ode.model.screen.ScreenPlateLink">
+		<properties>
+			<from_parent type="ode.model.screen.Screen"/>
+			<to_child type="ode.model.screen.Plate"/>
+		</properties>
+	</link>
+	<link id="ode.model.screen.WellReagentLink">
+		<properties>
+			<from_parent type="ode.model.screen.Well"/>
+			<to_child type="ode.model.screen.Reagent"/>
+		</properties>
+	</link>
+</types>

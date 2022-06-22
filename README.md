@@ -26,7 +26,7 @@ Depending on specific use-cases, the Bhojpur ODE use following digital imaging f
 
 - [Tagged Image File Format](https://docs.fileformat.com/image/tiff/)
 - [Scalable Vector Graphics](https://www.w3.org/TR/SVG2/)
-- [Joint Photographic Experts Group](https://jpeg.org)/
+- [Joint Photographic Experts Group](https://jpeg.org/)
 - [Bio-Formats](https://eliceirilab.org/software/bio-formats/) defined by the University of Wisconsin -
   Madison's [Laboratory for Optical and Computation Instrumentation](https://eliceirilab.org/)
 - [Flexible Image Transport System](https://fits.gsfc.nasa.gov/)
@@ -67,7 +67,7 @@ in project [WebGL Volume Rendering](https://github.com/lebarba/WebGLVolumeRender
 The `Bhojpur ODE` platform core components is developed using several software technologies
 (e.g. [Ivy](https://ant.apache.org/ivy/), [Groovy](https://groovy-lang.org), [Gradle](https://gradle.org),
 [Ice](https://zeroc.com/products/ice), [Python](https://www.python.org),
-[Node.js](https://nodejs.org), [Java](https://www.java.com)), [Spring](https://spring.io).
+[Node.js](https://nodejs.org), [Java](https://www.java.com), [Spring](https://spring.io)).
 
 Based on a Gradle [ice builder plugin](https://github.com/zeroc-ice/ice-builder-gradle),
 we have created a custom Gradle plugin for the Bhojpur ODE.
@@ -104,8 +104,16 @@ sudo pip3 install -U -r requirements.txt
 
 ### Server-side Framework
 
+The source code is compiled into `.jar` libraries using `Gradle` software build tool. So,
+please check if [settings.gradle](./settings.gradle) file points to `pkg/server` folder.
+
 It is based on `Java` >= 1.8 and `Spring Framework`. The Bhojpur ODE server is designed
 to securely store, retrieve, and process digital images efficiently.
+
+```bash
+cd pkg/server
+gradle build
+```
 
 ### Client-side Framework
 

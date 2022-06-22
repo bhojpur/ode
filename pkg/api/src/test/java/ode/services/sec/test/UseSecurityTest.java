@@ -376,7 +376,7 @@ public class UseSecurityTest extends AbstractPermissionsTest {
             List<IObject> micros = new ArrayList<IObject>();
             micros.add(micro);
             // boolean[] unlocked = r.getAdminService().unlock(micros);
-            // assertTrue(unlocked[0]); ticket:2039 - TOO BE REMOVED
+            // assertTrue(unlocked[0]);TOO BE REMOVED
         }
 
     }
@@ -456,7 +456,7 @@ public class UseSecurityTest extends AbstractPermissionsTest {
         r.getUpdateService().deleteObject(link);
         // boolean[] unlocked = r.getAdminService().unlock(Arrays.asList(prj, ds));
         // assertTrue(unlocked[0]);
-        // assertTrue(unlocked[1]);ticket:2039 - TOO BE REMOVED
+        // assertTrue(unlocked[1]); // TO BE REMOVED
 
     }
 

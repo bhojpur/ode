@@ -1,0 +1,87 @@
+// Copyright (c) 2018 Bhojpur Consulting Private Limited, India. All rights reserved.
+
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+// THE SOFTWARE.
+
+plugins {
+    id 'java-library'
+    id "net.bhojpur.ode.project" version "1.0.0"
+}
+
+group = "net.bhojpur.ode"
+version = "1.0.0-SNAPSHOT"
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+dependencies {
+    api("net.bhojpur.ode:api:1.0.0")
+
+    implementation("commons-beanutils:commons-beanutils:1.9.3")
+    implementation("com.zeroc:icegrid:3.6.5")
+    testImplementation("org.testng:testng:6.14.2")
+}
+
+configurations.all {
+    // resolutionStrategy.cacheChangingModulesFor 0, 'minutes'
+    exclude group: 'antlr'
+    exclude group: 'asm'
+    exclude group: 'backport-util-concurrent'
+    exclude group: 'batik'
+    exclude group: 'cglib'
+    exclude group: 'com.codahale.metrics'
+    exclude group: 'com.jamonapi'
+    exclude group: 'com.github.marcus-nl.btm'
+    exclude group: 'com.mortennobel'
+    exclude group: 'com.sun.mail'
+    exclude group: 'commons-codec'
+    exclude group: 'commons-pool'
+    exclude group: 'dom4j'
+    exclude group: 'freemarker'
+    exclude group: 'geronimo-spec'
+    exclude group: 'gnu.getopt'
+    exclude group: 'org.javassist'
+    exclude group: 'javax.jts'
+    exclude group: 'net.sf.ehcache'
+    exclude group: 'org.apache.lucene'
+    exclude group: 'org.apache.httpcomponents'
+    exclude group: 'org.codehaus.btm'
+    exclude group: 'org.hibernate'
+    exclude group: 'org.hibernate.javax.persistence'
+    exclude group: "org.postgresql"
+    exclude group: "org.springframework"
+    exclude group: "org.springframework.security"
+    exclude group: 'org.subethamail'
+    exclude group: 'org.apache.pdfbox'
+    exclude group: 'org.quartz-scheduler'
+    exclude group: 'org.apache.xmlgraphics'
+    exclude group: 'com.zeroc', module: 'ice-db'
+}
+
+test {
+    testLogging {
+        events "passed", "skipped", "failed", "standardOut", "standardError"
+    }
+    // enable TestNG support (default is JUnit)
+    useTestNG() {
+        suites "src/test/resources/unit.testng.xml"
+    }
+    dependsOn cleanTest
+}

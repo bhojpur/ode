@@ -68,16 +68,16 @@ public class PasswordTest extends AbstractAccountTest {
 
         ode.model.Experimenter e = createNewUser(rootAdmin);
         resetPasswordTo_ode(e);
-        assertCanLogin(e.getOmeName().getValue(), "ode");
+        assertCanLogin(e.getOdeName().getValue(), "ode");
 
-        getSudoAdmin("ode").changeUserPassword(e.getOmeName().getValue(), rstring("foo"));
-        assertCanLogin(e.getOmeName().getValue(), "foo");
-        assertCannotLogin(e.getOmeName().getValue(), "bar");
-        assertCannotLogin(e.getOmeName().getValue(), "");
+        getSudoAdmin("ode").changeUserPassword(e.getOdeName().getValue(), rstring("foo"));
+        assertCanLogin(e.getOdeName().getValue(), "foo");
+        assertCannotLogin(e.getOdeName().getValue(), "bar");
+        assertCannotLogin(e.getOdeName().getValue(), "");
 
-        getSudoAdmin("ode").changeUserPassword(e.getOmeName().getValue(), rstring(""));
-        assertCanLogin(e.getOmeName().getValue(), "");
-        assertCanLogin(e.getOmeName().getValue(), "NOTCORRECT");
+        getSudoAdmin("ode").changeUserPassword(e.getOdeName().getValue(), rstring(""));
+        assertCanLogin(e.getOdeName().getValue(), "");
+        assertCanLogin(e.getOdeName().getValue(), "NOTCORRECT");
 
     }
 
@@ -88,13 +88,13 @@ public class PasswordTest extends AbstractAccountTest {
     public void testUserCanChangeOwnPassword() throws Exception {
         Experimenter e = createNewUser(rootAdmin);
         resetPasswordTo_ode(e);
-        assertCanLogin(e.getOmeName().getValue(), "ode");
+        assertCanLogin(e.getOdeName().getValue(), "ode");
 
         ServiceFactory userServices = new ServiceFactory(
-                new Login(e.getOmeName().getValue(), "ode"));
+                new Login(e.getOdeName().getValue(), "ode"));
         userServices.getAdminService().changePassword("test");
-        assertCanLogin(e.getOmeName().getValue(), "test");
-        assertCannotLogin(e.getOmeName().getValue(), "ode");
+        assertCanLogin(e.getOdeName().getValue(), "test");
+        assertCannotLogin(e.getOdeName().getValue(), "ode");
 
     }
 
@@ -102,16 +102,16 @@ public class PasswordTest extends AbstractAccountTest {
     public void testUserCantChangeOthersPassword() throws Exception {
         Experimenter e = createNewUser(getSudoAdmin("ode"));
         resetPasswordTo_ode(e);
-        assertCanLogin(e.getOmeName().getValue(), "ode");
+        assertCanLogin(e.getOdeName().getValue(), "ode");
 
         Experimenter target = createNewUser(getSudoAdmin("ode"));
         resetPasswordTo_ode(target);
-        assertCanLogin(target.getOmeName().getValue(), "ode");
+        assertCanLogin(target.getOdeName().getValue(), "ode");
 
         ServiceFactory userServices = new ServiceFactory(
-                new Login(e.getOmeName().getValue(), "ode"));
+                new Login(e.getOdeName().getValue(), "ode"));
         userServices.getAdminService().changeUserPassword(
-                target.getOmeName().getValue(),"test");
+                target.getOdeName().getValue(),"test");
 
     }
 
@@ -123,16 +123,16 @@ public class PasswordTest extends AbstractAccountTest {
 
         Experimenter e = createNewUser(rootAdmin);
         setPasswordtoEmptyString(e);
-        assertCanLogin(e.getOmeName().getValue(), "bob");
-        assertCanLogin(e.getOmeName().getValue(), "");
-        assertCanLogin(e.getOmeName().getValue(), "ode");
+        assertCanLogin(e.getOdeName().getValue(), "bob");
+        assertCanLogin(e.getOdeName().getValue(), "");
+        assertCanLogin(e.getOdeName().getValue(), "ode");
 
-        new ServiceFactory(new Login(e.getOmeName().getValue(), "blah")).getAdminService()
+        new ServiceFactory(new Login(e.getOdeName().getValue(), "blah")).getAdminService()
                 .changePassword("ode");
 
-        assertCannotLogin(e.getOmeName().getValue(), "bob");
-        assertCannotLogin(e.getOmeName().getValue(), "");
-        assertCanLogin(e.getOmeName().getValue(), "ode");
+        assertCannotLogin(e.getOdeName().getValue(), "bob");
+        assertCannotLogin(e.getOdeName().getValue(), "");
+        assertCanLogin(e.getOdeName().getValue(), "ode");
 
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -158,15 +158,15 @@ public class PasswordTest extends AbstractAccountTest {
         Experimenter e = createNewUser(rootAdmin);
         removePasswordEntry(e);
 
-        assertCannotLogin(e.getOmeName().getValue(), "bob");
-        assertCannotLogin(e.getOmeName().getValue(), "");
-        assertCannotLogin(e.getOmeName().getValue(), "ode");
+        assertCannotLogin(e.getOdeName().getValue(), "bob");
+        assertCannotLogin(e.getOdeName().getValue(), "");
+        assertCannotLogin(e.getOdeName().getValue(), "ode");
 
         resetPasswordTo_ode(e);
 
-        assertCannotLogin(e.getOmeName().getValue(), "bob");
-        assertCannotLogin(e.getOmeName().getValue(), "");
-        assertCanLogin(e.getOmeName().getValue(), "ode");
+        assertCannotLogin(e.getOdeName().getValue(), "bob");
+        assertCannotLogin(e.getOdeName().getValue(), "");
+        assertCanLogin(e.getOdeName().getValue(), "ode");
 
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -190,15 +190,15 @@ public class PasswordTest extends AbstractAccountTest {
         Experimenter e = createNewUser(rootAdmin);
         nullPasswordEntry(e);
 
-        assertCannotLogin(e.getOmeName().getValue(), "bob");
-        assertCannotLogin(e.getOmeName().getValue(), "");
-        assertCannotLogin(e.getOmeName().getValue(), "ode");
+        assertCannotLogin(e.getOdeName().getValue(), "bob");
+        assertCannotLogin(e.getOdeName().getValue(), "");
+        assertCannotLogin(e.getOdeName().getValue(), "ode");
 
         resetPasswordTo_ode(e);
 
-        assertCannotLogin(e.getOmeName().getValue(), "bob");
-        assertCannotLogin(e.getOmeName().getValue(), "");
-        assertCanLogin(e.getOmeName().getValue(), "ode");
+        assertCannotLogin(e.getOdeName().getValue(), "bob");
+        assertCannotLogin(e.getOdeName().getValue(), "");
+        assertCanLogin(e.getOdeName().getValue(), "ode");
 
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

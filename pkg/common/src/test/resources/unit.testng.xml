@@ -1,0 +1,25 @@
+<!DOCTYPE suite SYSTEM "http://beust.com/testng/testng-1.0.dtd">
+<suite name="common.unit" >
+  <test name="common.unit.active">
+    <groups>
+      <run>
+        <exclude name="broken"/>
+        <exclude name="ignore"/>
+      </run>
+    </groups>
+    <packages>
+      <!--
+        MUST explicitly define the packages as include/exclude does not
+        seem to work for sub-packages and we CANNOT have ode.dsl.* tests
+        on the package path as their CLASSPATH is not setup correctly
+        in this context and they will fail.
+      -->
+      <package name="ode.conditions.*"/>
+      <package name="ode.model.*"/>
+      <package name="ode.params.*"/>
+      <package name="ode.system.*"/>
+      <package name="ode.testing.*"/>
+      <package name="ode.util.*"/>
+    </packages>
+  </test>
+</suite>

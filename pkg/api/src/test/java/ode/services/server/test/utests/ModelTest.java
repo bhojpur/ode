@@ -63,7 +63,7 @@ public class ModelTest {
     public void testMapper() throws Exception {
 
         Experimenter e = new Experimenter();
-        e.setOmeName("hi");
+        e.setOdeName("hi");
         e.setLdap(false);
         e.linkExperimenterGroup(new ExperimenterGroup("foo", false));
 
@@ -77,7 +77,7 @@ public class ModelTest {
     @Test
     public void testCopyObject() throws Exception {
         Experimenter e = new Experimenter();
-        e.setOmeName("hi");
+        e.setOdeName("hi");
         e.setLdap(false);
         e.linkExperimenterGroup(new ExperimenterGroup("foo", false));
         ExperimenterI ei = new ExperimenterI();
@@ -98,7 +98,7 @@ public class ModelTest {
     @Test
     public void testFillObject() throws Exception {
         ExperimenterI ei = new ExperimenterI();
-        ei.setOmeName(rstring("name"));
+        ei.setOdeName(rstring("name"));
         ei.linkExperimenterGroup(new ExperimenterGroupI());
         Experimenter e = (Experimenter) ei.fillObject(new IceMapper());
         Assert.assertEquals(new Integer(1),

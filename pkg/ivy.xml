@@ -1,0 +1,23 @@
+<ivy-module version="1.0">
+    <info organisation="net.bhojpur.ode" module="main" revision="${ode.version}" status="integration"/>
+    <configurations>
+      <conf name="build"/>
+      <conf name="client"/>
+      <conf name="server"/>
+    </configurations>
+    <publications>
+      <artifact name="main" type="zip"/>
+    </publications>
+    <dependencies>
+      <dependency org="net.bhojpur.ode" name="server" rev="${versions.ode-server}"/>
+      <dependency org="net.bhojpur.ode" name="gateway" rev="${versions.ode-gateway}"/>
+      <dependency org="org.slf4j" name="jul-to-slf4j" rev="1.7.30"/>
+      <dependency org="org.slf4j" name="jcl-over-slf4j" rev="1.7.30"/>
+      <!-- runtime dependencies from dsl/ivy.xml -->
+      <dependency org="janino" name="janino" rev="${versions.janino}"/>
+      <!-- Useful for globally overriding the Bio-Formats version, empty version is ignored by default -->
+      <dependency org="net.bhojpur.ode" name="formats-gpl" rev="${versions.bioformats}"/>
+      <!-- Extensions for bundling into the release -->
+      <dependency org="net.bhojpur.ode" name="ODEZarrReader" rev="${versions.ODEZarrReader}"/>
+    </dependencies>
+  </ivy-module>

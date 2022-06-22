@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <description>
+    Provides a central configuration location for all properties, preferences,
+    etc. used within Bhojpur ODE. These values may be pulled from the environment,
+    the Java runtime, your Java preferences, or from configuration files.
+    </description>
+
+    <bean id="preferenceContext" class="ode.system.PreferenceContext">
+
+        <description>
+            The PreferencesContext class handles much of the configuration and
+            lookup necessary for the OdeContext, including settings defaults
+            which on the traditional Spring classes like:
+
+            org.springframework.beans.factory.config.PreferencesPlaceholderConfigurer
+
+            or
+
+            org.springframework.beans.factory.config.PropertyPlaceholderConfigurer
+
+            would be necessary in this file.
+        </description>
+
+        <property name="locations">
+            <list>
+                <!-- Note: later properties overwrite earlier ones -->
+                <value>hibernate.properties</value>
+                <value>ode-model.properties</value>
+                <value>ode-common.properties</value>
+                <value>ode-server.properties</value>
+                <value>ode.properties</value>
+                <!-- these values are static
+                     and are compiled into the finished binaries. All other configuration
+                     takes place via the "prefs" class. -->
+            </list>
+        </property>
+        <property name="preferences">
+            <list>
+   <!-- Begin preference list -->
+    <bean class="ode.system.Preference" id="ode.version">
+       <property name="db" value="false"/>
+       <property name="mutable" value="false"/>
+       <property name="visibility" value="all"/>
+    </bean>
+    <bean class="ode.system.Preference" id="ode.upgrades.url">
+       <property name="db" value="false"/>
+       <property name="mutable" value="false"/>
+       <property name="visibility" value="all"/>
+    </bean>
+    <bean class="ode.system.Preference" id="ode.data.dir">
+       <property name="mutable" value="true"/>
+    </bean>
+    <bean class="ode.system.Preference" id="ode.router.insecure">
+       <property name="mutable" value="true"/>
+       <property name="visibility" value="all"/>
+       <property name="db" value="true"/>
+    </bean>
+    <bean class="ode.system.Preference" id="ode.security.filter.bitand">
+        <property name="db" value="false"/>
+        <property name="mutable" value="true"/>
+        <property name="aliases" value="ode.security.filter.bitand"/>
+        <property name="visibility" value="hidden"/>
+    </bean>
+    <bean class="ode.system.Preference" id="ode.security.password_required">
+        <property name="db" value="false"/>
+        <property name="mutable" value="false"/>
+        <property name="aliases" value="ode.security.password_required"/>
+        <property name="visibility" value="all"/>
+    </bean>
+    <bean class="ode.system.Preference" id="ode.cluster.read_only.runtime.db">
+        <property name="db" value="false"/>
+        <property name="mutable" value="false"/>
+        <property name="visibility" value="all"/>
+    </bean>
+    <bean class="ode.system.Preference" id="ode.cluster.read_only.runtime.repo">
+        <property name="db" value="false"/>
+        <property name="mutable" value="false"/>
+        <property name="visibility" value="all"/>
+    </bean>
+    <bean class="ode.system.Preference" id="ode.bioformats.version">
+        <property name="db" value="false"/>
+        <property name="mutable" value="false"/>
+        <property name="visibility" value="all"/>
+    </bean>
+    <bean class="ode.system.Preference" id="ode.bioformats.vcs_revision">
+        <property name="db" value="false"/>
+        <property name="mutable" value="false"/>
+        <property name="visibility" value="all"/>
+    </bean>
+    <bean class="ode.system.Preference" id="ode.bioformats.date">
+        <property name="db" value="false"/>
+        <property name="mutable" value="false"/>
+        <property name="visibility" value="all"/>
+    </bean>
+    <!--  DATABASE PROPERTIES -->
+    <bean class="ode.system.Preference" id="ode.db.authority">
+       <property name="db" value="true"/>
+       <property name="mutable" value="false"/>
+       <property name="visibility" value="all"/>
+    </bean>
+    <bean class="ode.system.Preference" id="ode.db.uuid">
+       <property name="db" value="true"/>
+       <property name="mutable" value="false"/>
+       <property name="visibility" value="all"/>
+    </bean>
+    <bean class="ode.system.Preference" id="ode.db.host">
+       <property name="db" value="false"/>
+       <property name="aliases" value="database.host"/>
+       <property name="visibility" value="hidden"/>
+    </bean>
+    <bean class="ode.system.Preference" id="ode.db.name">
+       <property name="db" value="false"/>
+       <property name="aliases" value="database.name"/>
+       <property name="visibility" value="hidden"/>
+    </bean>
+    <bean class="ode.system.Preference" id="ode.db.user">
+       <property name="db" value="false"/>
+       <property name="aliases" value="database.user,hibernate.connection.username"/>
+       <property name="visibility" value="hidden"/>
+    </bean>
+    <bean class="ode.system.Preference" id="ode.db.pass">
+       <property name="db" value="false"/>
+       <property name="aliases" value="hibernate.connection.password"/>
+       <property name="visibility" value="hidden"/>
+    </bean>
+    <bean class="ode.system.Preference" id="ode.db.driver">
+        <property name="db" value="false"/>
+        <property name="aliases" value="hibernate.connection.driver_class"/>
+        <property name="visibility" value="hidden"/>
+    </bean>
+    <bean class="ode.system.Preference" id="ode.db.poolsize">
+        <property name="db" value="false"/>
+        <property name="aliases" value="c3p0.maxPoolSize"/>
+        <property name="visibility" value="hidden"/>
+    </bean>
+    <bean class="ode.system.Preference" id="ode.db.dialect">
+        <property name="db" value="false"/>
+        <property name="mutable" value="true"/>
+        <property name="aliases" value="hibernate.dialect"/>
+        <property name="visibility" value="hidden"/>
+    </bean>
+    <bean class="ode.system.Preference" id="ode.mail.config">
+        <property name="visibility" value="all"/>
+    </bean>
+    <!--  PIXELDATA PROPERTIES -->
+    <bean class="ode.system.Preference" id="ode.pixeldata.backoff">
+       <property name="db" value="false"/>
+       <property name="mutable" value="false"/>
+       <property name="visibility" value="all"/>
+    </bean>
+    <bean class="ode.system.Preference" id="ode.pixeldata.tile_width">
+       <property name="db" value="false"/>
+       <property name="mutable" value="false"/>
+       <property name="visibility" value="all"/>
+    </bean>
+    <bean class="ode.system.Preference" id="ode.pixeldata.tile_height">
+       <property name="db" value="false"/>
+       <property name="mutable" value="false"/>
+       <property name="visibility" value="all"/>
+    </bean>
+    <bean class="ode.system.Preference" id="ode.pixeldata.max_plane_width">
+       <property name="db" value="false"/>
+       <property name="mutable" value="false"/>
+       <property name="visibility" value="all"/>
+    </bean>
+    <bean class="ode.system.Preference" id="ode.pixeldata.max_plane_height">
+       <property name="db" value="false"/>
+       <property name="mutable" value="false"/>
+       <property name="visibility" value="all"/>
+    </bean>
+    <bean class="ode.system.Preference" id="ode.pixeldata.max_plane_float_override">
+       <property name="db" value="false"/>
+       <property name="mutable" value="false"/>
+       <property name="visibility" value="all"/>
+    </bean>
+    <bean class="ode.system.Preference" id="ode.pixeldata.max_tile_length">
+       <property name="db" value="false"/>
+       <property name="mutable" value="false"/>
+       <property name="visibility" value="all"/>
+    </bean>
+    <bean class="ode.system.Preference" id="ode.pixeldata.max_projection_bytes">
+       <property name="db" value="false"/>
+       <property name="mutable" value="false"/>
+       <property name="visibility" value="all"/>
+    </bean>
+    <!--  CLIENT PROPERTIES -->
+    <bean class="ode.system.Preference" id="ode.client.scripts_to_ignore">
+       <property name="db" value="false"/>
+       <property name="mutable" value="false"/>
+       <property name="visibility" value="all"/>
+    </bean>
+    <bean class="ode.system.Preference" id="ode.client.ui.tree.orphans.enabled">
+       <property name="db" value="false"/>
+       <property name="mutable" value="false"/>
+       <property name="visibility" value="all"/>
+    </bean>
+    <bean class="ode.system.Preference" id="ode.client.ui.tree.orphans.name">
+       <property name="db" value="false"/>
+       <property name="mutable" value="false"/>
+       <property name="visibility" value="all"/>
+    </bean>
+    <bean class="ode.system.Preference" id="ode.client.ui.tree.orphans.description">
+       <property name="db" value="false"/>
+       <property name="mutable" value="false"/>
+       <property name="visibility" value="all"/>
+    </bean>
+    <bean class="ode.system.Preference" id="ode.client.ui.menu.dropdown.leaders.label">
+       <property name="db" value="false"/>
+       <property name="mutable" value="false"/>
+       <property name="visibility" value="all"/>
+    </bean>
+    <bean class="ode.system.Preference" id="ode.client.ui.menu.dropdown.leaders.enabled">
+       <property name="db" value="false"/>
+       <property name="mutable" value="false"/>
+       <property name="visibility" value="all"/>
+    </bean>
+    <bean class="ode.system.Preference" id="ode.client.ui.menu.dropdown.colleagues.label">
+       <property name="db" value="false"/>
+       <property name="mutable" value="false"/>
+       <property name="visibility" value="all"/>
+    </bean>
+    <bean class="ode.system.Preference" id="ode.client.ui.menu.dropdown.colleagues.enabled">
+       <property name="db" value="false"/>
+       <property name="mutable" value="false"/>
+       <property name="visibility" value="all"/>
+    </bean>
+    <bean class="ode.system.Preference" id="ode.client.ui.menu.dropdown.everyone.label">
+       <property name="db" value="false"/>
+       <property name="mutable" value="false"/>
+       <property name="visibility" value="all"/>
+    </bean>
+    <bean class="ode.system.Preference" id="ode.client.ui.menu.dropdown.everyone.enabled">
+       <property name="db" value="false"/>
+       <property name="mutable" value="false"/>
+       <property name="visibility" value="all"/>
+    </bean>
+    <bean class="ode.system.Preference" id="ode.client.viewer.roi_limit">
+       <property name="db" value="false"/>
+       <property name="mutable" value="false"/>
+       <property name="visibility" value="all"/>
+    </bean>
+    <bean class="ode.system.Preference" id="ode.client.viewer.initial_zoom_level">
+       <property name="db" value="false"/>
+       <property name="mutable" value="false"/>
+       <property name="visibility" value="all"/>
+    </bean>
+    <bean class="ode.system.Preference" id="ode.client.web.host">
+       <property name="db" value="false"/>
+       <property name="mutable" value="false"/>
+       <property name="visibility" value="all"/>
+    </bean>
+    <bean class="ode.system.Preference" id="ode.client.viewer.interpolate_pixels">
+       <property name="db" value="false"/>
+       <property name="mutable" value="false"/>
+       <property name="visibility" value="all"/>
+    </bean>
+    <bean class="ode.system.Preference" id="ode.client.download_as.max_size">
+       <property name="db" value="false"/>
+       <property name="mutable" value="false"/>
+       <property name="visibility" value="all"/>
+    </bean>
+    <bean class="ode.system.Preference" id="ode.client.ui.tree.type_order">
+       <property name="db" value="false"/>
+       <property name="mutable" value="false"/>
+       <property name="visibility" value="all"/>
+    </bean>
+    <bean class="ode.system.Preference" id="ode.client.browser.thumb_default_size">
+       <property name="db" value="false"/>
+       <property name="mutable" value="false"/>
+       <property name="visibility" value="all"/>
+    </bean>
+    <!--  SESSION PROPERTIES -->
+    <bean class="ode.system.Preference" id="ode.sessions.timeout">
+       <property name="db" value="false"/>
+       <property name="mutable" value="false"/>
+       <property name="visibility" value="all"/>
+    </bean>
+    <bean class="ode.system.Preference" id="ode.sessions.maximum">
+       <property name="db" value="false"/>
+       <property name="mutable" value="false"/>
+       <property name="visibility" value="all"/>
+    </bean>
+    <bean class="ode.system.Preference" id="ode.sessions.max_user_time_to_idle">
+       <property name="db" value="false"/>
+       <property name="mutable" value="false"/>
+       <property name="visibility" value="all"/>
+    </bean>
+    <bean class="ode.system.Preference" id="ode.sessions.max_user_time_to_live">
+       <property name="db" value="false"/>
+       <property name="mutable" value="false"/>
+       <property name="visibility" value="all"/>
+    </bean>
+    <!-- End preference list -->
+            </list>
+        </property>
+    </bean>
+</beans>

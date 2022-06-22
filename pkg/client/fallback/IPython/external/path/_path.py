@@ -9,12 +9,10 @@ for f in d.files('*.py'):
 
 This module requires Python 2.5 or later.
 
-
 URL:     http://pypi.python.org/pypi/path.py
-Author:  Jason Orendorff <jason.orendorff\x40gmail\x2ecom> (and others - see the url!)
-Date:    9 Mar 2007
+Author:  Shashi Bhushan Rai <raisb.brahmrishi\x40gmail\x2ecom> (and others - see the url!)
+Date:    26 Mar 2018
 """
-
 
 # TODO
 #   - Tree-walking functions don't avoid symlink loops.  Matt Harrison

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<project name="load-hibernate" basedir=".">
+     <target name="load-hibernate">
+        <available property="hibernate-exists" classname="org.hibernate.Hibernate" classpathref="ode.classpath" />
+        <available property="hibernate.ext-exists" classname="org.hibernate.tool.ant.HibernateToolTask" classpathref="ode.classpath" />
+        <fail unless="hibernate-exists" message="${msg.macro.missing_fail} Hibernate"/>
+        <fail unless="hibernate.ext-exists" message="${msg.macro.missing_fail} Hibernate Tools"/>
+        <taskdef classname="org.hibernate.tool.ant.HibernateToolTask" classpathref="ode.classpath" name="hibernatetool"/>
+    </target>
+    <macrodef name="hibernate">
+        <attribute name="mappings" default="${resrc.dest}"/>
+        <element name="templates" implicit="yes"/>
+        <sequential>
+            <hibernatetool destdir="${generated.dir}" templatepath="${resrc.dir}">
+                <classpath refid="ode.classpath"/>
+                <configuration propertyfile="${hibernate.properties}">
+                    <fileset dir="${resrc.dir}" includes="${hbm.pat}"/>
+                    <fileset dir="@{mappings}" includes="${hbm.pat}">
+                        <not><present targetdir="${resrc.dir}"/></not>
+                    </fileset>
+               </configuration>
+               <templates/>
+            </hibernatetool>
+        </sequential>
+    </macrodef>
+
+</project>

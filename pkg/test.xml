@@ -1,0 +1,9 @@
+<ivy-module version="1.0">
+    <info organisation="net.bhojpur.ode" module="main" revision="${ode.version}" status="integration"/>
+    <configurations>
+      <conf name="test"/>
+    </configurations>
+    <publications>
+      <artifact name="main" type="zip"/>
+    </publications>
+  </ivy-module>

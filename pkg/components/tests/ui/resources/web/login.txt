@@ -1,0 +1,67 @@
+*** Settings ***
+Documentation     A resource file with reusable keywords and variables.
+...
+...               The system specific keywords created here form our own
+...               domain specific language. They utilize keywords provided
+...               by the imported Selenium2Library.
+
+Resource          ../../resources/config.txt
+
+Library           Selenium2Library
+
+*** Keywords ***
+User "${username}" logs in with password "${password}"
+    Open Browser To Login Page
+    Select Server     ${SERVER_ID}
+    Input username    ${username}
+    Input password    ${password}
+    Submit credentials
+    Welcome Page Should Be Open
+
+Page Should Be Open
+    [Arguments]         ${page url}         ${title}=${None}
+    Location Should Be  ${page url}
+    Run Keyword If      '${title}'!='None'  Title Should Be     ${title}
+
+Welcome Page Should Be Open
+    [Arguments]             ${welcome url}=${WELCOME URL}   ${title}=Webclient
+    Wait Until Keyword Succeeds             ${TIMEOUT}   ${INTERVAL}   Page Should Be Open     ${WELCOME URL}       ${title} 
+
+Login Page Should Be Open
+    [Arguments]             ${login url}=${LOGIN URL}   ${title}=ODE.web - Login
+    Page Should Be Open     ${login url}         ${title}
+
+Open Browser To Login Page
+    [Arguments]                 ${main url}=${LOGIN URL}    ${login url}=${LOGIN URL}     ${title}=ODE.web - Login
+    Open Browser                ${main url}         ${BROWSER}      remote_url=${REMOTE_URL}    desired_capabilities=${DC}
+    Set Selenium Speed          ${DELAY}
+    Login Page Should Be Open   ${login url}        ${title}
+
+Go To Login Page
+    Go To    ${LOGIN URL}
+    Login Page Should Be Open
+
+Input Username
+    [Arguments]   ${username}
+    Input Text    username    ${username}
+
+Input Password
+    [Arguments]   ${password}
+    Input Text    password    ${password}
+
+Select Server
+    [Arguments]         ${server}
+    Select From List By Value   id_server    ${server}
+
+Submit Credentials
+    Click Button    Login
+
+Log Out
+    Click Element                       xpath=//div[@id='show_user_dropdown']/span
+    Click Link                          link=Logout
+    Wait Until Page Contains Element    id=login    ${WAIT}
+    Page Should Be Open                 ${LOGIN URL}                          ODE.web - Login
+
+Logout and Teardown
+    Log Out
+    Close all browsers

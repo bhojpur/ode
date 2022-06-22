@@ -1,0 +1,19 @@
+<ivy-module version="2.0" xmlns:e="http://ant.apache.org/ivy/extra">
+
+  <info
+      organisation="net.bhojpur.ode"
+      module="ode_client"
+      status="integration"/>
+  <configurations>
+    <conf name="build"/>
+    <conf name="client"/>
+  </configurations>
+  <dependencies>
+    <dependency org="net.bhojpur.ode" name="ode-server" rev="${versions.ode-server}">
+	    <artifact name="ode-server" type="jar" ext="jar"/>
+	    <artifact name="ode-server" type="zip" ext="zip" e:classifier="python"/>
+    </dependency>
+    <dependency org="net.bhojpur.ode" name="ode-gateway" rev="${versions.ode-gateway}"/>
+    <dependency org="net.bhojpur.ode" name="ode-common-test" rev="${versions.ode-common-test}"/>
+  </dependencies>
+</ivy-module>

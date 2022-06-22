@@ -157,7 +157,7 @@ public class PermissionsVerifierI extends _PermissionsVerifierDisp {
                             if (!e.isLoaded()) {
                                 e = q.get(Experimenter.class, e.getId());
                             }
-                            data.add(String.format("user=%s", e.getOmeName()));
+                            data.add(String.format("user=%s", e.getOdeName()));
                         } else {
                             e = q.findByString(Experimenter.class,
                                     "odeName", userId);

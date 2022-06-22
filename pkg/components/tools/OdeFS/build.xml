@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<project name="OdeFS" default="tools-dist" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant">
+
+    <description>
+    Python code for the FS server.
+    </description>
+
+    <dirname property="up-two" file="${basedir}"/>
+    <dirname property="up-one" file="${up-two}"/>
+    <property name="import.dir"       value="${up-one}/antlib/resources"/>
+    <property name="copy.dir"         value="target"/>
+
+    <import file="${import.dir}/global.xml"/>
+    <import file="../common.xml"/>
+    <import file="../python.xml"/>
+
+    <target name="test" depends="python-test" unless="env.NOPYTHON"/>
+
+    <target name="integration" depends="python-integration" unless="env.NOPYTHON"/>
+
+    <target name="tools-init" unless="env.NOPYTHON">
+        <copy todir="${copy.dir}">
+            <fileset dir="src" includes="*.py"/>
+        </copy>
+    </target>
+
+    <target name="tools-build" depends="tools-init,python-build" description="Creates all artifacts for tools/target" unless="env.NOPYTHON"/>
+
+    <target name="tools-dist" depends="tools-build,python-install" description="Copied artifacts to tools/target" unless="env.NOPYTHON"/>
+
+    <target name="tools-clean" depends="python-clean">
+        <delete dir="${copy.dir}"/>
+        <delete dir="${basedir}/build"/>
+    </target>
+
+</project>

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<types>
+<!-- Job running -->
+	<enum id="ode.model.jobs.JobStatus">
+		<!-- Note: JobStatus is not in model-->
+		<entry name="Submitted"/>
+		<entry name="Resubmitted"/>
+		<entry name="Queued"/>
+		<entry name="Requeued"/>
+		<entry name="Running"/>
+		<entry name="Error"/>
+		<entry name="Waiting"/>
+		<entry name="Finished"/>
+		<entry name="Cancelled"/>
+	</enum>
+	<type id="ode.model.jobs.Job" abstract="true">
+		<!-- Note: Job is not in model-->
+		<properties>
+			<required name="username" type="string"/>
+			<required name="groupname" type="string"/>
+			<required name="type" type="string"/>
+			<required name="message" type="string"/>
+			<required name="status" type="ode.model.jobs.JobStatus"/>
+			<required name="submitted" type="timestamp"/>
+			<required name="scheduledFor" type="timestamp"/>
+			<optional name="started" type="timestamp"/>
+			<optional name="finished" type="timestamp"/>
+			<child name="originalFileLinks" type="ode.model.jobs.JobOriginalFileLink" target="ode.model.core.OriginalFile"/>
+		</properties>
+	</type>
+
+	<type id="ode.model.jobs.UploadJob" superclass="ode.model.jobs.Job">
+		<!-- Note: UploadJob is not in model-->
+		<properties>
+		    <map name="versionInfo" type="string"/>
+		</properties>
+	</type>
+	<type id="ode.model.jobs.MetadataImportJob" superclass="ode.model.jobs.Job">
+		<!-- Note: MetadataImportJob is not in model-->
+		<properties>
+		    <map name="versionInfo" type="string"/>
+		</properties>
+	</type>
+	<type id="ode.model.jobs.ThumbnailGenerationJob" superclass="ode.model.jobs.Job">
+		<!-- Note: ThumbnailGenerationJob is not in model-->
+		<properties>
+		</properties>
+	</type>
+        <!-- pyramids, min/max, plane sha1 -->
+        <type id="ode.model.jobs.PixelDataJob" superclass="ode.model.jobs.Job">
+                <!-- Note: PyramidGenerationJob is not in model-->
+                <properties>
+                </properties>
+        </type>
+        <type id="ode.model.jobs.IndexingJob" superclass="ode.model.jobs.Job">
+                <!-- Note: PyramidGenerationJob is not in model-->
+                <properties>
+                </properties>
+        </type>
+	<type id="ode.model.jobs.IntegrityCheckJob" superclass="ode.model.jobs.Job">
+		<!-- Note: IntegrityCheckJob is not in model-->
+		<properties>
+		</properties>
+	</type>
+	<!-- Warning: ImportJob is DEPRECATED and may be removed in Bhojpur ODE -->
+	<type id="ode.model.jobs.ImportJob" superclass="ode.model.jobs.Job" deprecated="true">
+		<!-- Note: ImportJob is not in model-->
+		<properties>
+			<required name="imageName" type="text"/>
+			<required name="imageDescription" type="text"/>
+		</properties>
+	</type>
+	<type id="ode.model.jobs.ScriptJob" superclass="ode.model.jobs.Job">
+		<!-- Note: ScriptJob is not in model-->
+		<properties>
+			<optional name="description" type="string"/>
+		</properties>
+	</type>
+	<type id="ode.model.jobs.ParseJob" superclass="ode.model.jobs.Job">
+		<!-- Note: ScriptJob is not in model-->
+		<properties>
+			<!-- optional, so that it can be updated after the fact -->
+			<optional name="params" type="byte[]"/>
+		</properties>
+	</type>
+	<link id="ode.model.jobs.JobOriginalFileLink">
+		<!-- Note: JobOriginalFileLink is not in model-->
+		<properties>
+			<from_parent type="ode.model.jobs.Job"/>
+			<to_child type="ode.model.core.OriginalFile"/>
+		</properties>
+	</link>
+</types>

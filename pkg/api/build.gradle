@@ -20,43 +20,171 @@
 
 plugins {
     id "java-library"
-    // id "net.bhojpur.ode.api" version "1.0.0"
-    // id "net.bhojpur.ode.dsl" version "1.0.0"
-    // id "net.bhojpur.ode.server" version "1.0.0"
-    // id "net.bhojpur.ode.project" version "1.0.0"
-    // id "net.bhojpur.gradle.icebuilder.slice" // version "1.0.0"
+    id "net.bhojpur.ode.api" version "1.0.0"
+    id "net.bhojpur.ode.dsl" version "1.0.0"
+    id "net.bhojpur.ode.server" version "1.0.0"
+    id "net.bhojpur.ode.project" version "1.0.0"
+    id "net.bhojpur.gradle.icebuilder.slice" version "1.0.0"
 }
 
-apply plugin : "java"
-
-description = "Bhojpur ODE application programming interface source code"
+group = "net.bhojpur.ode"
+version = "1.0.0-SNAPSHOT"
 
 repositories {
     mavenLocal()
     mavenCentral()
 }
 
-test {
-    testLogging {
-        events "passed", "skipped", "failed"
-    }
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+ext {
+    databaseType = "psql"
+    pythonOutputDir = "$buildDir/toArchive/python"
+    iceOutputDir = "$buildDir/toArchive/icedoc"
+    generatedDir = "build/${databaseType}"
+    generatedSliceDir = "${generatedDir}/slice"
 }
 
 dependencies {
+    testImplementation("jmock:jmock:1.+")
+    testImplementation("org.testng:testng:6.14.2")
+    testImplementation('nl.javadude.assumeng:assumeng:1.2.4')
+    testImplementation('net.bhojpur.ode:common-test:1.0.0')
+    testImplementation('org.quartz-scheduler:quartz:2.2.1')
+    
+    api("net.bhojpur.ode:server:1.0.0")
+
     implementation("com.sun.activation:javax.activation:1.2.0")
     implementation("org.ini4j:ini4j:0.4.1")
     implementation("commons-beanutils:commons-beanutils:1.9.3")
     implementation("org.apache.xmlgraphics:batik-all:1.9.1")
-    implementation('org.apache.httpcomponents:httpclient:4.5.12')
-    implementation("org.apache.httpcomponents:httpmime:4.5.12")
+    implementation("org.apache.httpcomponents:httpclient:4.5.6")
+    implementation("org.apache.httpcomponents:httpmime:4.5.6")
     implementation("gnu.getopt:java-getopt:1.0.13")
     implementation("net.sf.ehcache:ehcache:2.10.6")
-
-    testImplementation('junit:junit:4.12')
 }
 
 configurations.all {
     exclude group: 'com.google.code.findbugs'
+}
+
+if (slice.iceVersion.contains("3.7")) {
+    slice.output = file("$generatedDir/ice37")
+    dependencies {
+        implementation "com.zeroc:icegrid:3.7.2"
+        implementation "com.zeroc:icestorm:3.7.2"
+    }
+    sourceSets.main.java {
+        srcDirs "src/main/ice37", slice.output
+    }
+} else if (slice.iceVersion.contains("3.6")) {
+    slice.output = file("${generatedDir}/ice36")
+    dependencies {
+        implementation "com.zeroc:icegrid:3.6.5"
+        implementation "com.zeroc:icestorm:3.6.5"
+    }
+    sourceSets.main.java {
+        srcDirs "src/main/ice36", slice.output
+    }
+}
+
+test {
+    testLogging {
+        events "passed", "skipped", "failed", "standardOut", "standardError"
+    }
+    // enable TestNG support (default is JUnit)
+    useTestNG() {
+        suites "src/test/resources/unit.testng.xml"
+    }
+    dependsOn cleanTest
+}
+
+dsl {
+    database databaseType
+
+    outputDir file("${generatedDir}")
+
+    singleFile {
+        iceMap {
+            template "java_ice_map.vm"
+            outputFile "java/ode/util/IceMap.java"
+        }
+
+        modelObjectFactoryRegistry {
+            template "java_obj_reg.vm"
+            outputFile "java/ode/util/ModelObjectFactoryRegistry.java"
+        }
+
+        objectFactoryRegistrar {
+            template "py_obj_reg.vm"
+            outputFile "$pythonOutputDir/ode/ObjectFactoryRegistrar.py"
+        }
+    }
+}
+
+api {
+    outputDir file("${generatedDir}")
+    language {
+        java {
+            language "java"
+            outputDir "java/ode/model"
+        }
+
+        ice {
+            language "ice"
+            outputDir "slice/ode/model"
+            rename "\$1"
+        }
+
+        python {
+            language "python"
+            outputDir pythonOutputDir
+            rename "ode_model_\$1I"
+        }
+    }
+}
+
+task copySliceFiles(type: Copy, dependsOn: "generateIce") {
+    from "src/main/slice"
+    into "${generatedSliceDir}"
+}
+
+slice {
+    java {
+        include = [file("${generatedSliceDir}")]
+        files = fileTree(dir: file("${generatedSliceDir}"), include: "**/*.ice")
+        args = "--tie"
+    }
+}
+
+tasks.addRule("Pattern: pythonTask<ID>") { String taskName ->
+    if (taskName.startsWith("pythonTask")) {
+        def id = taskName.replace("pythonTask", "")
+        def camel = id.substring(0, 1).toLowerCase() + id.substring(1)
+        def dir = camel.replaceAll("([A-Z])", '/$1').toLowerCase()
+        def dirAsPrefix = dir.replace("/", "_") + "_"
+
+        task(taskName, type: com.zeroc.gradle.icebuilder.slice.PythonTask, dependsOn: "copySliceFiles") {
+            includeDirs = "${generatedSliceDir}"
+            inputFiles = fileTree(dir: "${generatedSliceDir}/${dir}", include: "**.ice")
+            outputDir = file("$pythonOutputDir")
+            prefix = dirAsPrefix
+        }
+    }
+}
+
+task pythonTaskGroup {
+    description "Runs all python tasks"
+    dependsOn = [
+            tasks."generatePython",
+            pythonTaskOde,
+            pythonTaskOdeModel,
+            pythonTaskOdeCmd,
+            pythonTaskOdeApi,
+    ]
 }
 
 jar {
@@ -65,17 +193,22 @@ jar {
     }
 }
 
-task printSourceSetInformation(){
-    doLast{
-        sourceSets.each { srcSet ->
-            println "["+srcSet.name+"]"
-            print "-->Source directories: "+srcSet.allJava.srcDirs+"\n"
-            print "-->Output directories: "+srcSet.output.classesDirs.files+"\n"
-            print "-->Compile classpath:\n"
-            srcSet.compileClasspath.files.each { 
-                print "  "+it.path+"\n"
-            }
-            println ""
-        }
-    }
+// Need to ensure that the pythonTaskGroup output doesn't overwrite the output of generateObjectFactoryRegistrar
+tasks."generateObjectFactoryRegistrar${dsl.database.get().capitalize()}".mustRunAfter pythonTaskGroup
+
+// Set compileSlice to depend on the generation of ice files from "splitIce"
+compileSlice.dependsOn "copySliceFiles"
+
+// Set compileJava to additionally depend on "splitJava"
+compileJava.dependsOn "generateJava"
+
+task compileIcedoc(type: com.zeroc.gradle.icebuilder.slice.IceDocsTask, dependsOn: "compileSlice") {
+    outputDir = file("${iceOutputDir}")
+    includeDirs = files("${generatedSliceDir}", "src/main/slice")
+    sourceDirs = files("${generatedSliceDir}", "src/main/slice")
+    header = file("src/main/resources/header.txt")
+    footer = file("src/main/resources/footer.txt")
 }
+
+// Add publish functionality
+apply from: "publish.gradle"

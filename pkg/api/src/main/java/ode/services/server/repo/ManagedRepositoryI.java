@@ -283,7 +283,7 @@ public class ManagedRepositoryI extends PublicRepositoryI
         final Class<? extends FormatReader> readerClass = getReaderClass(fs, __current);
 
         // The next part of the string which is chosen by the user:
-        // /home/bob/myStuff
+        // /home/shashi.rai/myStuff
         FsFile basePath = commonRoot(paths);
 
         // If any two files clash in that chosen basePath directory, then

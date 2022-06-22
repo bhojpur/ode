@@ -1,0 +1,97 @@
+-- GENERATED %(TIME)s from %(DIR)s
+--
+-- Copyright (c) 2018 Bhojpur Consulting Private Limited, India. All rights reserved.
+--
+-- Permission is hereby granted, free of charge, to any person obtaining a copy
+-- of this software and associated documentation files (the "Software"), to deal
+-- in the Software without restriction, including without limitation the rights
+-- to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+-- copies of the Software, and to permit persons to whom the Software is
+-- furnished to do so, subject to the following conditions:
+--
+-- The above copyright notice and this permission notice shall be included in
+-- all copies or substantial portions of the Software.
+--
+-- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+-- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+-- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+-- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+-- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+-- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+-- THE SOFTWARE.
+--
+-- This file was created by Bhojpur ODE: bin/ode db script command
+-- and contains an MD5 version of your Bhojpur ODE root users's password.
+-- You should think about deleting it as soon as possible.
+--
+-- To create your database:
+--
+--     createdb ode
+--     psql ode < %(SCRIPT)s
+--
+--
+BEGIN;
+
+--
+-- check PostgreSQL server version and database encoding
+--
+
+CREATE OR REPLACE FUNCTION db_pretty_version(version INTEGER) RETURNS TEXT AS $$
+
+BEGIN
+    RETURN (version/10000)::TEXT || '.' || ((version/100)%%100)::TEXT || '.' || (version%%100)::TEXT;
+
+END;$$ LANGUAGE plpgsql;
+
+
+CREATE FUNCTION assert_db_server_prerequisites(version_prereq INTEGER) RETURNS void AS $$
+
+DECLARE
+    version_num INTEGER;
+    char_encoding TEXT;
+
+BEGIN
+    SELECT CAST(setting AS INTEGER) INTO STRICT version_num
+        FROM pg_settings WHERE name = 'server_version_num';
+    SELECT pg_encoding_to_char(encoding) INTO STRICT char_encoding
+        FROM pg_database WHERE datname = current_database();
+
+    IF version_num < version_prereq THEN
+        RAISE EXCEPTION 'PostgreSQL database server version %% is less than Bhojpur ODE prerequisite %%',
+	    db_pretty_version(version_num), db_pretty_version(version_prereq);
+    END IF;
+
+    IF char_encoding != 'UTF8' THEN
+        RAISE EXCEPTION 'ODE database character encoding must be UTF8, not %%', char_encoding;
+    ELSE
+        SET client_encoding = 'UTF8';
+    END IF;
+
+END;$$ LANGUAGE plpgsql;
+
+SELECT assert_db_server_prerequisites(90300);
+
+DROP FUNCTION assert_db_server_prerequisites(INTEGER);
+DROP FUNCTION db_pretty_version(INTEGER);
+
+-- Compare IllegalArgumentException cases in object.vm.
+
+CREATE DOMAIN nonnegative_int AS INTEGER CHECK (VALUE >= 0);
+CREATE DOMAIN nonnegative_float AS DOUBLE PRECISION CHECK (VALUE >= 0);
+CREATE DOMAIN positive_int AS INTEGER CHECK (VALUE > 0);
+CREATE DOMAIN positive_float AS DOUBLE PRECISION CHECK (VALUE > 0);
+CREATE DOMAIN percent_fraction AS DOUBLE PRECISION CHECK (VALUE >= 0 AND VALUE <= 1);
+
+CREATE TYPE UnitsElectricPotential AS ENUM ('YV','ZV','EV','PV','TV','GV','MV','kV','hV','daV','V','dV','cV','mV','µV','nV','pV','fV','aV','zV','yV');
+
+CREATE TYPE UnitsFrequency AS ENUM ('YHz','ZHz','EHz','PHz','THz','GHz','MHz','kHz','hHz','daHz','Hz','dHz','cHz','mHz','µHz','nHz','pHz','fHz','aHz','zHz','yHz');
+
+CREATE TYPE UnitsLength AS ENUM ('Ym','Zm','Em','Pm','Tm','Gm','Mm','km','hm','dam','m','dm','cm','mm','µm','nm','pm','fm','am','zm','ym','Å','ua','ly','pc','thou','li','in','ft','yd','mi','pt','pixel','reference frame');
+
+CREATE TYPE UnitsPower AS ENUM ('YW','ZW','EW','PW','TW','GW','MW','kW','hW','daW','W','dW','cW','mW','µW','nW','pW','fW','aW','zW','yW');
+
+CREATE TYPE UnitsPressure AS ENUM ('YPa','ZPa','EPa','PPa','TPa','GPa','MPa','kPa','hPa','daPa','Pa','dPa','cPa','mPa','µPa','nPa','pPa','fPa','aPa','zPa','yPa','bar','Mbar','kbar','dbar','cbar','mbar','atm','psi','Torr','mTorr','mm Hg');
+
+CREATE TYPE UnitsTemperature AS ENUM ('K','°C','°F','°R');
+
+CREATE TYPE UnitsTime AS ENUM ('Ys','Zs','Es','Ps','Ts','Gs','Ms','ks','hs','das','s','ds','cs','ms','µs','ns','ps','fs','as','zs','ys','min','h','d');

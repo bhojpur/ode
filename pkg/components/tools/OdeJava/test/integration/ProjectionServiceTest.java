@@ -1,0 +1,600 @@
+package integration;
+
+// Copyright (c) 2018 Bhojpur Consulting Private Limited, India. All rights reserved.
+
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+// THE SOFTWARE.
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
+import ode.ValidationException;
+import ode.api.IProjectionPrx;
+import ode.constants.projection.ProjectionType;
+import ode.model.Image;
+import ode.model.Pixels;
+import ode.model.PixelsType;
+import ode.sys.EventContext;
+import ode.sys.ParametersI;
+
+import org.testng.Assert;
+import org.testng.annotations.Test;
+
+/**
+ * Test the projection of an image by different users in all groups type.
+ * Test also methods by passing invalid parameters.
+ */
+public class ProjectionServiceTest extends AbstractServerTest
+{
+
+    /**
+     * Creates a binary image with
+     * 5 z-sections, 6 timepoints, 1 channel.
+     * 
+     * @return The pixels set.
+     * @throws Exception Thrown if an error occurred.
+     */
+    private Pixels importImage() throws Exception
+    {
+        int sizeZ = 5;
+        int sizeT = 6;
+        int sizeC = 1;
+        Image image = createBinaryImage(20, 20, sizeZ, sizeT, sizeC);
+        //load the image so the pixels type is loaded
+        List<Long> ids = Collections.singletonList(image.getId().getValue());
+        List<Image> images = factory.getContainerService().getImages(
+                Image.class.getName(), ids, new ParametersI());
+        image = images.get(0);
+        return image.getPrimaryPixels();
+    }
+
+    /** 
+     * Creates an image and projects it either by the owner or by another
+     * member of the group.
+     * 
+     * @param perms The permissions of the group.
+     * @param role The role of the other group member projecting the image or
+     * <code>-1</code> if the owner projects the image.
+     * @throws Exception Thrown if an error occurred.
+     */
+    private void projectImage(String perms, int memberRole)
+            throws Exception
+    {
+        EventContext ctx = newUserAndGroup(perms);
+        long ownerID = ctx.userId;
+        if (memberRole > 0) { //create a second user in the group.
+            EventContext ctx2 = newUserInGroup(ctx);
+            switch (memberRole) {
+            case AbstractServerTest.ADMIN:
+                logRootIntoGroup(ctx2);
+                break;
+            case AbstractServerTest.GROUP_OWNER:
+                makeGroupOwner();
+            }
+            ctx2 = iAdmin.getEventContext();
+            ownerID = ctx2.userId;
+        }
+        Pixels pixels = importImage();
+        List<Integer> channels = Arrays.asList(0);
+        Image img = projectImage(pixels, 0, pixels.getSizeT().getValue()-1, 0,
+                pixels.getSizeZ().getValue()-1, 1,
+                ProjectionType.MAXIMUMINTENSITY, null, channels);
+        Assert.assertEquals(ownerID, img.getDetails().getOwner().getId().getValue());
+    }
+
+    /**
+     * Projects the image.
+     * 
+     * @param pixels The pixels set.
+     * @param startT The lower bound of the timepoint interval.
+     * @param endT The upper bound of the timepoint interval.
+     * @param startZ The lower bound of the z-section interval.
+     * @param endZ The upper bound of the z-section interval.
+     * @param stepping The stepping.
+     * @param prjType The type of projection to perform.
+     * @param pixelsType The type of pixels to generate.
+     * @param channels The list of channels' indexes.
+     * @return The projected image.
+     * @throws Exception Thrown if an error occurred.
+     */
+    private Image projectImage(Pixels pixels, int startT, int endT, int startZ,
+            int endZ, int stepping, ProjectionType prjType,
+            PixelsType pixelsType, List<Integer> channels)
+            throws Exception
+    {
+        IProjectionPrx svc = factory.getProjectionService();
+        long imageID = svc.projectPixels(pixels.getId().getValue(), pixelsType,
+                prjType, startT, endT, channels, stepping, startZ, endZ,
+                "projectedImage");
+        Assert.assertNotEquals(imageID, 0);
+        List<Image> images =
+                factory.getContainerService().getImages(Image.class.getName(),
+                Arrays.asList(imageID), new ParametersI());
+        Assert.assertEquals(1, images.size());
+        Pixels p = images.get(0).getPixels(0);
+        Assert.assertEquals(channels.size(), p.getSizeC().getValue());
+        Assert.assertEquals(Math.abs(startT-endT)+1, p.getSizeT().getValue());
+        Assert.assertEquals(p.getSizeZ().getValue(), 1);
+        if (pixelsType == null) pixelsType = pixels.getPixelsType();
+        Assert.assertEquals(pixelsType.getValue().getValue(),
+                p.getPixelsType().getValue().getValue());
+        return images.get(0);
+    }
+
+    /**
+     * Projects the image.
+     * 
+     * @param pixelsID The id of the pixels set.
+     * @param timepoint The selected timepoint.
+     * @param startZ The lower bound of the z-section interval.
+     * @param endZ The upper bound of the z-section interval.
+     * @param stepping The stepping.
+     * @param prjType The type of projection to perform.
+     * @param pixelsType The type of pixels to generate.
+     * @param channelIndex The channel's index.
+     * @throws Exception Thrown if an error occurred.
+     */
+    private void projectStackImage(long pixelsID, int timepoint, int startZ,
+            int endZ, int stepping, ProjectionType prjType,
+            PixelsType pixelsType, int channelIndex)
+            throws Exception
+    {
+        IProjectionPrx svc = factory.getProjectionService();
+        byte[] value = svc.projectStack(pixelsID, pixelsType, prjType,
+                timepoint, channelIndex, stepping, startZ, endZ);
+        Assert.assertNotEquals(value.length, 0);
+        //TODO: more check to be added
+    }
+    
+    /**
+     * Test the possible projection type.
+     *
+     * @throws Exception Thrown if an error occurred.
+     */
+    @Test
+    public void testProjectionMeanIntensity() throws Exception {
+        Pixels pixels = importImage();
+        List<Integer> channels = Arrays.asList(0);
+        projectImage(pixels, 0, pixels.getSizeT().getValue()-1, 0,
+                pixels.getSizeZ().getValue()-1, 1,
+                ProjectionType.MEANINTENSITY, null, channels);
+    }
+
+    /**
+     * Test the possible projection type.
+     *
+     * @throws Exception Thrown if an error occurred.
+     */
+    @Test
+    public void testProjectionSumIntensity() throws Exception {
+        Pixels pixels = importImage();
+        List<Integer> channels = Arrays.asList(0);
+        projectImage(pixels, 0, 0, 0,
+                pixels.getSizeZ().getValue()-1, 1,
+                ProjectionType.SUMINTENSITY, null, channels);
+    }
+
+    /**
+     * Test the possible projection type.
+     *
+     * @throws Exception Thrown if an error occurred.
+     */
+    @Test
+    public void testProjectionMaxIntensity() throws Exception {
+        Pixels pixels = importImage();
+        List<Integer> channels = Arrays.asList(0);
+        projectImage(pixels, 0, pixels.getSizeT().getValue()-1, 0,
+                pixels.getSizeZ().getValue()-1, 1,
+                ProjectionType.MAXIMUMINTENSITY, null, channels);
+    }
+
+    /**
+     * Test the projection with an invalid timepoint range.
+     *
+     * @throws Exception Thrown if an error occurred.
+     */
+    @Test(expectedExceptions = ValidationException.class)
+    public void testWrongTimepointIntervalUpperBound() throws Exception {
+        Pixels pixels = importImage();
+        List<Integer> channels = Arrays.asList(0);
+        projectImage(pixels, 0, pixels.getSizeT().getValue(), 0,
+                pixels.getSizeZ().getValue()-1, 1,
+                ProjectionType.MAXIMUMINTENSITY, null, channels);
+    }
+
+    /**
+     * Test the projection with an invalid timepoint range.
+     *
+     * @throws Exception Thrown if an error occurred.
+     */
+    @Test(expectedExceptions = ValidationException.class)
+    public void testWrongTimepointIntervalLowerBound() throws Exception {
+        Pixels pixels = importImage();
+        List<Integer> channels = Arrays.asList(0);
+        projectImage(pixels, -1, pixels.getSizeT().getValue()-1, 0,
+                pixels.getSizeZ().getValue()-1, 1,
+                ProjectionType.MAXIMUMINTENSITY, null, channels);
+    }
+
+    /**
+     * Test the projection with a timepoint range with lower bound = upper bound
+     *
+     * @throws Exception Thrown if an error occurred.
+     */
+    @Test
+    public void testSameTimepointInterval() throws Exception {
+        Pixels pixels = importImage();
+        List<Integer> channels = Arrays.asList(0);
+        projectImage(pixels, 0, 0, 0, pixels.getSizeZ().getValue()-1, 1,
+                ProjectionType.MAXIMUMINTENSITY, null, channels);
+    }
+
+    /**
+     * Test the projection with a restricted but valid timepoint range.
+     *
+     * @throws Exception Thrown if an error occurred.
+     */
+    @Test
+    public void testTimepointIntervalNotFullRange() throws Exception {
+        Pixels pixels = importImage();
+        List<Integer> channels = Arrays.asList(0);
+        projectImage(pixels, 2, 4, 1, 3, 1,
+                ProjectionType.MAXIMUMINTENSITY, null, channels);
+    }
+    
+    /**
+     * Test the projection with an invalid timepoint range.
+     *
+     * @throws Exception Thrown if an error occurred.
+     */
+    @Test(expectedExceptions = ValidationException.class)
+    public void testWrongTimepointInterval() throws Exception {
+        Pixels pixels = importImage();
+        List<Integer> channels = Arrays.asList(0);
+        projectImage(pixels, 6, 7, 0, pixels.getSizeZ().getValue()-1, 1,
+                ProjectionType.MAXIMUMINTENSITY, null, channels);
+    }
+
+    /**
+     * Test the projection with no channels specified.
+     *
+     * @throws Exception Thrown if an error occurred.
+     */
+    @Test(expectedExceptions = ValidationException.class)
+    public void testNoChannels() throws Exception {
+        Pixels pixels = importImage();
+        List<Integer> channels = new ArrayList<Integer>();
+        projectImage(pixels, 0, pixels.getSizeT().getValue()-1, 0,
+                pixels.getSizeZ().getValue(), 1,
+                ProjectionType.MAXIMUMINTENSITY, null, channels);
+    }
+
+    /**
+     * Test the projection with <code>null</code> channels list.
+     *
+     * @throws Exception Thrown if an error occurred.
+     */
+    @Test(expectedExceptions = ValidationException.class)
+    public void testNullChannels() throws Exception {
+        Pixels pixels = importImage();
+        projectImage(pixels, 0, pixels.getSizeT().getValue()-1, 0,
+                pixels.getSizeZ().getValue(), 1,
+                ProjectionType.MAXIMUMINTENSITY, null, null);
+    }
+
+    /**
+     * Test the projection with an invalid channel index
+     *
+     * @throws Exception Thrown if an error occurred.
+     */
+    @Test(expectedExceptions = ValidationException.class)
+    public void testWrongChannels() throws Exception {
+        Pixels pixels = importImage();
+        List<Integer> channels = Arrays.asList(1);
+        projectImage(pixels, 0, pixels.getSizeT().getValue()-1, 0,
+                pixels.getSizeZ().getValue(), 1,
+                ProjectionType.MAXIMUMINTENSITY, null, channels);
+    }
+
+    /**
+     * Test the projection with an invalid z-section range.
+     *
+     * @throws Exception Thrown if an error occurred.
+     */
+    @Test(expectedExceptions = ValidationException.class)
+    public void testWrongZSectionIntervalUpperBound() throws Exception {
+        Pixels pixels = importImage();
+        List<Integer> channels = Arrays.asList(0);
+        projectImage(pixels, 0, pixels.getSizeT().getValue()-1, 0,
+                pixels.getSizeZ().getValue(), 1,
+                ProjectionType.MAXIMUMINTENSITY, null, channels);
+    }
+
+    /**
+     * Test the projection with a z-sections range with same value.
+     *
+     * @throws Exception Thrown if an error occurred.
+     */
+    @Test
+    public void testSameZSectionInterval() throws Exception {
+        Pixels pixels = importImage();
+        List<Integer> channels = Arrays.asList(0);
+        projectImage(pixels, 0, pixels.getSizeT().getValue()-1, 0, 1, 1,
+                ProjectionType.MAXIMUMINTENSITY, null, channels);
+    }
+
+    /**
+     * Test the projection with an invalid timepoint range.
+     *
+     * @throws Exception Thrown if an error occurred.
+     */
+    @Test(expectedExceptions = ValidationException.class)
+    public void testWrongZSectionIntervalLowerBound() throws Exception {
+        Pixels pixels = importImage();
+        List<Integer> channels = Arrays.asList(0);
+        projectImage(pixels, 0, pixels.getSizeT().getValue()-1, -1,
+                pixels.getSizeZ().getValue()-1, 1,
+                ProjectionType.MAXIMUMINTENSITY, null, channels);
+    }
+
+    /**
+     * Test the projection with a negative stepping
+     *
+     * @throws Exception Thrown if an error occurred.
+     */
+    @Test(expectedExceptions = ValidationException.class)
+    public void testNegativeStepping() throws Exception {
+        Pixels pixels = importImage();
+        List<Integer> channels = Arrays.asList(0);
+        projectImage(pixels, 0, pixels.getSizeT().getValue()-1, 0,
+                pixels.getSizeZ().getValue()-1, -10,
+                ProjectionType.MAXIMUMINTENSITY, null, channels);
+    }
+
+    /**
+     * Test the projection with 2 steps
+     *
+     * @throws Exception Thrown if an error occurred.
+     */
+    public void testTwoSteps() throws Exception {
+        Pixels pixels = importImage();
+        List<Integer> channels = Arrays.asList(0);
+        projectImage(pixels, 0, pixels.getSizeT().getValue()-1, 0,
+                pixels.getSizeZ().getValue()-1, 2,
+                ProjectionType.MAXIMUMINTENSITY, null, channels);
+    }
+
+    /**
+     * Test the projection with 0 step
+     *
+     * @throws Exception Thrown if an error occurred.
+     */
+    @Test(expectedExceptions = ValidationException.class)
+    public void testZeroStep() throws Exception {
+        Pixels pixels = importImage();
+        List<Integer> channels = Arrays.asList(0);
+        projectImage(pixels, 0, pixels.getSizeT().getValue()-1, 0,
+                pixels.getSizeZ().getValue()-1, 0,
+                ProjectionType.MAXIMUMINTENSITY, null, channels);
+    }
+
+    /**
+     * Test the projection of stack with a negative stepping
+     *
+     * @throws Exception Thrown if an error occurred.
+     */
+    @Test(expectedExceptions = ValidationException.class)
+    public void testProjectStackNegativeStepping() throws Exception {
+        Pixels pixels = importImage();
+        projectStackImage(pixels.getId().getValue(), 0, 0,
+                pixels.getSizeZ().getValue()-1, -10,
+                ProjectionType.MAXIMUMINTENSITY, null, 0);
+    }
+
+    /**
+     * Test the projection of stack with a zero stepping
+     *
+     * @throws Exception Thrown if an error occurred.
+     */
+    @Test(expectedExceptions = ValidationException.class)
+    public void testProjectStackZero() throws Exception {
+        Pixels pixels = importImage();
+        projectStackImage(pixels.getId().getValue(), 0, 0,
+                pixels.getSizeZ().getValue()-1, 0,
+                ProjectionType.MAXIMUMINTENSITY, null, 0);
+    }
+
+    //Permissions testing.
+    /**
+     * Test the projection of the image by the owner of the data in a
+     * RW---- group.
+     *
+     * @throws Exception Thrown if an error occurred.
+     */
+    @Test
+    public void testProjectImageByOwnerRW() throws Exception {
+        projectImage("rw----", -1);
+    }
+
+    /**
+     * Test the projection of the image by the owner of the data in a
+     * RWR--- group.
+     *
+     * @throws Exception Thrown if an error occurred.
+     */
+    @Test
+    public void testProjectImageByOwnerRWR() throws Exception {
+        projectImage("rwr---", -1);
+    }
+
+    /**
+     * Test the projection of the image by the owner of the data in a
+     * RWRA-- group.
+     *
+     * @throws Exception Thrown if an error occurred.
+     */
+    @Test
+    public void testProjectImageByOwnerRWRA() throws Exception {
+        projectImage("rwra--", -1);
+    }
+
+    /**
+     * Test the projection of the image by the owner of the data in a
+     * RWR--- group.
+     *
+     * @throws Exception Thrown if an error occurred.
+     */
+    @Test
+    public void testProjectImageByOwnerRWRW() throws Exception {
+        projectImage("rwrw--", -1);
+    }
+
+    /**
+     * Test the projection of the image by the member of the group
+     * in a RW---- group.
+     *
+     * @throws Exception Thrown if an error occurred.
+     */
+    @Test
+    public void testProjectImageByMemberRW() throws Exception {
+        projectImage("rw----", AbstractServerTest.MEMBER);
+    }
+
+    /**
+     * Test the projection of the image by the group owner of the group
+     * in a RW---- group.
+     *
+     * @throws Exception Thrown if an error occurred.
+     */
+    @Test
+    public void testProjectImageByGroupOwnerRW() throws Exception {
+        projectImage("rw----", AbstractServerTest.GROUP_OWNER);
+    }
+
+    /**
+     * Test the projection of the image by an administrator.
+     * in a RW---- group.
+     *
+     * @throws Exception Thrown if an error occurred.
+     */
+    @Test
+    public void testProjectImageByAdminRW() throws Exception {
+        projectImage("rw----", AbstractServerTest.ADMIN);
+    }
+
+    /**
+     * Test the projection of the image by a member of the group
+     * in a RWR--- group.
+     *
+     * @throws Exception Thrown if an error occurred.
+     */
+    @Test
+    public void testProjectImageByGroupMemberRWR() throws Exception {
+        projectImage("rwr---", AbstractServerTest.MEMBER);
+    }
+
+    /**
+     * Test the projection of the image by the group owner of the group
+     * in a RWR--- group.
+     *
+     * @throws Exception Thrown if an error occurred.
+     */
+    @Test
+    public void testProjectImageByGroupOwnerRWR() throws Exception {
+        projectImage("rwr---", AbstractServerTest.GROUP_OWNER);
+    }
+
+    /**
+     * Test the projection of the image by an administrator.
+     * in a RWR--- group.
+     *
+     * @throws Exception Thrown if an error occurred.
+     */
+    @Test
+    public void testProjectImageByAdminRWR() throws Exception {
+        projectImage("rwr---", AbstractServerTest.ADMIN);
+    }
+
+    /**
+     * Test the projection of the image by a member of the group
+     * in a RWRA-- group.
+     *
+     * @throws Exception Thrown if an error occurred.
+     */
+    @Test
+    public void testProjectImageByGroupMemberRWRA() throws Exception {
+        projectImage("rwra--", AbstractServerTest.MEMBER);
+    }
+
+    /**
+     * Test the projection of the image by the group owner of the group
+     * in a RWRA-- group.
+     *
+     * @throws Exception Thrown if an error occurred.
+     */
+    @Test
+    public void testProjectImageByGroupOwnerRWRA() throws Exception {
+        projectImage("rwra--", AbstractServerTest.GROUP_OWNER);
+    }
+
+    /**
+     * Test the projection of the image by an administrator.
+     * in a RWRA-- group.
+     *
+     * @throws Exception Thrown if an error occurred.
+     */
+    @Test
+    public void testProjectImageByAdminRWRA() throws Exception {
+        projectImage("rwra--", AbstractServerTest.ADMIN);
+    }
+
+    /**
+     * Test the projection of the image by a member of the group
+     * in a RWRW-- group.
+     *
+     * @throws Exception Thrown if an error occurred.
+     */
+    @Test
+    public void testProjectImageByGroupMemberRWRW() throws Exception {
+        projectImage("rwrw--", AbstractServerTest.MEMBER);
+    }
+
+    /**
+     * Test the projection of the image by the group owner of the group
+     * in a RWRW-- group.
+     *
+     * @throws Exception Thrown if an error occurred.
+     */
+    @Test
+    public void testProjectImageByGroupOwnerRWRW() throws Exception {
+        projectImage("rwrw--", AbstractServerTest.GROUP_OWNER);
+    }
+
+    /**
+     * Test the projection of the image by an administrator.
+     * in a RWRW-- group.
+     *
+     * @throws Exception Thrown if an error occurred.
+     */
+    @Test
+    public void testProjectImageByAdminRWRW() throws Exception {
+        projectImage("rwrw--", AbstractServerTest.ADMIN);
+    }
+}

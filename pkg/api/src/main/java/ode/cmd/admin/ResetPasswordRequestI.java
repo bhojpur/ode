@@ -132,7 +132,7 @@ public class ResetPasswordRequestI extends ResetPasswordRequest implements
                     "ApiUsageException", ex.getMessage());
         }
         final SqlAction sql = helper.getSql();
-        final String emailFromDb = sql.getUserEmailByOmeName(odename);
+        final String emailFromDb = sql.getUserEmailByOdeName(odename);
         if (emailFromDb == null)
             throw helper.cancel(new ERR(), null, "unknown-email",
                     "ApiUsageException",
@@ -171,7 +171,7 @@ public class ResetPasswordRequestI extends ResetPasswordRequest implements
                         String.format(pce.getMessage()));
             }
 
-            final String prettyName = sql.getUserPrettyNameByOmeName(odename);
+            final String prettyName = sql.getUserPrettyNameByOdeName(odename);
             String subject = "Bhojpur ODE - Reset password";
             String body = "Dear " + prettyName
                     + " (" + odename + ")" + " your new password is: "

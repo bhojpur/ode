@@ -291,7 +291,7 @@ public class TestEngine
                 "\n" +
                 "ex. %s -s localhost -u username -w password ShortRunImages\n" +
                 "\n" +
-                "Report bugs to qa@openmicroscopy.org.uk>",
+                "Report bugs to quality@bhojpur.net>",
                 APP_NAME, TestEngineConfig.DEFAULT_FEEDBACK, APP_NAME));
         System.exit(1);
     }

@@ -1,0 +1,19 @@
+<!DOCTYPE suite SYSTEM "http://beust.com/testng/testng-1.0.dtd" >
+  
+<suite name="model.unit" >
+  
+  <test name="model.unit.active">
+    <groups>
+      <run>
+        <exclude name="broken"/>
+        <exclude name="ignore"/>
+      </run>
+    </groups>
+    <packages>
+      <package name="ode.conditions.*"/>
+      <package name="ode.model.*"/>
+      <package name="ode.util.*"/>
+    </packages>
+  </test>
+
+</suite>

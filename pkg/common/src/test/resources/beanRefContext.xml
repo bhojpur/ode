@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+  <description>
+	  This beanRefContext.xml contains the definition of OdeContexts for testing
+    only.
+  </description>
+
+  <bean class="ode.system.OdeContext" id="ode.client">
+    <description>
+      Used to test the lookups that clients would perform.
+    </description>
+    <constructor-arg>
+      <list/>
+    </constructor-arg>
+  </bean>
+  
+  <bean    id="ode.system.utests.ContextTest-parent"
+    	  class="ode.system.OdeContext"
+    lazy-init="true">
+    <constructor-arg>
+    	<list>
+        <value>ode/system/utests/ContextTest-parent.xml</value>
+      </list>
+    </constructor-arg>
+  </bean>
+
+  <bean    id="ode.system.utests.ContextTest"
+    	  class="ode.system.OdeContext"
+    lazy-init="true">
+    <constructor-arg>
+      <list>
+        <value>ode/system/utests/ContextTest.xml</value>
+      </list>
+    </constructor-arg>
+    <constructor-arg index="1" value="true" type="boolean"/>
+    <constructor-arg index="2" ref="ode.system.utests.ContextTest-parent"/>
+  </bean>
+          
+ </beans>

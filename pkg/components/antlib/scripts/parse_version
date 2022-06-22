@@ -1,0 +1,127 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+# Copyright (c) 2018 Bhojpur Consulting Private Limited, India. All rights reserved.
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+# THE SOFTWARE.
+
+"""
+Helper script to simpliy version.xml
+"""
+
+import os
+import re
+import sys
+
+def choose_ode_version(ode_version):
+    """
+    Returns an array specifying the build parameter for
+    ant. Returned as an array so that an empty value can
+    be extended into the build command.
+
+    If BUILD_NUMER is set, then
+    "-Dode.version=${ode.version}-b${BUILD_NUMBER}"
+    otherwise nothing.
+    """
+
+    ode_build = os.environ.get("BUILD_NUMBER", "")
+    use_snapshot = os.environ.get("USE_SNAPSHOT", "")
+
+    err = ""
+    try:
+        if use_snapshot or not ode_build:
+            ode_build = ""  # Unset on use_snapshot
+            try:
+                ode_version = snapshot_logic(ode_version)
+            except:
+                pass
+        elif ode_build:
+            ode_build = "-b%s" % ode_build
+
+        return "%s%s" % (ode_version, ode_build)
+
+    except:
+        print("Error getting version for BUILD_NUMBER=%s" % ode_build)
+        if err:
+            print(err)
+        sys.exit(1)
+
+
+def snapshot_logic(ode_version):
+    """
+    If we're not on hudson, then we don't want to force
+    users to deal with rebuilding after each commit.
+    Instead, drop everything except for "-DEV"
+
+    See gh-67 for the discussion.
+    """
+    m = re.match((
+        "^"
+        "(?P<BASE>.*?)"
+        "(?P<STRIP>([-]DEV)?-\d+-[a-f0-9]+?(-dirty)?)"
+        "(?P<ICE>-ice[0-9]+)?"
+        "$"), ode_version)
+    if m:
+        # Non-tag version
+        base = incr_version(m.group("BASE"))
+        ode_version = "%s%s-SNAPSHOT" % (
+            base, m.group("ICE"))
+    else:
+        return ode_version
+    return ode_version
+
+
+def incr_version(ode_version):
+    """
+    For maven-compatibility, we take "SNAPSHOT" of the _next_ version
+    """
+    try:
+        # First we try to use distutils
+        from distutils.version import LooseVersion
+        version = LooseVersion(ode_version).version
+        # Find the last index which is an int
+        for idx in range(len(version)-1, 0, -1):
+            val = version[idx]
+            if isinstance(val, int):
+                version[idx] += 1
+                break
+
+        last_int = False
+        new_vers = ""
+        for val in version:
+            if isinstance(val, int):
+                if last_int:
+                    new_vers += "."
+                else:
+                    last_int = True
+            else:
+                last_int = False
+            new_vers += str(val)
+        ode_version = new_vers
+    except:
+        # But if that doesn't work, we brute force with regex
+        m = re.match("^([^\d]*\d+[.]\d+[.])(\d+)-SNAPSHOT$", ode_version)
+        if m:
+            next = int(m.group(2)) + 1
+            ode_version = "%s%s-SNAPSHOT" % (m.group(1), next)
+    return ode_version
+
+
+if __name__ == "__main__":
+    print (choose_ode_version(sys.argv[1])),

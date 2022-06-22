@@ -1,0 +1,16 @@
+<ivy-module version="1.0">
+    <info
+        organisation="net.bhojpur.ode"
+        module="common-test"
+        status="integration"/>
+    <configurations>
+      <conf name="test"/>
+    </configurations>
+    <publications>
+      <artifact name="common-test" type="jar"/>
+    </publications>
+    <dependencies defaultconfmapping="test->*">
+      <dependency name="common" rev="${ode.version}" changing="true"/>
+      <dependency name="dsl-test" rev="${ode.version}" changing="true"/>
+    </dependencies>
+  </ivy-module>

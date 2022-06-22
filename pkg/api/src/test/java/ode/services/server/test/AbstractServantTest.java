@@ -77,7 +77,6 @@ public abstract class AbstractServantTest extends MockObjectTestCase {
     @Override
     protected void setUp() throws Exception {
 
-        // ticket:#6417
         odeDataDir = TempFileManager.create_path(".odeDataDir", "test", true);
         System.setProperty("ode.data.dir", odeDataDir.getAbsolutePath());
 

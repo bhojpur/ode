@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<types>
+	<type id="ode.model.internal.Link"/>
+	<!-- PDI -->
+	<type id="ode.model.containers.Project" named="true" described="true" annotated="true">
+		<!-- Note: Name is optional in model-->
+		<properties>
+			<child name="datasetLinks" type="ode.model.containers.ProjectDatasetLink" target="ode.model.containers.Dataset"/>
+		</properties>
+	</type>
+	<type id="ode.model.containers.Dataset" named="true" described="true" annotated="true">
+		<!-- Note: Name is optional in model-->
+		<properties>
+			<parent name="projectLinks" type="ode.model.containers.ProjectDatasetLink" target="ode.model.containers.Project"/>
+			<child name="imageLinks" type="ode.model.containers.DatasetImageLink" target="ode.model.core.Image"/>
+		</properties>
+	</type>
+	<link id="ode.model.containers.ProjectDatasetLink">
+		<properties>
+			<from_parent type="ode.model.containers.Project"/>
+			<to_child type="ode.model.containers.Dataset"/>
+		</properties>
+	</link>
+	<link id="ode.model.containers.DatasetImageLink">
+		<properties>
+			<from_parent type="ode.model.containers.Dataset"/>
+			<to_child type="ode.model.core.Image"/>
+		</properties>
+	</link>
+    <type id="ode.model.containers.Folder" named="true" described="true" annotated="true">
+        <!-- Note: Name is optional in model-->
+        <properties>
+            <zeromany name="childFolders" type="ode.model.containers.Folder" inverse="parentFolder"/>
+            <manyzero name="parentFolder" type="ode.model.containers.Folder"/>
+            <child name="imageLinks" type="ode.model.containers.FolderImageLink" target="ode.model.core.Image"/>
+            <child name="roiLinks" type="ode.model.containers.FolderRoiLink" target="ode.model.roi.Roi"/>
+        </properties>
+    </type>
+    <link id="ode.model.containers.FolderImageLink">
+        <properties>
+            <from_parent type="ode.model.containers.Folder"/>
+            <to_child type="ode.model.core.Image"/>
+        </properties>
+    </link>
+    <link id="ode.model.containers.FolderRoiLink">
+        <properties>
+            <from_parent type="ode.model.containers.Folder"/>
+            <to_child type="ode.model.roi.Roi"/>
+        </properties>
+    </link>
+</types>

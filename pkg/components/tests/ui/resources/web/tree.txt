@@ -1,0 +1,618 @@
+
+*** Variables ***
+${treeRootId}                   j1_1
+${userIcon}                     webclient/image/icon_user.png
+${projectIcon}                  webclient/image/folder16.png
+${datasetIcon}                  webclient/image/folder_image16.png
+${imageIcon}                    webclient/image/image16.png
+${shareIcon}                    webclient/image/left_sidebar_icon_public.png
+${screenIcon}                   webclient/image/folder_screen16.png
+${orphanedIcon}                 webclient/image/folder_yellow16.png
+${plateIcon}                    webclient/image/folder_plate16.png
+${runIcon}                      webclient/image/run16.png
+
+${detailsPane}               xpath=//*[@id="general_tab"]/h1[contains(@data-name,'details')]/following-sibling::div
+*** Keywords ***
+
+Get Dialog Button Xpath
+    [Arguments]     ${buttonText}
+    # Confirm dialog (make sure we pick the currently visible dialog)
+    # jQuery UI buttons sometimes are <button>text and sometimes <button><span>text so we use *
+    [Return]        //div[contains(@class,'ui-dialog')][contains(@style,'display: block')]//div[contains(@class, 'ui-dialog-buttonset')]//*[contains(text(), '${buttonText}')]
+
+Click Dialog Button
+    [Arguments]     ${buttonText}
+    ${xpath}=                       Get Dialog Button Xpath     ${buttonText}
+    Wait Until Element Is Visible   xpath=${xpath}
+    Click Element                   xpath=${xpath}
+
+Xpath Should Have Class
+    [Arguments]                     ${identifier}       ${className}
+    Page Should Contain Element     ${identifier}[contains(@class, '${className}')]
+
+Xpath Should Not Have Class
+    [Arguments]                     ${identifier}       ${className}
+    Page Should Contain Element     ${identifier}[not(contains(@class, '${className}'))]
+
+Tree Should Be Visible
+    Wait Until Element Is Visible   dataTree
+    Element Should Be Visible       dataTree
+
+Node Should Be Visible
+    [Arguments]                 ${nodeText}
+    # Node identified by text value
+    Element Should Be Visible   xpath=//div[@id='dataTree']//a[contains(text(),'${nodeText}')]
+
+Wait For Node To Be Visible
+    [Arguments]                         ${nodeText}
+    # Node identified by text value
+    Wait Until Page Contains Element    xpath=//div[@id='dataTree']//a[contains(text(),'${nodeText}')]
+
+
+Node Popup Menu Item Should Be Enabled
+    [Arguments]       ${menuItem}              ${nodeText}=${None}
+    Run Keyword If    '${nodeText}'!='None'    Select And Expand Node    ${nodeText}
+    Popup Menu Item Should Be Enabled          ${menuItem}    ${true}
+    Run Keyword If    '${nodeText}'!='None'    Select And Expand Node    ${nodeText}
+
+Node Popup Menu Item Should Be Disabled
+    [Arguments]       ${menuItem}              ${nodeText}=${None}
+    Run Keyword If    '${nodeText}'!='None'    Select And Expand Node    ${nodeText}
+    Popup Menu Item Should Be Enabled          ${menuItem}    ${false}
+    Run Keyword If    '${nodeText}'!='None'    Select And Expand Node    ${nodeText}
+
+Select And Expand Node
+    [Arguments]     ${nodeText}
+    # Node identified by text value - needs to be visible
+    Wait Until Element Is Visible       xpath=//div[@id='dataTree']//a[contains(text(),'${nodeText}')]
+    Click Element                       xpath=//div[@id='dataTree']//a[contains(text(),'${nodeText}')]
+
+Select And Expand Project Dataset Image
+    ${projectId}=                       Select First Project With Children
+    ${datasetId}=                       Select First Dataset With Children
+    ${imageId}=                         Select First Image
+    [Return]                            ${projectId}    ${datasetId}    ${imageId}
+
+Select And Expand Project Dataset
+    ${projectId}=                       Select First Project With Children
+    ${datasetId}=                       Select First Dataset With Children
+    [Return]                            ${projectId}    ${datasetId}
+
+Select And Expand Image
+    ${pid}    ${did}    ${imageId}      Select And Expand Project Dataset Image
+    [Return]                            ${imageId}
+
+Create Project
+    [Arguments]     ${newName}=testCreateContainerRobot
+    ${pid}=     Create Container    project    ${newName}
+    [Return]    ${pid}
+
+Create Dataset
+    [Arguments]     ${newName}=testCreateContainerRobot
+    ${did}=     Create Container    dataset    ${newName}
+    [Return]    ${did}
+
+Create Screen
+    [Arguments]     ${newName}=testCreateContainerRobot
+    ${did}=     Create Container    screen    ${newName}
+    [Return]    ${did}
+
+Create Button Should Be Enabled
+    [Arguments]                 ${oType}
+    Element Should Be Enabled   add${oType}Button
+
+Create Button Should Be Disabled
+    [Arguments]                 ${oType}
+    Element Should Be Disabled  add${oType}Button
+
+
+Create Container
+    [Arguments]                 ${dType}    ${newName}=testCreateContainerRobot
+    # Check if metadata panel was loaded and get and old object
+    # This is important when two the same objects are created in a row.
+    ${status}    ${oldId}       Run Keyword And Ignore Error    Get Text                css=tr.data_heading_id strong
+    Click Button                add${dType}Button
+    Element Should Be Visible   new-container-form
+    Input Text                  name    ${newName}
+    # Make sure we pick 'OK' button from visible dialog
+
+    Click Dialog Button         OK
+    # Wait until metadata panel reloads based on status.
+    # This is work arround as unfortunately there is no Wait Until Page NOT Contains Element
+    # This is important when two the same objects are created in a row.
+    Run Keyword If  '${status}'=='PASS'     Wait Until Page Contains Element    xpath=//tr[contains(@class,'data_heading_id')]/td/strong[not(text() = '${oldId}')]  ${WAIT}
+    Wait Until Page Contains            ${dType.title()} ID:  ${WAIT}
+    Wait Until Element Is Visible       css=tr.data_heading_id  ${WAIT}
+    ${newId}    Get Text                css=tr.data_heading_id strong
+    Wait Until Page Contains Element    xpath=//li[@data-id='${newId}']/a[contains(@class, 'jstree-clicked')]    ${WAIT}
+    [Return]                            ${newId}
+
+Delete Container
+    [Documentation]                         Delete the active container
+    Click Element                           id=deleteButton
+    Wait Until Element Is Visible           id=delete-dialog-form
+    Click Dialog Button                     Yes
+    # Wait for activities to show job done, then refresh tree...
+    Wait Until Keyword Succeeds             ${TIMEOUT}   ${INTERVAL}   Page Should Contain Element     xpath=//span[@id='jobstatus']
+
+Key Down
+    [Arguments]    ${keyCode}    ${cssSelector}=body
+    #     Press Key    css=body    \\40     # This doesn't work, since body is not a text input
+    #    https://github.com/rtomac/robotframework-selenium2library/issues/198
+    Execute Javascript    var e = jQuery.Event("keydown");e.which = ${keyCode};$("${cssSelector}").trigger(e);
+
+Popup Menu Item Should Be Enabled
+    [Arguments]                         ${menuItem}    ${enabled}
+    # Right Click on the currently selected tree node ('tree-clicked')
+    Open Context Menu                   xpath=//a[contains(@class, 'tree-clicked')]
+    Wait Until Element Is Visible       xpath=//ul[contains(@class, 'jstree-contextmenu')]
+    Run Keyword If                      ${enabled}     Page Should Contain Element    //li[contains(@class, 'vakata-contextmenu-disabled')]/a[contains(text(), '${menuItem}')]    limit=0
+    ...                                 ELSE           Page Should Contain Element    //li[contains(@class, 'vakata-contextmenu-disabled')]/a[contains(text(), '${menuItem}')]    limit=1
+    # Click elsewhere to hide the context menu
+    Click Element                       content
+
+Select Experimenter
+    Tree Should Be Visible
+    Wait Until Element Is Visible       id=${treeRootId}
+    Click Node                          ${treeRootId}
+
+
+
+
+# Methods for querying nodes by TYPE
+
+Get NodeId By Icon
+    [Arguments]                     ${icon}
+    Wait Until Element Is Visible                            xpath=//i[contains(@style, '${icon}')]/parent::a/parent::li
+    ${nodeId}=                      Get Element Attribute    xpath=//i[contains(@style, '${icon}')]/parent::a/parent::li      attribute=id
+    [Return]                        ${nodeId}
+
+Select Node By Icon
+    [Arguments]                     ${icon}
+    ${firstNodeId}=                 Get NodeId By Icon       ${icon}
+    ${objId}=                       Get Element Attribute    xpath=//li[@id='${firstNodeId}']    attribute=data-id
+    Click Node                      ${firstNodeId}
+    [Return]                        ${objId}
+
+Select Node With Children By Icon
+    [Arguments]                     ${icon}
+    Wait Until Element Is Visible                            xpath=//i[contains(@style, '${icon}')]/following-sibling::span[contains(@class, 'children_count')]/parent::a/parent::li
+    ${firstNodeId}=                 Get Element Attribute    xpath=//i[contains(@style, '${icon}')]/following-sibling::span[contains(@class, 'children_count')]/parent::a/parent::li     attribute=id
+    ${objId}=                       Get Element Attribute    xpath=//li[@id='${firstNodeId}']                                                                                            attribute=data-id
+    Click Node                      ${firstNodeId}
+    [Return]                        ${objId}
+
+Select First Project
+    ${projectId}=                   Select Node By Icon      ${projectIcon}
+    Wait Until Right Panel Loads    Project                  ${projectId}
+    [Return]                        ${projectId}
+
+Select First Project With Children
+    ${projectId}=                   Select Node With Children By Icon    ${projectIcon}
+    Wait Until Element Is Visible   xpath=//li[@data-id='${projectId}']/ul/li
+    Wait Until Right Panel Loads    Project                  ${projectId}
+    [Return]                        ${projectId}
+
+Select First Project With Name
+    [Arguments]                     ${ProjectName}
+    ${nodeId}=                      Wait For Project Node Text      ${ProjectName}
+    Click Node                      ${nodeId}
+    Wait For General Panel          Project
+    [Return]                        ${nodeId}
+
+Select First Dataset
+    ${datasetId}=                   Select Node By Icon      ${datasetIcon}
+    Wait Until Right Panel Loads    Dataset                  ${datasetId}
+    [Return]                        ${datasetId}
+
+Select First Dataset With Children
+    ${datasetId}=                   Select Node With Children By Icon    ${datasetIcon}
+    Wait Until Element Is Visible   xpath=//li[@data-id='${datasetId}']/ul/li
+    Wait Until Right Panel Loads    Dataset                  ${datasetId}
+    [Return]                        ${datasetId}
+
+Select First Dataset With Name
+    [Arguments]                     ${DatasetName}
+    ${nodeId}=                      Wait For Dataset Node Text      ${DatasetName}
+    Click Node                      ${nodeId}
+    Wait For General Panel          Dataset
+    [Return]                        ${nodeId}
+
+Select First Image
+    ${imageId}=                     Select Node By Icon      ${imageIcon}
+    Wait Until Right Panel Loads    Image                    ${imageId}
+    [Return]                        ${imageId}
+
+Select First Image With Name
+    [Arguments]                     ${ImageName}
+    ${nodeId}=                      Wait For Image Node Text        ${ImageName}
+    Click Node                      ${nodeId}
+    Wait For General Panel          Image
+    [Return]                        ${nodeId}
+
+Select First Plate With Name
+    [Arguments]                     ${PlateName}
+    ${nodeId}=                      Wait For Plate Node Text      ${PlateName}
+    Click Node                      ${nodeId}
+    Wait For General Panel          Plate
+    [Return]                        ${nodeId}
+
+Select First Orphaned Image
+    ${nodeId}                       Select Orphaned Images Section
+    Wait Until Element Is Visible   xpath=//li[@id='${nodeId}']/ul/li[1]/a
+    Click Element                   xpath=//li[@id='${nodeId}']/ul/li[1]/a
+    Wait Until Page Contains Element                        xpath=//tr[contains(@class,'data_heading_id')]//th[contains(text(),'Image ID:')]
+    ${newId}                        Get Text                css=tr.data_heading_id strong
+    Wait Until Right Panel Loads    Image                   ${newId}
+    [Return]                        ${newId}
+
+Select First Share
+    ${shareId}=                     Select Node By Icon      ${shareIcon}
+    [Return]                        ${shareId}
+
+Select First Screen
+    ${screenId}=                    Select Node By Icon      ${screenIcon}
+    Wait Until Right Panel Loads    Screen                   ${screenId}
+    [Return]                        ${screenId}
+
+Select First Screen With Children
+    ${screenId}=                    Select Node With Children By Icon    ${screenIcon}
+    Wait Until Element Is Visible   xpath=//li[@data-id='${screenId}']/ul/li
+    Wait Until Right Panel Loads    Screen                   ${screenId}
+    [Return]                        ${screenId}
+
+Select First Plate
+    ${plateId}=                     Select Node By Icon      ${plateIcon}
+    Wait Until Right Panel Loads    Plate                    ${plateId}
+    [Return]                        ${plateId}
+
+Select First Plate No Load
+    ${plateId}=                     Select Node By Icon      ${plateIcon}
+    [Return]                        ${plateId}
+
+Select First Run
+    ${runId}=                       Select Node By Icon      ${runIcon}
+    Wait Until Right Panel Loads    Run                      ${runId}
+
+Select Orphaned Images Section
+    ${firstNodeId}=                 Get NodeId By Icon       ${orphanedIcon}
+    Click Node                                               ${firstNodeId}
+    Wait Until Page Contains Element                         xpath=//p[contains(@class,"description")][contains(text(),'This is a virtual container with orphaned images.')]
+    Wait Until Element Is Visible                            xpath=//li[@id='${firstNodeId}']/ul/li
+    Node Should Be Selected By Icon                          ${orphanedIcon}
+    [Return]                        ${firstNodeId}
+
+Wait Until Right Panel Loads
+    [Arguments]                     ${containerType}         ${containerId}
+    Wait Until Element Is Visible                           xpath=//tr[contains(@class,'data_heading_id')]//th[contains(text(),'${containerType} ID:')]
+    Wait Until Element Is Visible                           xpath=//tr[contains(@class,'data_heading_id')]/td/strong[(text() = '${containerId}')]
+
+Wait Until Right Panel Loads Everything
+    [Arguments]                         ${containerType}        ${containerId}
+
+    Wait Until Right Panel Loads        ${containerType}        ${containerId}
+    Wait Until Element Is Visible       xpath=//*[@id="general_tab"]/h1[contains(text(),'${containerType} Details')]
+    Wait Until Element Is Visible       xpath=//*[@id="general_tab"]/div/h1[contains(text(),'Tags')]
+    Wait Until Element Is Visible       xpath=//*[@id="general_tab"]/div/h1[contains(text(),'Key-Value Pairs')]
+    Wait Until Element Is Visible       xpath=//*[@id="general_tab"]/div/h1[contains(text(),'Attachments')]
+    Wait Until Element Is Visible       xpath=//*[@id="general_tab"]/div/h1[contains(text(),'Ratings')]
+    Wait Until Element Is Visible       xpath=//*[@id="general_tab"]/div/h1[contains(text(),'Comments')]
+    Run Keyword If                      '${containerType}' == 'Project'        Wait Until Element Is Visible     ${detailsPane}//th[contains(text(),'Creation Date:')]
+    Run Keyword If                      '${containerType}' == 'Dataset'        Wait Until Element Is Visible     ${detailsPane}//th[contains(text(),'Creation Date:')]
+    Run Keyword If                      '${containerType}' == 'Image'          Check Right Panel Image
+
+Check Right Panel Image
+    Wait Until Element Is Visible       ${detailsPane}//th[contains(text(),'Acquisition Date:')]
+    Wait Until Element Is Visible       ${detailsPane}//th[contains(text(),'Import Date:')]
+    Wait Until Element Is Visible       ${detailsPane}//th[contains(text(),'Dimensions (XY):')]
+    Wait Until Element Is Visible       ${detailsPane}//th[contains(text(),'Pixels Type:')]
+    Wait Until Element Is Visible       ${detailsPane}//th[contains(text(),'Pixels Size (XYZ) (µm):')]
+    Wait Until Element Is Visible       ${detailsPane}//th[contains(text(),'Z-sections/Timepoints:')]
+    Wait Until Element Is Visible       ${detailsPane}//th[contains(text(),'Channels:')]
+    Wait Until Element Is Visible       ${detailsPane}//th[contains(text(),'ROI Count:')]
+    Wait Until Element Is Visible       xpath=//*[@id="general_tab"]//a/span[contains(text(),'Full viewer')]
+    Wait Until Element Is Visible       xpath=//*[@id="general_tab"]/div/div/button[contains(@title,'Publishing Options')]
+    Wait Until Element Is Visible       xpath=//*[@id="show_fs_files_btn"]
+    Wait Until Element Is Visible       xpath=//*[@id="show_image_hierarchy"]
+    Wait Until Element Is Visible       xpath=//*[@id="show_link_btn"]
+    Wait Until Element Is Visible       xpath=//*[@id="general_tab"]/div/div/button[contains(@title,'Download Image as...')]
+
+Wait Until Center Panel Loads
+    [Arguments]                     ${containerType}
+    Run Keyword If                  '${containerType}' == 'Dataset'        Wait Until Element Is Visible      //*[@id="content_details"]/div[1]
+    Run Keyword If                  '${containerType}' == 'Dataset'        Wait Until Element Is Visible      xpath=//form[@id="filtersearch"]/select[@id="choosefilter"]
+    Run Keyword If                  '${containerType}' == 'Dataset'        Wait Until Element Is Visible      xpath=//*[@id="icon_layout"][contains(@title,"View as Thumbnails")][contains(@class,"checked")]
+    Run Keyword If                  '${containerType}' == 'Dataset'        Wait Until Element Is Visible      //*[@id="table_layout"][contains(@title,"View as List")]
+
+Edit Object Name
+    [Arguments]                             ${dtype}        ${id}       ${name}
+    Wait Until Page Contains Element        css=#${dtype}name-${id} button.btn_edit
+    Click Element                           css=#${dtype}name-${id} button.btn_edit
+    Wait Until Page Contains Element        form-${dtype}name-${id}
+    # id 'id_name' is not unique!
+    Input Text                              xpath=//form[@id='form-${dtype}name-${id}']//input[@id='id_name']  ${name}
+    Submit Form                             form-${dtype}name-${id}
+    Wait Until Page Contains Element        xpath=//span[@id='${dtype}name-${id}-name'][contains(text(), '${name}')]
+
+# Methods for querying nodes by TEXT
+
+Get NodeId By Icon And Text
+    [Arguments]                     ${icon}    ${text}
+    Wait Until Element Is Visible                            xpath=//i[contains(@style, '${icon}')]/parent::a[contains(text(), '${text}')]/parent::li
+    ${nodeId}=                      Get Element Attribute    xpath=//i[contains(@style, '${icon}')]/parent::a[contains(text(), '${text}')]/parent::li    attribute=id
+    [Return]                        ${nodeId}
+
+Wait For Project Node Text
+    [Arguments]                     ${text}
+    ${nodeId}=                      Get NodeId By Icon And Text       ${projectIcon}        ${text}
+    [Return]                        ${nodeId}
+
+Wait For Dataset Node Text
+    [Arguments]                     ${text}
+    ${nodeId}=                      Get NodeId By Icon And Text       ${datasetIcon}        ${text}
+    [Return]                        ${nodeId}
+
+Wait For Image Node Text
+    [Arguments]                     ${text}
+    ${nodeId}=                      Get NodeId By Icon And Text       ${imageIcon}          ${text}
+    [Return]                        ${nodeId}
+
+Wait For Plate Node Text
+    [Arguments]                     ${text}
+    ${nodeId}=                      Get NodeId By Icon And Text       ${plateIcon}          ${text}
+    [Return]                        ${nodeId}
+
+
+# Methods for querying nodes by ID
+
+Get NodeId By Icon And Id
+    [Arguments]                     ${icon}    ${objId}
+    Wait Until Element Is Visible                            xpath=//i[contains(@style, '${icon}')]/parent::a/parent::li[@data-id='${objId}']
+    ${nodeId}=                      Get Element Attribute    xpath=//i[contains(@style, '${icon}')]/parent::a/parent::li[@data-id='${objId}']    attribute=id
+    [Return]                        ${nodeId}
+
+Wait For Project Node
+    [Arguments]                     ${projectId}
+    ${nodeId}=                      Get NodeId By Icon And Id       ${projectIcon}        ${projectId}
+    [Return]                        ${nodeId}
+
+Wait For Dataset Node
+    [Arguments]                     ${datasetId}
+    ${nodeId}=                      Get NodeId By Icon And Id       ${datasetIcon}        ${datasetId}
+    [Return]                        ${nodeId}
+
+Wait For Image Node
+    [Arguments]                     ${imageId}
+    ${nodeId}=                      Get NodeId By Icon And Id       ${imageIcon}        ${imageId}
+    [Return]                        ${nodeId}
+
+Wait For Share Node
+    [Arguments]                     ${shareId}
+    ${nodeId}=                      Get NodeId By Icon And Id       ${shareIcon}        ${shareId}
+    [Return]                        ${nodeId}
+
+Wait For Screen Node
+    [Arguments]                     ${screenId}
+    ${nodeId}=                      Get NodeId By Icon And Id       ${screenIcon}        ${screenId}
+    [Return]                        ${nodeId}
+
+Wait For Plate Node
+    [Arguments]                     ${plateId}
+    ${nodeId}=                      Get NodeId By Icon And Id       ${plateIcon}         ${plateId}
+    [Return]                        ${nodeId}
+
+Wait For Run Node
+    [Arguments]                     ${runId}
+    ${nodeId}=                      Get NodeId By Icon And Id       ${runIcon}          ${runId}
+    [Return]                        ${nodeId}
+
+# Or checking Nodes don't exist by ID (only checks what's loaded in jsTree)
+
+Node Should Not Exist In Tree
+    [Arguments]                      ${icon}    ${objId}
+    Page Should Not Contain Element  xpath=//i[contains(@style, '${icon}')]/parent::a/parent::li[@data-id='${objId}']
+
+Project Should Not Exist In Tree
+    [Arguments]                     ${projectId}
+    Node Should Not Exist In Tree   ${projectIcon}      ${projectId}
+
+Dataset Should Not Exist In Tree
+    [Arguments]                     ${datasetId}
+    Node Should Not Exist In Tree   ${datasetIcon}      ${datasetId}
+
+Image Should Not Exist In Tree
+    [Arguments]                     ${imageId}
+    Node Should Not Exist In Tree   ${imageIcon}        ${imageId}
+
+Dataset Should Contain Image
+    [Arguments]                             ${imageId}      ${datasetId}
+    Select Dataset By Id                    ${datasetId}
+    Wait Until Page Contains Element        css=tr.data_heading_id strong
+    ${nodeId}=                              Wait For Dataset Node               ${datasetId}
+    Wait Until Element Is Visible           xpath=//li[@id='${nodeId}']/ul/li[@data-id='${imageId}']
+
+# Selecting Nodes by ID
+
+Select Project By Id
+    [Arguments]                     ${projectId}
+    ${nodeId}=                      Wait For Project Node    ${projectId}
+    Click Node                      ${nodeId}
+    [Return]                        ${nodeId}
+
+Select Dataset By Id
+    [Arguments]                     ${datasetId}
+    ${nodeId}=                      Wait For Dataset Node    ${datasetId}
+    Click Node                      ${nodeId}
+    [Return]                        ${nodeId}
+
+Select Image By Id
+    [Arguments]                     ${imageId}
+    ${nodeId}=                      Wait For Image Node     ${imageId}
+    Click Node                      ${nodeId}
+    [Return]                        ${nodeId}
+
+Select Screen By Id
+    [Arguments]                     ${screenId}
+    ${nodeId}=                      Wait For Screen Node    ${screenId}
+    Click Node                      ${nodeId}
+    [Return]                        ${nodeId}
+
+Select Plate By Id
+    [Arguments]                     ${plateId}
+    ${nodeId}=                      Wait For Plate Node    ${plateId}
+    Click Node                      ${nodeId}
+    [Return]                        ${nodeId}
+
+
+# Checking selected state of Nodes by ID
+
+Node Should Be Selected By Id
+    [Arguments]       ${nodeId}     ${expected}=${true}
+    Run Keyword If    ${expected}   Wait Until Page Contains Element    xpath=//li[@id='${nodeId}']/a[contains(@class, 'jstree-clicked')]
+    ...               ELSE          Wait Until Page Contains Element    xpath=//li[@id='${nodeId}']/a[not(contains(@class, 'jstree-clicked'))]
+
+Image Should Be Selected By Id
+    [Arguments]                         ${imageId}                  ${expected}=${true}
+    ${nodeId}=                          Wait For Image Node         ${imageId}
+    Node Should Be Selected By Id       ${nodeId}                   ${expected}
+
+Image Should Not Be Selected By Id
+    [Arguments]                         ${imageId}                  ${expected}=${true}
+    Image Should Be Selected By Id      ${imageId}                  ${false}
+
+Dataset Should Be Selected By Id
+    [Arguments]                         ${datasetId}                ${expected}=${true}
+    ${nodeId}=                          Wait For Dataset Node       ${datasetId}
+    Node Should Be Selected By Id       ${nodeId}                   ${expected}
+
+Run Should Be Selected By Id
+    [Arguments]                         ${runId}                    ${expected}=${true}
+    ${nodeId}=                          Wait For Run Node           ${runId}
+    Node Should Be Selected By Id       ${nodeId}                   ${expected}
+
+User Should Be Selected
+    [Arguments]                         ${expected}=${true}
+    ${nodeId}=                          Get NodeId By Icon          ${userIcon}
+    Node Should Be Selected By Id       ${nodeId}                   ${expected}
+
+User Should Not Be Selected
+    User Should Be Selected     ${false}
+
+
+# Methods for querying nodes by SELECTED
+
+Node Should Be Selected By Icon
+    [Arguments]                         ${icon}
+    Wait Until Page Contains Element    xpath=//i[contains(@style, '${icon}')]/parent::a[contains(@class, 'jstree-clicked')]/parent::li
+    ${nodeId}=                          Get Element Attribute    xpath=//i[contains(@style, '${icon}')]/parent::a[contains(@class, 'jstree-clicked')]/parent::li    attribute=id
+    [Return]                            ${nodeId}
+
+Dataset Should Be Selected
+    ${nodeId}=                  Node Should Be Selected By Icon     ${datasetIcon}
+    [Return]                    ${nodeId}
+
+Plate Should Be Selected By Name
+    [Arguments]                         ${text}                     ${expected}=${true}
+    ${nodeId}=                          Wait For Plate Node Text    ${text}
+    Node Should Be Selected By Id       ${nodeId}                   ${expected}
+
+
+# Get the Object Id of the currently seleted Node
+Get Selected Id From Tree
+    ${objectId}=        Get Element Attribute    xpath=//a[contains(@class, 'jstree-clicked')]/parent::li    attribute=data-id
+    [Return]            ${objectId}
+
+
+Click Node
+    [Arguments]         ${nodeId}
+    Click Element       xpath=//li[@id='${nodeId}']/a
+
+Wait For General Panel
+    [Arguments]         ${nodeType}
+    Wait Until Page Contains                ${nodeType.title()} ID:  ${WAIT}
+    Wait Until Element Is Visible           css=tr.data_heading_id  ${WAIT}
+
+Wait For General Panel And Return Id
+    [Arguments]         ${nodeType}
+    Wait For General Panel                  ${nodeType}
+    ${imageId}=                             Get Text        xpath=//tr[contains(@class, 'data_heading_id')]/td/strong
+    [Return]                                ${imageId}
+
+Wait For General Panel And Return Name
+    [Arguments]         ${nodeType}
+    Wait For General Panel                  ${nodeType}
+    ${imageName}=                           Get Text        xpath=//div[contains(@class, 'data_heading')]//h1/span
+    [Return]                                ${imageName}
+
+Click Thumbnail
+    [Arguments]    ${imageId}
+    Click Element  id=image_icon-${imageId}
+
+Click Previous Thumbnail
+    Click Element  xpath=//ul[@id='dataIcons']/li[contains(@class, 'ui-selected')]/preceding-sibling::li
+
+Click Next Thumbnail
+    Click Element  xpath=//ul[@id='dataIcons']/li[contains(@class, 'ui-selected')]/following-sibling::li
+
+Click Next Well
+    Click Element  xpath=//td[contains(@class, 'well')][contains(@class, 'ui-selected')]/following-sibling::td/img
+
+Double Click Well By Name
+    [Arguments]    ${name}
+    Click Well By Name      ${name}         ${true}
+
+Click Well By Name
+    [Arguments]    ${name}      ${doubleClick}=${false}
+    Wait Until Page Contains Element    xpath=//td[contains(@class,'well')]/img[@name='${name}']
+    # Have to be sure that thumbnail itself has loaded before image is clickable!
+    Sleep                               1
+    Run Keyword If      ${doubleClick}      Double Click Element    xpath=//td[contains(@class,'well')]/img[@name='${name}']
+    ...                 ELSE                Click Element           xpath=//td[contains(@class,'well')]/img[@name='${name}']
+
+
+Thumbnail Should Be Selected
+    [Arguments]     ${imageId}    ${expected}=${true}
+    Run Keyword If  ${expected}   Wait Until Page Contains Element    xpath=//li[@id='image_icon-${imageId}' and contains(@class, 'ui-selected')]
+    ...             ELSE          Wait Until Page Contains Element    xpath=//li[@id='image_icon-${imageId}' and not(contains(@class, 'ui-selected'))]
+
+Thumbnail Should Not Be Selected
+    [Arguments]                     ${imageId}
+    Thumbnail Should Be Selected    ${imageId}    ${false}
+
+Get Id From Selected Item In Tree
+    # Wait Until Element Is Visible xpath=//li::a[contains(@class, 'jstree-clicked')]
+    ${dataId}=                      Get Element Attribute    xpath=//li[contains(@class,'jstree-leaf')][descendant::a[contains(@class, 'jstree-clicked')]]     attribute=data-id
+    [return]                        ${dataId}
+
+Get Id From Selected Thumbnail
+    ${dataId}=                      Get Element Attribute    xpath=//li[contains(@class,'ui-selected')]     attribute=data-id
+    [return]                        ${dataId}
+
+Get Id From Right Panel
+    ${dataId}=                      Get Text                css=tr.data_heading_id strong
+    [return]                        ${dataId}
+
+Shift Click Node
+    [Arguments]                     ${nodeId}
+    Shift Click Element             "#${nodeId}>a"
+
+Shift Click Thumbnail
+    [Arguments]                     ${iid}
+    Shift Click Element             "#image_icon-${iid}"
+
+Shift Click Element
+    [Arguments]                     ${elementSelector}
+    Execute Javascript              $(${elementSelector}).trigger(jQuery.Event( "click", { shiftKey: true } ));
+
+Meta Click Node
+    [Arguments]                     ${nodeId}
+    Meta Click Element              "#${nodeId}>a"
+
+Meta Click Thumbnail
+    [Arguments]                     ${iid}
+    Meta Click Element              "#image_icon-${iid}"
+
+Meta Click Element
+    [Arguments]                     ${elementSelector}
+    Execute Javascript              $(${elementSelector}).trigger(jQuery.Event( "click", { metaKey: true } ));
+

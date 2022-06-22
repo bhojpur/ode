@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project name="ui-tests" default="install" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant">
+    <description>
+        The from-a-distance automated operations on Bhojpur ODE client UIs
+        that are performed by Robot Framework. At present this build
+        file simply compiles the Java source for custom script
+        keywords.
+    </description>
+
+
+    <!-- run pybot with various arguments. Used to run web/cli tests.-->
+    <macrodef name="run_pybot">
+        <attribute name="failonerror" default="true"/>
+        <attribute name="output"/>
+        <element name="args" implicit="true"/>
+        <sequential>
+            <exec executable="pybot" failonerror="@{failonerror}" dir="${output}">
+                <env key="PYTHONPATH" path="${basedir}/library/python:${env.PYTHONPATH}"/>
+                 <args/>
+            </exec>
+        </sequential>
+    </macrodef>
+
+    <!-- run pabot with various arguments. Used to run web tests.-->
+    <macrodef name="run_pabot">
+        <attribute name="failonerror" default="true"/>
+        <attribute name="output"/>
+        <element name="args" implicit="true"/>
+        <sequential>
+            <exec executable="pabot" failonerror="@{failonerror}" dir="${output}">
+                <env key="PYTHONPATH" path="${basedir}/library/python:${env.PYTHONPATH}"/>
+                 <args/>
+            </exec>
+        </sequential>
+    </macrodef>
+
+    <!-- The number of processes if run using pabot. -->
+    <property name="pabot.processes" value="3"/>
+
+    <!-- The name of the rerun file. -->
+    <property name="reports.rerun" value="rerun.xml"/>
+
+    <!-- The name of the output file. -->
+    <property name="reports.output" value="output.xml"/>
+
+    <!-- reports directory. -->
+    <property name="reports" value="${basedir}/target/reports"/>
+
+    <!-- reports for the web tests. -->
+    <property name="reports.web" value="${reports}/web"/>
+
+    <!-- reports for the cli tests. -->
+    <property name="target.images" value="${basedir}/target/images"/>
+
+
+    <property name="main.class" value="NONE"/>
+
+    <property name="import.dir" value="${basedir}/../../antlib/resources"/>
+
+    <property name="target.dir" value="${basedir}/../../../target/repository"/>
+
+    <!-- file created while running the web-browser -DBROWSER=chrome target -->
+    <property name="google.log" value="${basedir}/libpeerconnection.log"/>
+
+    <import file="${import.dir}/global.xml"/>
+    <import file="${import.dir}/lifecycle.xml"/>
+
+
+    <!-- aggregate the results to publish them -->
+    <target name="aggregate-results">
+        <if>
+            <available file="${reports}" type="dir"/>
+            <then>
+                <apply executable="rebot" dir="${reports}" parallel="true">
+                    <arg value="--output"/>
+                    <arg value="${reports.output}"/>
+                    <srcfile/> 
+                    <fileset id="reports.files" dir="${reports}/">
+                       <include name="**/${reports.output}"/>
+                    </fileset>
+                </apply>
+            </then>
+        </if>
+    </target>
+
+    <!-- merge the results to publish them -->
+    <target name="merge-results">
+        <delete file="${reports}/${reports.output}" failonerror="false"/>
+        <if>
+            <available file="${reports}" type="dir"/>
+            <then>
+                <apply executable="rebot" dir="${reports}" parallel="true">
+                    <arg value="--output"/>
+                    <arg value="${reports.output}"/>
+                    <srcfile/>
+                    <arg value="--merge"/>
+                    <fileset id="reports.files" dir="${reports}/">
+                       <include name="**/${reports.output}"/>
+                    </fileset>
+                </apply>
+            </then>
+        </if>
+    </target>
+
+    <!-- merge the results of test reruns to publish them -->
+    <target name="merge-results-rerun">
+        <delete file="${reports}/${reports.output}" failonerror="false"/>
+        <var name="browser" value="firefox/"/>
+        <if><isset property="BROWSER"/>
+            <then>
+                <var name="browser" value="${BROWSER}"/>
+            </then>
+        </if>
+        <var name="output" value="${reports.web}/${browser}"/>
+        <if>
+            <available file="${reports}" type="dir"/>
+            <then>
+                <apply executable="rebot" dir="${reports}" parallel="true">
+                    <arg value="--output"/>
+                    <arg value="${reports.output}"/>
+                    <arg value="--merge"/>
+                    <srcfile/>
+                    <fileset id="reports.files" dir="${output}/">
+                       <include name="${reports.output}"/>
+                       <include name="${reports.rerun}"/>
+                    </fileset>
+                </apply>
+            </then>
+        </if>
+    </target>
+
+	<target name="check-config-file">
+	    <property file="${basedir}/resources/config.txt" />
+	    <available file="${basedir}/resources/config.txt" property="hasconfig" />
+	    <fail unless="hasconfig" message="The configuration file ${basedir}/resources/config.txt does not exist. Please follow instructions under ${basedir}/README.md." />
+	</target>
+
+    <!--  run all the web tests -->
+    <target name="ui-test-web">
+        <antcall target="web-browser" inheritRefs="true" inheritAll="true"/>
+        <antcall target="web-browser" inheritRefs="true" inheritAll="true">
+            <param name="BROWSER" value="chrome"/>
+        </antcall>
+    </target>
+
+    <!--  run all the web tests with pabot-->
+    <target name="ui-test-web-pabot">
+        <antcall target="web-browser-pabot" inheritRefs="true" inheritAll="true"/>
+        <antcall target="web-browser-pabot" inheritRefs="true" inheritAll="true">
+            <param name="BROWSER" value="chrome"/>
+        </antcall>
+    </target>
+
+    <!-- test with a given browser. If chrome is used, the chrome driver has to be installed -->
+    <target name="web-browser" depends="check-config-file">
+        <var name="browser" value="firefox"/>
+        <if><isset property="BROWSER"/>
+            <then>
+                <var name="browser" value="${BROWSER}"/>
+            </then>
+        </if>
+        <var name="output" value="${reports.web}/${browser}"/>
+        <mkdir dir="${output}"/>
+        <var name="target" value="web/"/>
+        <if><isset property="TEST"/>
+            <then>
+                <var name="target" value="web/${TEST}"/>
+            </then>
+        </if>
+        <run_pybot failonerror="${test.with.fail}" output="${output}">
+            <arg value="-d"/>
+            <arg value="${output}"/>
+            <arg value="-v"/>
+            <arg value="browser:${browser}"/>
+            <arg value="-v"/>
+            <arg value="DELAY:0.2"/>
+            <arg value="--loglevel"/>
+            <arg value="debug"/>
+            <arg value="${basedir}/testcases/${target}"/>
+        </run_pybot>
+        <if>
+            <available file="${google.log}"/>
+            <then>
+                <move file="${google.log}" todir="${reports.web}/${browser}"/>
+            </then>
+        </if>
+    </target>
+
+    <!-- Rerun the tests that failed. It is possible to retest in the same or another browser
+    either the test failures or the full tests suite. the chrome driver has to be installed -->
+    <target name="web-browser-rerun" depends="check-config-file">
+        <var name="browser" value="firefox/"/>
+        <if><isset property="BROWSER"/>
+            <then>
+                <var name="browser" value="${BROWSER}"/>
+            </then>
+        </if>
+        <var name="output" value="${reports.web}/${browser}"/>
+        <var name="target" value="web/"/>
+        <var name="run" value="--rerunfailed"/>
+        <var name="targetbrowser" value="chrome"/>
+        <if><isset property="TARGETBROWSER"/>
+            <then>
+                <var name="targetbrowser" value="${TARGETBROWSER}"/>
+            </then>
+        </if>
+        <if><isset property="TEST"/>
+            <then>
+                <var name="target" value="web/${TEST}"/>
+            </then>
+        </if>
+        <if><isset property="SUITE"/>
+            <then>
+                <var name="run" value="--rerunfailedsuites"/>
+            </then>
+        </if>
+        <run_pybot failonerror="${test.with.fail}" output="${output}">
+            <arg value="--nostatusrc"/>
+            <arg value="${run}"/>
+            <arg value="${output}/${reports.output}"/>
+            <arg value="--output"/>
+            <arg value="${output}/${reports.rerun}"/>
+            <arg value="-v"/>
+            <arg value="browser:${targetbrowser}"/>
+            <arg value="-v"/>
+            <arg value="DELAY:0.2"/>
+            <arg value="--loglevel"/>
+            <arg value="debug"/>
+            <arg value="${basedir}/testcases/${target}"/>
+        </run_pybot>
+        <if>
+            <available file="${google.log}"/>
+            <then>
+                <move file="${google.log}" todir="${reports.web}/${browser}"/>
+            </then>
+        </if>
+    </target>
+
+    <!-- Rerun the tests that failed in parallel. It is possible to retest in the same or another browser
+    either the test failures or the full tests suite. the chrome driver has to be installed -->
+    <target name="web-browser-rerun-pabot" depends="check-config-file">
+        <var name="browser" value="firefox/"/>
+        <if><isset property="BROWSER"/>
+            <then>
+                <var name="browser" value="${BROWSER}"/>
+            </then>
+        </if>
+        <var name="output" value="${reports.web}/${browser}"/>
+        <var name="target" value="web/"/>
+        <var name="run" value="--rerunfailed"/>
+        <var name="targetbrowser" value="chrome"/>
+        <if><isset property="TARGETBROWSER"/>
+            <then>
+                <var name="targetbrowser" value="${TARGETBROWSER}"/>
+            </then>
+        </if>
+        <if><isset property="SUITE"/>
+            <then>
+                <var name="run" value="--rerunfailedsuites"/>
+            </then>
+        </if>
+        <run_pabot failonerror="${test.with.fail}" output="${output}">
+            <arg value="--processes"/>
+            <arg value="${pabot.processes}"/>
+            <arg value="--nostatusrc"/>
+            <arg value="${run}"/>
+            <arg value="${output}/${reports.output}"/>
+            <arg value="--output"/>
+            <arg value="${output}/${reports.rerun}"/>
+            <arg value="-v"/>
+            <arg value="browser:${targetbrowser}"/>
+            <arg value="-v"/>
+            <arg value="DELAY:0.2"/>
+            <arg value="--loglevel"/>
+            <arg value="debug"/>
+            <arg value="${basedir}/testcases/${target}"/>
+        </run_pabot>
+        <if>
+            <available file="${google.log}"/>
+            <then>
+                <move file="${google.log}" todir="${reports.web}/${browser}"/>
+            </then>
+        </if>
+    </target>
+
+    <!-- test with a given brower. If chrome is used, the chrome driver has to be installed -->
+    <target name="web-browser-pabot" depends="check-config-file">
+        <var name="browser" value="firefox"/>
+        <if><isset property="BROWSER"/>
+            <then>
+                <var name="browser" value="${BROWSER}"/>
+            </then>
+        </if>
+        <var name="output" value="${reports.web}/${browser}"/>
+        <mkdir dir="${output}"/>
+        <var name="target" value="web/"/>
+        <if><isset property="TEST"/>
+            <then>
+                <var name="target" value="web/${TEST}"/>
+            </then>
+        </if>
+        <run_pabot failonerror="${test.with.fail}" output="${output}">
+            <arg value="--processes"/>
+            <arg value="${pabot.processes}"/>
+            <arg value="--outputdir"/>
+            <arg value="${output}"/>
+            <arg value="-v"/>
+            <arg value="browser:${browser}"/>
+            <arg value="-v"/>
+            <arg value="DELAY:0.2"/>
+            <arg value="--loglevel"/>
+            <arg value="debug"/>
+            <arg value="${basedir}/testcases/${target}"/>
+        </run_pabot>
+        <if>
+            <available file="${google.log}"/>
+            <then>
+                <move file="${google.log}" todir="${reports.web}/${browser}"/>
+            </then>
+        </if>
+    </target>
+
+    <target name="tests-dist" />
+
+    <target name="package" depends="lifecycle.package" />
+
+    <!-- delete the reports directory -->
+    <target name="tests-clean" depends="clean">
+    <delete dir="${basedir}/target"/>
+    <librarybuild target="clean"/>
+    </target>
+
+    <!-- compile the unit tests under library/java/test -->
+    <target name="test-compile" description=""/>
+
+    <!-- no-operation -->
+    <target name="integration" description=""/>
+
+    <target name="test" />
+</project>

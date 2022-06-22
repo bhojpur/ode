@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<types>
+<!-- Structured Annotations -->
+	<abstract id="ode.model.annotations.Annotation" discriminator="/" annotated="true">
+		<properties>
+			<optional name="ns" type="text"/>
+			<optional name="name" type="text"/>
+			<optional name="description" type="text"/>
+		</properties>
+	</abstract>
+<!-- top-level types -->
+	<type id="ode.model.annotations.ListAnnotation" discriminator="/list/" superclass="ode.model.annotations.Annotation"/>
+	<abstract id="ode.model.annotations.BasicAnnotation" discriminator="/basic/" superclass="ode.model.annotations.Annotation"/><!-- not used in data model -->
+	<abstract id="ode.model.annotations.TypeAnnotation" discriminator="/type/" superclass="ode.model.annotations.Annotation"/><!-- not used in data model -->
+<!-- /basic/text -->
+	<abstract id="ode.model.annotations.TextAnnotation" discriminator="/basic/text/" superclass="ode.model.annotations.Annotation">
+		<properties>
+			<optional name="textValue" type="text"/>
+		</properties>
+	</abstract>
+	<type id="ode.model.annotations.CommentAnnotation" discriminator="/basic/text/comment/" superclass="ode.model.annotations.TextAnnotation"/>
+	<type id="ode.model.annotations.TagAnnotation" discriminator="/basic/text/tag/" superclass="ode.model.annotations.TextAnnotation"/>
+	<type id="ode.model.annotations.XmlAnnotation" discriminator="/basic/text/xml/" superclass="ode.model.annotations.TextAnnotation"/>
+<!--  /basic/num -->
+	<abstract id="ode.model.annotations.NumericAnnotation" discriminator="/basic/num/" superclass="ode.model.annotations.BasicAnnotation"/>
+	<type id="ode.model.annotations.LongAnnotation" discriminator="/basic/num/long/" superclass="ode.model.annotations.NumericAnnotation">
+		<properties>
+			<optional name="longValue" type="long"/>
+		</properties>
+	</type>
+	<type id="ode.model.annotations.DoubleAnnotation" discriminator="/basic/num/double/" superclass="ode.model.annotations.NumericAnnotation">
+		<properties>
+			<optional name="doubleValue" type="double"/>
+		</properties>
+	</type>
+<!-- other basic -->
+	<type id="ode.model.annotations.BooleanAnnotation" discriminator="/basic/bool/" superclass="ode.model.annotations.BasicAnnotation">
+		<properties>
+			<optional name="boolValue" type="boolean"/>
+		</properties>
+	</type>
+	<type id="ode.model.annotations.MapAnnotation" discriminator="/map/" superclass="ode.model.annotations.Annotation">
+		<properties>
+			<map name="mapValue" type="string"/>
+		</properties>
+	</type>
+	<type id="ode.model.annotations.TimestampAnnotation" discriminator="/basic/time/" superclass="ode.model.annotations.BasicAnnotation">
+		<properties>
+			<optional name="timeValue" type="timestamp"/>
+		</properties>
+	</type>
+	<type id="ode.model.annotations.TermAnnotation" discriminator="/basic/term/" superclass="ode.model.annotations.BasicAnnotation">
+		<properties>
+			<optional name="termValue" type="text"/>
+		</properties>
+	</type>
+<!--  /type -->
+	<type id="ode.model.annotations.FileAnnotation" discriminator="/type/OriginalFile/" superclass="ode.model.annotations.TypeAnnotation">
+		<properties>
+			<optional name="file" type="ode.model.core.OriginalFile"/>
+		</properties>
+	</type>
+</types>

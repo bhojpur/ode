@@ -1,0 +1,281 @@
+$$ -*- mode: c++; -*-
+$var n = 50  $$ Maximum length of Values arguments we want to support.
+$var maxtuple = 10  $$ Maximum number of Combine arguments we want to support.
+
+// Copyright (c) 2018 Bhojpur Consulting Private Limited, India. All rights reserved.
+
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+// THE SOFTWARE.
+
+#ifndef GTEST_INCLUDE_GTEST_INTERNAL_GTEST_PARAM_UTIL_GENERATED_H_
+#define GTEST_INCLUDE_GTEST_INTERNAL_GTEST_PARAM_UTIL_GENERATED_H_
+
+// scripts/fuse_gtest.py depends on gtest's own header being #included
+// *unconditionally*.  Therefore these #includes cannot be moved
+// inside #if GTEST_HAS_PARAM_TEST.
+#include "gtest/internal/gtest-param-util.h"
+#include "gtest/internal/gtest-port.h"
+
+#if GTEST_HAS_PARAM_TEST
+
+namespace testing {
+
+// Forward declarations of ValuesIn(), which is implemented in
+// include/gtest/gtest-param-test.h.
+template <typename ForwardIterator>
+internal::ParamGenerator<
+  typename ::testing::internal::IteratorTraits<ForwardIterator>::value_type>
+ValuesIn(ForwardIterator begin, ForwardIterator end);
+
+template <typename T, size_t N>
+internal::ParamGenerator<T> ValuesIn(const T (&array)[N]);
+
+template <class Container>
+internal::ParamGenerator<typename Container::value_type> ValuesIn(
+    const Container& container);
+
+namespace internal {
+
+// Used in the Values() function to provide polymorphic capabilities.
+template <typename T1>
+class ValueArray1 {
+ public:
+  explicit ValueArray1(T1 v1) : v1_(v1) {}
+
+  template <typename T>
+  operator ParamGenerator<T>() const { return ValuesIn(&v1_, &v1_ + 1); }
+
+ private:
+  // No implementation - assignment is unsupported.
+  void operator=(const ValueArray1& other);
+
+  const T1 v1_;
+};
+
+$range i 2..n
+$for i [[
+$range j 1..i
+
+template <$for j, [[typename T$j]]>
+class ValueArray$i {
+ public:
+  ValueArray$i($for j, [[T$j v$j]]) : $for j, [[v$(j)_(v$j)]] {}
+
+  template <typename T>
+  operator ParamGenerator<T>() const {
+    const T array[] = {$for j, [[static_cast<T>(v$(j)_)]]};
+    return ValuesIn(array);
+  }
+
+ private:
+  // No implementation - assignment is unsupported.
+  void operator=(const ValueArray$i& other);
+
+$for j [[
+
+  const T$j v$(j)_;
+]]
+
+};
+
+]]
+
+# if GTEST_HAS_COMBINE
+// INTERNAL IMPLEMENTATION - DO NOT USE IN USER CODE.
+//
+// Generates values from the Cartesian product of values produced
+// by the argument generators.
+//
+$range i 2..maxtuple
+$for i [[
+$range j 1..i
+$range k 2..i
+
+template <$for j, [[typename T$j]]>
+class CartesianProductGenerator$i
+    : public ParamGeneratorInterface< ::std::tr1::tuple<$for j, [[T$j]]> > {
+ public:
+  typedef ::std::tr1::tuple<$for j, [[T$j]]> ParamType;
+
+  CartesianProductGenerator$i($for j, [[const ParamGenerator<T$j>& g$j]])
+      : $for j, [[g$(j)_(g$j)]] {}
+  virtual ~CartesianProductGenerator$i() {}
+
+  virtual ParamIteratorInterface<ParamType>* Begin() const {
+    return new Iterator(this, $for j, [[g$(j)_, g$(j)_.begin()]]);
+  }
+  virtual ParamIteratorInterface<ParamType>* End() const {
+    return new Iterator(this, $for j, [[g$(j)_, g$(j)_.end()]]);
+  }
+
+ private:
+  class Iterator : public ParamIteratorInterface<ParamType> {
+   public:
+    Iterator(const ParamGeneratorInterface<ParamType>* base, $for j, [[
+
+      const ParamGenerator<T$j>& g$j,
+      const typename ParamGenerator<T$j>::iterator& current$(j)]])
+        : base_(base),
+$for j, [[
+
+          begin$(j)_(g$j.begin()), end$(j)_(g$j.end()), current$(j)_(current$j)
+]]    {
+      ComputeCurrentValue();
+    }
+    virtual ~Iterator() {}
+
+    virtual const ParamGeneratorInterface<ParamType>* BaseGenerator() const {
+      return base_;
+    }
+    // Advance should not be called on beyond-of-range iterators
+    // so no component iterators must be beyond end of range, either.
+    virtual void Advance() {
+      assert(!AtEnd());
+      ++current$(i)_;
+
+$for k [[
+      if (current$(i+2-k)_ == end$(i+2-k)_) {
+        current$(i+2-k)_ = begin$(i+2-k)_;
+        ++current$(i+2-k-1)_;
+      }
+
+]]
+      ComputeCurrentValue();
+    }
+    virtual ParamIteratorInterface<ParamType>* Clone() const {
+      return new Iterator(*this);
+    }
+    virtual const ParamType* Current() const { return &current_value_; }
+    virtual bool Equals(const ParamIteratorInterface<ParamType>& other) const {
+      // Having the same base generator guarantees that the other
+      // iterator is of the same type and we can downcast.
+      GTEST_CHECK_(BaseGenerator() == other.BaseGenerator())
+          << "The program attempted to compare iterators "
+          << "from different generators." << std::endl;
+      const Iterator* typed_other =
+          CheckedDowncastToActualType<const Iterator>(&other);
+      // We must report iterators equal if they both point beyond their
+      // respective ranges. That can happen in a variety of fashions,
+      // so we have to consult AtEnd().
+      return (AtEnd() && typed_other->AtEnd()) ||
+         ($for j  && [[
+
+          current$(j)_ == typed_other->current$(j)_
+]]);
+    }
+
+   private:
+    Iterator(const Iterator& other)
+        : base_(other.base_), $for j, [[
+
+        begin$(j)_(other.begin$(j)_),
+        end$(j)_(other.end$(j)_),
+        current$(j)_(other.current$(j)_)
+]] {
+      ComputeCurrentValue();
+    }
+
+    void ComputeCurrentValue() {
+      if (!AtEnd())
+        current_value_ = ParamType($for j, [[*current$(j)_]]);
+    }
+    bool AtEnd() const {
+      // We must report iterator past the end of the range when either of the
+      // component iterators has reached the end of its range.
+      return
+$for j  || [[
+
+          current$(j)_ == end$(j)_
+]];
+    }
+
+    // No implementation - assignment is unsupported.
+    void operator=(const Iterator& other);
+
+    const ParamGeneratorInterface<ParamType>* const base_;
+    // begin[i]_ and end[i]_ define the i-th range that Iterator traverses.
+    // current[i]_ is the actual traversing iterator.
+$for j [[
+
+    const typename ParamGenerator<T$j>::iterator begin$(j)_;
+    const typename ParamGenerator<T$j>::iterator end$(j)_;
+    typename ParamGenerator<T$j>::iterator current$(j)_;
+]]
+
+    ParamType current_value_;
+  };  // class CartesianProductGenerator$i::Iterator
+
+  // No implementation - assignment is unsupported.
+  void operator=(const CartesianProductGenerator$i& other);
+
+
+$for j [[
+  const ParamGenerator<T$j> g$(j)_;
+
+]]
+};  // class CartesianProductGenerator$i
+
+
+]]
+
+// INTERNAL IMPLEMENTATION - DO NOT USE IN USER CODE.
+//
+// Helper classes providing Combine() with polymorphic features. They allow
+// casting CartesianProductGeneratorN<T> to ParamGenerator<U> if T is
+// convertible to U.
+//
+$range i 2..maxtuple
+$for i [[
+$range j 1..i
+
+template <$for j, [[class Generator$j]]>
+class CartesianProductHolder$i {
+ public:
+CartesianProductHolder$i($for j, [[const Generator$j& g$j]])
+      : $for j, [[g$(j)_(g$j)]] {}
+  template <$for j, [[typename T$j]]>
+  operator ParamGenerator< ::std::tr1::tuple<$for j, [[T$j]]> >() const {
+    return ParamGenerator< ::std::tr1::tuple<$for j, [[T$j]]> >(
+        new CartesianProductGenerator$i<$for j, [[T$j]]>(
+$for j,[[
+
+        static_cast<ParamGenerator<T$j> >(g$(j)_)
+]]));
+  }
+
+ private:
+  // No implementation - assignment is unsupported.
+  void operator=(const CartesianProductHolder$i& other);
+
+
+$for j [[
+  const Generator$j g$(j)_;
+
+]]
+};  // class CartesianProductHolder$i
+
+]]
+
+# endif  // GTEST_HAS_COMBINE
+
+}  // namespace internal
+}  // namespace testing
+
+#endif  //  GTEST_HAS_PARAM_TEST
+
+#endif  // GTEST_INCLUDE_GTEST_INTERNAL_GTEST_PARAM_UTIL_GENERATED_H_

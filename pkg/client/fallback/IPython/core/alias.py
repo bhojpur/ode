@@ -1,11 +1,7 @@
 # encoding: utf-8
+
 """
 System command aliases.
-
-Authors:
-
-* Fernando Perez
-* Brian Granger
 """
 
 #-----------------------------------------------------------------------------
@@ -218,7 +214,7 @@ class AliasManager(Configurable):
         (command) translated according to alias expansion rules.
 
         [ipython]|16> _ip.expand_aliases("np myfile.txt")
-                 <16> 'q:/opt/np/notepad++.exe myfile.txt'
+                 <16> 'q:/opt/bhojpur/notepad++.exe myfile.txt'
         """
 
         pre,_,fn,rest = split_user_input(line)

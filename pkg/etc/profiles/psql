@@ -1,0 +1,60 @@
+## Copyright (c) 2018 Bhojpur Consulting Private Limited, India. All rights reserved.
+##
+## Permission is hereby granted, free of charge, to any person obtaining a copy
+## of this software and associated documentation files (the "Software"), to deal
+## in the Software without restriction, including without limitation the rights
+## to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+## copies of the Software, and to permit persons to whom the Software is
+## furnished to do so, subject to the following conditions:
+##
+## The above copyright notice and this permission notice shall be included in
+## all copies or substantial portions of the Software.
+##
+## THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+## IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+## FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+## AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+## LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+## OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+## THE SOFTWARE.
+
+## Bhojpur ODE database system
+## postgres profile
+
+# TCP port on which the database server is listening for connections.
+# Used by the JDBC driver to access the database. Use of a local UNIX
+# socket is not supported.
+#
+# (PostgreSQL default)
+ode.db.port=5432
+
+# JDBC driver used to access the database. Other drivers can be configured
+# which wrap this driver to provide logging, monitoring, etc.
+#
+# (PostgreSQL default)
+ode.db.driver=org.postgresql.Driver
+
+# Implementation of the org.hibernate.dialect.Dialect interface which will
+# be used to convert HQL queries and save operations into SQL SELECTs and
+# DML statements.
+#
+# (PostgreSQL default)
+ode.db.dialect=ode.util.PostgresqlDialect
+
+# Implementation of the ode.util.SqlAction interface which will be used to
+# perform all direct SQL actions, i.e. without Hibernate.
+#
+# (PostgreSQL default)
+ode.db.sql_action_class=ode.util.actions.PostgresSqlAction
+
+### END
+ode.db.generate_dialect=ode.util.PostgresqlDialect
+ode.db.lob_handler=org.springframework.jdbc.support.lob.DefaultLobHandler
+ode.db.org=org.postgresql
+ode.db.jar=postgresql
+ode.db.jar_version=9.4-1200-jdbc4
+ode.db.delimiter=;;
+ode.db.defer=
+ode.db.temp_ids=false
+ode.security.filter.bitand=(int8and(permissions,%s) = %s)
+ode.db.driver_type=UNUSED

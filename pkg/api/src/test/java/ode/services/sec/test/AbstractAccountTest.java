@@ -64,7 +64,7 @@ public class AbstractAccountTest extends AbstractSecurityTest {
         init();
         root = (Experimenter) rootQuery.get("Experimenter", 0L);
         sudo = (Experimenter) createNewSystemUser(rootAdmin);
-        sudo_name = sudo.getOmeName().getValue();
+        sudo_name = sudo.getOdeName().getValue();
         resetPasswordTo_ode(sudo);
         assertCanLogin(sudo_name, "ode");
         assertCannotLogin(sudo_name, "bob");
@@ -76,7 +76,7 @@ public class AbstractAccountTest extends AbstractSecurityTest {
     protected Experimenter createNewSystemUser(IAdminPrx iAdmin) {
 
         Experimenter e = new ExperimenterI();
-        e.setOmeName(rstring(UUID.randomUUID().toString()));
+        e.setOdeName(rstring(UUID.randomUUID().toString()));
         e.setFirstName(rstring("ticket:181"));
         e.setLastName(rstring("ticket:181"));
         long id;
@@ -100,7 +100,7 @@ public class AbstractAccountTest extends AbstractSecurityTest {
             g = (ExperimenterGroup) iUpdate.saveAndReturnObject(g);
             g.unload();
             Experimenter e = new ExperimenterI();
-            e.setOmeName(rstring(UUID.randomUUID().toString()));
+            e.setOdeName(rstring(UUID.randomUUID().toString()));
             e.setFirstName(rstring("ticket:181"));
             e.setLastName(rstring("ticket:181"));
             e.linkExperimenterGroup(g);
@@ -121,7 +121,7 @@ public class AbstractAccountTest extends AbstractSecurityTest {
         {
             iAdmin.createGroup(g);
             Experimenter e = new ExperimenterI();
-            e.setOmeName(rstring(UUID.randomUUID().toString()));
+            e.setOdeName(rstring(UUID.randomUUID().toString()));
             e.setFirstName(rstring("ticket:181"));
             e.setLastName(rstring("ticket:181"));
             long id;

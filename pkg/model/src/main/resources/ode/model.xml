@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    Configuration for the model/ ApplicationContext (not OdeContext)
+    Primarily defines a map which other components can add to define 
+    bridges, validators and other components need within the model.
+-->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- A map used by server configuration files to inject
+    object via ode.util.MapPut -->
+    <bean id="bridges" class="java.util.HashMap"/>
+
+</beans>

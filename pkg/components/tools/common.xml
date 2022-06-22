@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project name="tools-common">
+    <description>
+        Shared resources for tool builds.
+    </description>
+    <macrodef name="get-source">
+        <attribute name="todir"/>
+        <element   name="filesets" implicit="true"/>
+        <sequential>
+        <copy todir="@{todir}">
+            <filesets/>
+        </copy>
+        </sequential>
+    </macrodef>
+</project>

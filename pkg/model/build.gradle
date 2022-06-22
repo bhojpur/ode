@@ -1,0 +1,116 @@
+// Copyright (c) 2018 Bhojpur Consulting Private Limited, India. All rights reserved.
+
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+// THE SOFTWARE.
+
+plugins {
+    id "java-library"
+    id "net.bhojpur.ode.project" version "1.0.0"
+    id "net.bhojpur.ode.dsl" version "1.0.0"
+}
+
+group = "net.bhojpur.ode"
+version = "1.0.0-SNAPSHOT"
+
+ext {
+    databaseType = "psql"
+}
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+dependencies {
+    testImplementation("org.testng:testng:6.14.2")
+
+    // Needs updating to later versions
+    api("org.springframework:spring-orm:4.3.14.RELEASE")
+    api("org.springframework:spring-context:4.3.14.RELEASE")
+    api("org.springframework:spring-context-support:4.3.22.RELEASE")
+    api("org.hibernate:hibernate-core:3.6.10.Final")
+    api("org.hibernate:hibernate-search:3.4.2.Final")
+
+    // Our libraries
+    api("ode:formats-gpl:1.0.0")
+
+    // Unidata
+    api("edu.ucar:bufr:3.0"){
+        exclude group: "edu.ucar", module: "netcdf"
+    }
+    api("edu.ucar:udunits:4.5.5")
+}
+
+test {
+    testLogging {
+        events "passed", "skipped", "failed", "standardOut", "standardError"
+    }
+    // enable TestNG support (default is JUnit)
+    useTestNG() {
+        suites "src/test/resources/unit.testng.xml"
+    }
+    dependsOn cleanTest
+}
+
+dsl {
+    database databaseType
+
+    outputDir file("build/${databaseType}")
+
+    multiFile {
+        java {
+            template "object.vm"
+            outputDir "java"
+            formatOutput = { st ->
+                "${st.getPackage()}/${st.getShortname()}.java"
+            }
+        }
+    }
+
+    singleFile {
+        hibernate {
+            template "cfg.vm"
+            outputFile "resources/hibernate.cfg.xml"
+        }
+
+        sql {
+            template "views.vm"
+            outputFile "resources/views.sql"
+        }
+
+        enums {
+            template "enums.vm"
+            outputFile "resources/enums.properties"
+        }
+    }
+}
+
+processResources {
+    with copySpec {
+        from 'src/main/resources'
+        // Set db profile
+        filter { String line ->
+            line.startsWith('ode.db.profile') ? 'ode.db.profile='+databaseType : line
+        }
+    }
+}

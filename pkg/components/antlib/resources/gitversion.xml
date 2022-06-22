@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<project name="gitversion" basedir=".">
+    <property name="ode.shortversion" value="1.0.0"/>
+    <property name="ode.plainversion" value="1.0.0"/>
+    <property name="ode.vcs.shortrevision" value="dd39b23"/>
+    <property name="ode.vcs.revision" value="dd39b23d071e2d034d277dfe4bf7f319a5c531ed"/>
+    <property name="ode.vcs.date" value="2018-03-26 11:43:28 +0200"/>
+
+    <!-- Properties for detecting where these properties were read from -->
+    <property name="ode.shortversion.source" value="embedded"/>
+    <property name="ode.plainversion.source" value="embedded"/>
+    <property name="ode.vcs.revision.source" value="embedded"/>
+    <property name="ode.vcs.shortrevision.source" value="embedded"/>
+    <property name="ode.vcs.date.source" value="embedded"/>
+</project>
