@@ -1,0 +1,13 @@
+.settings
+.project
+.pydevproject
+.DS_Store
+build
+node_modules
+static
+templates
+dist
+ode_viewer.egg-info
+libs
+.ode
+*.pyc

@@ -26,7 +26,7 @@ project(openmicroscopy)
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
-set(ODE_CPP_DIR components/tools/OdeCpp)
+set(ODE_CPP_DIR pkg/components/tools/OdeCpp)
 set(ODE_CPP_SOURCE_DIR ${PROJECT_SOURCE_DIR}/${ODE_CPP_DIR})
 set(ODE_CPP_BINARY_DIR ${PROJECT_BINARY_DIR}/${ODE_CPP_DIR})
 

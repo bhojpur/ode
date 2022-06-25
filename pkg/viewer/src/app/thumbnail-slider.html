@@ -1,0 +1,41 @@
+<template>
+    <div class="refresh_thumbnails glyphicon glyphicon-refresh
+                ${requesting_thumbnail_data ?
+                    'background-color: disabled-color' : ''}"
+         show.bind="!(image_config.image_info.error && !initialized)"
+         click.delegate="refreshThumbnails()"
+         title="Refresh thumbnails">
+    </div>
+
+    <div class="thumbnail-scroll-panel"
+        show.bind="!requesting_thumbnail_data"
+        resize.trigger="panelResized($event)"
+        scroll.trigger="handleScrollEvent($event) & debounce:100">
+
+        <div>
+            <!-- Both the div and the img have data-id for drag-n-drop -->
+            <div repeat.for="thumb of thumbnails" class="thumbnail-wrapper"
+                data-id="${thumb.id}"
+                draggable="true" dragstart.delegate="handleDragStart($event, thumb.type)">
+              <!-- show placeholder 1 x 1 px png if no thumb.url -->
+              <img id="${'img-thumb-' + thumb.id}" data-id="${thumb.id}"
+                class="${image_config.image_info.image_id === thumb.id ? 'selected' : ''}
+                    ${thumb.id ? '' : 'transparent'}"
+                src.bind="thumb.url ? thumb.url + '?version=' + thumb.revision : 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNgYAAAAAMAASsJTYQAAAAASUVORK5CYII='"
+                title="${thumb.title}"
+                alt=""
+                click.delegate="onClick(thumb.id)"
+                dblclick.delegate="onDoubleClick(thumb.id, $event)"/>
+            </div>
+        </div>
+
+    </div>
+    <div class="disabled-color" style="position: relative;top: 40%;"
+         show.bind="requesting_thumbnail_data">
+            Gathering<br>Thumbnail<br>Info...
+    </div>
+    <div class="disabled-color" style="position: relative;top: 40%;"
+         show.bind="image_config.image_info.error && !initialized">
+            No Image Data
+    </div>
+</template>

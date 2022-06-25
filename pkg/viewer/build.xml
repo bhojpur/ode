@@ -1,0 +1,100 @@
+<project name="ol3-viewer" default="prepare-css-prod">
+    <description>
+        #################################################
+        ####            BHOJPUR ODE VIEWER           ####
+        #################################################
+    </description>
+
+    <property name="node_modules" value="${basedir}/node_modules" />
+    <property name="karma" value="${node_modules}/.bin/karma" />
+    <property name="clean-css" value="${node_modules}/.bin/cleancss" />
+
+    <property name="build.dir" value="${basedir}/build" />
+    <property name="test.build.dir" value="${basedir}/test/build" />
+
+    <property name="dist.css" value="${build.dir}/css" />
+    <property name="plugin.name" value="ol-viewer.js" />
+    <property name="test.name" value="${test.build.dir}/${plugin.name}" />
+
+    <target name="clean-css-dir">
+        <delete dir="${dist.css}" />
+        <mkdir dir="${dist.css}" />
+    </target>
+
+    <target name="copy-images">
+        <copy todir="${dist.css}/images">
+            <fileset dir="${basedir}/css/images"/>
+        </copy>
+    </target>
+
+    <target name="prepare-css-prod"
+            depends="clean-css-dir, copy-images"
+            description="prepares css for production">
+        <echo>Combine and minify css...</echo>
+        <exec dir="${basedir}" executable="npm">
+            <arg line="install clean-css-cli"/>
+        </exec>
+        <exec dir="${basedir}" executable="${clean-css}">
+            <arg value="-O1"/>
+            <arg value="specialComments:0"/>
+            <arg value="--skip-rebase"/>
+            <arg value="-o"></arg>
+            <arg value="${dist.css}/all.min.css"/>
+            <arg value="${node_modules}/jquery-ui/themes/base/theme.css"/>
+            <arg value="${node_modules}/jquery-ui/themes/base/spinner.css"/>
+            <arg value="${node_modules}/jquery-ui/themes/base/slider.css"/>
+            <arg value="${node_modules}/bootstrap/dist/css/bootstrap.min.css"/>
+            <arg value="${node_modules}/spectrum-colorpicker/spectrum.css"/>
+            <arg value="${basedir}/css/ol3-viewer.css"/>
+            <arg value="${basedir}/css/app.css"/>
+        </exec>
+    </target>
+
+    <target name="prepare-css-debug"
+            depends="clean-css-dir, copy-images"
+            description="prepares css for debug">
+        <echo>Combine css...</echo>
+        <concat destfile="${dist.css}/all.min.css" overwrite="true">
+            <fileset file="${node_modules}/jquery-ui/themes/base/theme.css"/>
+            <fileset file="${node_modules}/jquery-ui/themes/base/spinner.css"/>
+            <fileset file="${node_modules}/jquery-ui/themes/base/slider.css"/>
+            <fileset file="${node_modules}/bootstrap/dist/css/bootstrap.min.css"/>
+            <fileset file="${node_modules}/spectrum-colorpicker/spectrum.css"/>
+            <fileset file="${basedir}/css/ol3-viewer.css"/>
+            <fileset file="${basedir}/css/app.css"/>
+        </concat>
+    </target>
+
+    <target name="unit-tests">
+        <echo>Fetching test libraries ....</echo>
+        <exec dir="${basedir}" executable="npm">
+            <arg value="install"/>
+            <arg value="webpack"/>
+            <arg value="babel-loader"/>
+            <arg value="karma"/>
+            <arg value="karma-chrome-launcher"/>
+            <arg value="karma-mocha"/>
+            <arg value="karma-chai"/>
+            <arg value="karma-webpack"/>
+            <arg value="mocha"/>
+            <arg value="chai"/>
+            <arg value="babel-core@6.26.0"/>
+            <arg value="karma-spec-reporter"/>
+            <arg value="ol@5.3.0"/>
+        </exec>
+        <echo>Running Test Suite ....</echo>
+        <exec dir="${basedir}" resultproperty="result" executable="${karma}" >
+            <arg value="start"/>
+            <arg value="--single-run"/>
+            <arg value="--browsers ChromeHeadless"/>
+            <arg value="karma.conf.js"/>
+        </exec>
+        <fail status="${result}">
+            <condition>
+                <not>
+                    <equals arg1="${result}" arg2="0"/>
+                </not>
+            </condition>
+        </fail>
+    </target>
+</project>

@@ -1,0 +1,44 @@
+<template>
+    <require from="../settings/settings"></require>
+    <require from="../regions/regions"></require>
+    <require from="../info/info"></require>
+
+    <ul id="panel-tabs" class="nav nav-tabs" role="tablist">
+        <li class="${context.selected_tab === TABS.INFO ? 'active' : ''}">
+            <a href="${'#' + TABS.INFO}" role="tab">Info</a>
+        </li>
+        <li class="${context.selected_tab === TABS.SETTINGS ? 'active' : ''}">
+            <a href="${'#' + TABS.SETTINGS}" role="tab">Settings</a>
+        </li>
+        <li class="${context.selected_tab === TABS.ROIS ? 'active' : ''}">
+            <a href="${'#' + TABS.ROIS}" role="tab">
+                ROIs ${image_config && image_config.image_info ?
+                        '[' + image_config.image_info.roi_count + ']' : ''}
+            </a>
+        </li>
+    </ul>
+
+    <div class="disabled-color loading-text"
+         show.bind="image_config === null ||
+                     (!image_config.image_info.ready &&
+                      image_config.image_info.error)">
+            No Image Data
+    </div>
+    <div class="tab-content regions-tabs"
+         show.bind="image_config && image_config.image_info &&
+                    !image_config.image_info.error">
+        <div id="${TABS.INFO}" role="tabpanel"
+             class="tab-pane ${context.selected_tab === TABS.INFO ? 'active' : ''}">
+            <info image_info.bind="image_config.image_info"></info>
+        </div>
+        <div id="${TABS.SETTINGS}" role="tabpanel"
+             class="tab-pane ${context.selected_tab === TABS.SETTINGS ? 'active' : ''}">
+            <settings image_config.bind="image_config"></settings>
+        </div>
+        <div id="${TABS.ROIS}" role="tabpanel"
+             class="tab-pane ${context.selected_tab === TABS.ROIS ? 'active' : ''}">
+            <regions regions_info.bind="image_config.regions_info"></regions>
+        </div>
+    </div>
+
+</template>

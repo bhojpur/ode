@@ -66,7 +66,7 @@ in project [WebGL Volume Rendering](https://github.com/lebarba/WebGLVolumeRender
 
 The `Bhojpur ODE` platform core components is developed using several software technologies
 (e.g. [Ivy](https://ant.apache.org/ivy/), [Groovy](https://groovy-lang.org), [Gradle](https://gradle.org),
-[Ice](https://zeroc.com/products/ice), [Python](https://www.python.org),
+[Ant](https://ant.apache.org/), [Ice](https://zeroc.com/products/ice), [Python](https://www.python.org),
 [Node.js](https://nodejs.org), [Java](https://www.java.com), [Spring](https://spring.io)).
 
 Based on a Gradle [ice builder plugin](https://github.com/zeroc-ice/ice-builder-gradle),
@@ -137,9 +137,18 @@ node_modules/webpack/bin/webpack.js --progress
 
 ### Web Application
 
-Now, change directory to `pkg` and issue the following commands.
+Now, change directory to `pkg/components/tools/OdeWeb` and issue the following commands.
 
 ```bash
-cd pkg
+cd pkg/components/tools/OdeWeb
 python3 ./engine/manage.py runserver 0:8000
+```
+
+#### Web Viewer Application
+
+Also, a web viewer of Bhojpur ODE is available in the `pkg/viewer` folder.
+
+```bash
+npm install
+npm run dev
 ```

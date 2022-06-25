@@ -1,0 +1,59 @@
+<template>
+
+    <h4 show.bind="image_info.ready"
+        title="${image_info.image_name}">
+        ${image_info.short_image_name}
+    </h4>
+
+    <div show.bind="image_info.ready" class="openwith">
+        <span repeat.for="ow of open_with_links">
+            <hr if.bind="$first" />
+            <span if.bind="$first">Open With:</span>
+            <a target="_blank" href="${ow.url}">${ow.text}</a> ${!$last ? ' | ' : ''}
+        </span>
+    </div>
+
+    <div class="well well-sm">
+        <button type="button" class="btn">
+            Image Info
+        </button>
+    </div>
+
+    <table show.bind="image_info.ready" class="table table-condensed">
+        <tr>
+            <td class="col-sm-6 text-weight-bold">Image ID:</td>
+            <td class="col-sm-6">
+                <a href="${image_info.web_url}"
+                   title="Show ${image_info.short_image_name} in webclient"
+                   target="_blank">${image_info.image_id}
+                </a>
+            </td>
+        </tr>
+        <tr show.bind="parent_info !== null">
+            <td class="col-sm-6 text-weight-bold">${parent_info.title}:</td>
+            <td class="col-sm-6">
+                <a href="${parent_info.url}"
+                   title="Show ${parent_info.title} in webclient"
+                   target="_blank">${parent_info.name}
+                </a>
+            </td>
+        </tr>
+        <tr repeat.for="column of columns">
+            <td class="col-sm-6 text-weight-bold">${column.label}</td>
+            <td class="col-sm-6">${column.value}</td>
+        </tr>
+        <tr>
+            <td class="col-sm-6 text-weight-bold">Channels:</td>
+            <td class="col-sm-6">
+                <span repeat.for="channel of image_info.channels">
+                    ${channel.label}${!$last ? ', ' : ''}
+                </span>
+            </td>
+        </tr>
+    </table>
+
+    <div class="disabled-color loading-text" show.bind="!image_info.ready">
+        Loading Image Data ...
+     </div>
+
+</template>

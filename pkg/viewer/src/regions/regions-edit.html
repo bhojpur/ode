@@ -1,0 +1,73 @@
+<template>
+    <div class="shapes-edit">
+        <div class="shape-fill-color"><input class="spectrum-input"/></div>
+        <div class="shape-stroke-color"><input class="spectrum-input"/></div>
+        <div class="shape-stroke-width"><input /></div>
+
+        <div class="dropdown rois-dropdown arrow-button"
+             title="Toggle arrow heads">
+            <button type="button"
+                class="btn btn-default btn-sm dropdown-toggle"
+                disabled="disabled"
+            data-toggle="dropdown">&nbsp;</button>
+            <ul class="dropdown-menu">
+                <li click.delegate="toggleArrow(false)">
+                    <span class="marker_start"></span>
+                    <a href="#">Start</a>
+                </li>
+                <li click.delegate="toggleArrow(true)">
+                    <span class="marker_end"></span>
+                    <a href="#">End</a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="dropdown rois-dropdown">
+            <button type="button"
+                    class="btn btn-default btn-sm dropdown-toggle shape-edit-button
+                           ${regions_info.shape_to_be_drawn !== null ? 'disabled' : ''}"
+                    data-toggle="dropdown">Edit
+            </button>
+            <ul class="dropdown-menu">
+                <li if.bind="regions_info && regions_info.selected_shapes &&
+                                regions_info.selected_shapes.length !== 0"
+                    click.delegate="copyShapes()">
+                        <a href="#">Copy</a>
+                </li>
+                <li if.bind="regions_info.copied_shapes.length !== 0 &&
+                             regions_info.image_info.can_annotate"
+                     click.delegate="pasteShapes()">
+                        <a href="#">Paste</a>
+                </li>
+                <li click.delegate="selectAllShapes()"><a href="#">Select All</a></li>
+            </ul>
+        </div>
+
+        <button type="button" disabled
+                click.delegate="deleteShapes()"
+                class="btn btn-default btn-sm shape-delete-button">Delete
+        </button>
+    </div>
+
+
+    <div class="shapes-edit">
+        <div class="shape-edit-comment">
+            <input placeholder="Comment" class="form-control input-sm" />
+        </div>
+        <div class="shape-font-size"><input /></div>
+    </div>
+    <div class="shapes-edit form-inline">
+        <div class="shape-edit-attachments form-group">
+            <label>Z</label>
+            <input class="form-control input-sm" type="text" dim="z" value="" tabindex="-1"/>
+            <span name="shape-edit-attachments-locks" tabindex="-1"
+                   dim="z" locked="locked" class="dim_locked"></span>
+            <label>T</label>
+            <input class="form-control input-sm" type="text" dim="t" value="" tabindex="-1"/>
+            <span name="shape-edit-attachments-locks" tabindex="-1"
+                  dim="t" locked="locked" class="dim_locked"></span>
+        </div>
+        <span tabindex="1"></span>
+   </div>
+</div>
+</template>

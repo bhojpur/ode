@@ -1,0 +1,104 @@
+<template>
+    <require from="../utils/converters"></require>
+    <require from="./channel-settings"></require>
+
+    <div class="btn-group save-settings">
+        <button type="button"
+            disabled.bind="!(image_config.image_info.ready &&
+                image_config.image_info.can_annotate &&
+                image_config.history.length > 0 &&
+                image_config.historyPointer >= 0)"
+            class="btn btn-default btn-sm"
+            click.delegate="saveImageSettings()">Save
+        </button>
+        <button type="button"
+            disabled.bind="!(image_config.image_info.ready &&
+                            image_config.image_info.can_annotate)"
+            class="btn btn-default btn-sm"
+            title="Apply and save Image settings to all Images in the Dataset"
+            click.delegate="saveImageSettingsToAll()">Save to All
+        </button>
+    </div>
+
+    <div class="btn-group history">
+        <button type="button" click.delegate="undo()"
+            disabled.bind="!(!image_config.is_movie_playing &&
+                            image_config.history.length > 0 &&
+                            image_config.historyPointer >= 0)"
+            class="btn btn-default btn-sm">Undo</button>
+        <button type="button" click.delegate="redo()"
+            disabled.bind="!(!image_config.is_movie_playing &&
+                            image_config.history.length > 0 &&
+                            image_config.historyPointer < image_config.history.length-1)"
+            class="btn btn-default btn-sm">Redo</button>
+        <button type="button" click.delegate="copy()" class="btn btn-default btn-sm">Copy</button>
+        <button type="button" class="btn btn-default btn-sm"
+            disabled.bind="!(image_config.image_info.ready &&
+                            image_config.image_info.copied_img_rdef)"
+            click.delegate="paste()">Paste</button>
+    </div>
+
+    <div class="checkbox checkbox-settings">
+        <div>
+            <label>
+                <input type="checkbox"
+                    checked.bind="image_config.image_info.model | imageModel"
+                    disabled.bind="!(image_config && image_config.image_info &&
+                                     image_config.image_info.ready)"
+                    change.delegate="onModelChange($event.target.checked)" />
+               Grayscale
+           </label>
+        </div>
+        <div>
+            <label class="${image_config.image_info.ready &&
+                            !image_config.image_info.tiled  ?
+                                '' : 'disabled-color'}">
+            <input type="checkbox"
+                disabled.bind="!(image_config.image_info.ready &&
+                                !image_config.image_info.tiled)"
+                checked.bind="image_config.show_histogram"
+                change.delegate="toggleHistogram($event)" />
+            Histogram
+            </label>
+        </div>
+
+        <div>
+            <label>
+                <input type="checkbox"
+                    checked.one-way="context.interpolate"
+                    disabled.bind="!(image_config && image_config.image_info &&
+                                     image_config.image_info.ready)"
+                    change.delegate="toggleInterpolation($event)" />
+               Interpolate
+           </label>
+        </div>
+    </div>
+
+    <div show.bind="image_config.image_info.ready &&
+                    !image_config.image_info.tiled &&
+                    histogram && histogram.visible" class="row">
+        <div class="histogram"></div>
+    </div>
+
+    <div show.bind="image_config.image_info.ready" class="row">
+        <channel-settings image_config.bind="image_config"></channel-settings>
+    </div>
+
+    <div show.bind="image_config.image_info.ready" class="row">
+        <hr />
+        <div>User Settings:</div>
+        <div class="user-settings">
+            <div repeat.for="rdef of rdefs"
+                class="user-setting"
+                click.delegate="applyUserSetting($index)">
+                <img src.bind="getRdefThumbUrl() + '/?rdefId=' + rdef.id + '&' + revision" class="img-thumbnail">
+                <div>${rdef.owner.firstName + ' ' + rdef.owner.lastName}</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="disabled-color loading-text"
+         show.bind="!image_config.image_info.ready">Loading Image Data ...
+     </div>
+
+</template>

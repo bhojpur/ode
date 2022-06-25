@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <link rel="stylesheet" type="text/css" href="{% static 'ode_viewer/css/all.min.css'|add:viewer_url_suffix %}" />
+
+      <script type="text/javascript">
+        window.INITIAL_REQUEST_PARAMS = {};
+        {% for key, value in params.items %}
+            window.INITIAL_REQUEST_PARAMS['{{key}}'] = "{{value}}";
+        {% endfor %}
+
+        window.ODE = {}
+        ODE.OPEN_WITH = [];
+
+        // Helper can be used by 'open with' plugins to add isEnabled()
+        // handlers to the OPEN_WITH object.
+        ODE.setOpenWithEnabledHandler = function(label, fn) {
+            // look for label in OPEN_WITH
+            ODE.OPEN_WITH.forEach(function(ow){
+                if (ow.label === label) {
+                    ow.isEnabled = function() {
+                        // wrap fn with try/catch, since error here will break jsTree menu
+                        var args = Array.from(arguments);
+                        var enabled = false;
+                        try {
+                            enabled = fn.apply(this, args);
+                        } catch (e) {
+                            // Give user a clue as to what went wrong
+                            console.log("Open with " + label + ": " + e);
+                        }
+                        return enabled;
+                    }
+                }
+            });
+        };
+        // Helper can be used by 'open with' plugins to provide
+        // a url for the selected objects
+        ODE.setOpenWithUrlProvider = function(id, fn) {
+            // look for label in OPEN_WITH
+            ODE.OPEN_WITH.forEach(function(ow){
+                if (ow.id === id) {
+                    ow.getUrl = fn;
+                }
+            });
+        };
+      </script>
+
+      <title>Bhojpur ODE - Web Viewer</title>
+  </head>
+
+  <body class="container-fluid">
+      <script type="text/javascript"
+              src="{% static 'ode_viewer/vendors.js'|add:viewer_url_suffix %}">
+      </script>
+      <script type="text/javascript"
+              src="{% static 'ode_viewer/main.js'|add:viewer_url_suffix %}">
+      </script>
+      <script type="text/javascript"
+              src="{% static 'ode_viewer/deps.js'|add:viewer_url_suffix %}">
+      </script>
+  </body>
+
+</html>
