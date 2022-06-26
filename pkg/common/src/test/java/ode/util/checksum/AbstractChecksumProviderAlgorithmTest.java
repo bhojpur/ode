@@ -35,7 +35,7 @@ import org.testng.annotations.Test;
  * {@link AbstractChecksumProvider}. This class and {@link ChecksumTestVector}
  * should be updated with relevant test vectors and tests whenever a new
  * checksum algorithm implementation is added. This class should be ignored by
- * TestNG. The design has been inspired by m.t.b.carroll at dundee.ac.uk.
+ * TestNG.
  */
 public abstract class AbstractChecksumProviderAlgorithmTest {
 

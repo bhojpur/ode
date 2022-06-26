@@ -35,7 +35,7 @@ dependencies {
     api("net.bhojpur.ode:api:1.0.0")
 
     implementation("commons-beanutils:commons-beanutils:1.9.3")
-    implementation("com.zeroc:icegrid:3.6.5")
+    implementation("com.zeroc:icegrid:3.7.7")
     testImplementation("org.testng:testng:6.14.2")
 }
 

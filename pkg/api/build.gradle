@@ -20,10 +20,10 @@
 
 plugins {
     id "java-library"
-    id "net.bhojpur.ode.api" version "1.0.0"
-    id "net.bhojpur.ode.dsl" version "1.0.0"
-    id "net.bhojpur.ode.server" version "1.0.0"
-    id "net.bhojpur.ode.project" version "1.0.0"
+    id "net.bhojpur.gradle.api" version "1.0.0"
+    id "net.bhojpur.gradle.dsl" version "1.0.0"
+    id "net.bhojpur.gradle.server" version "1.0.0"
+    id "net.bhojpur.gradle.project" version "1.0.0"
     id "net.bhojpur.gradle.icebuilder.slice" version "1.0.0"
 }
 
@@ -74,8 +74,8 @@ configurations.all {
 if (slice.iceVersion.contains("3.7")) {
     slice.output = file("$generatedDir/ice37")
     dependencies {
-        implementation "com.zeroc:icegrid:3.7.2"
-        implementation "com.zeroc:icestorm:3.7.2"
+        implementation "com.zeroc:icegrid:3.7.7"
+        implementation "com.zeroc:icestorm:3.7.7"
     }
     sourceSets.main.java {
         srcDirs "src/main/ice37", slice.output

@@ -1,0 +1,2 @@
+// Use a local m2 repo to ensure a clean build
+System.setProperty("maven.repo.local", "/Volumes/Software/macos/maven/repo")

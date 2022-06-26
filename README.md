@@ -91,6 +91,16 @@ export ODEDIR==$(pwd)
 The ICE tools generate `Java` source code for the *server-side* and `Python` source code
 for the *client-side* frameworks.
 
+### Gradle Plugins
+
+Firstly, you need to build different Gradle plugins (e.g. `artifact`, `project`, `api`,
+`dsl`, `server`, `javapackeger`, `icebuilder`) that are used by source code generators.
+
+```bash
+cd pkg/plugins
+gradle --no-daemon --init-script init-ci.gradle publishToMavenLocal
+```
+
 ### Source Code Generator
 
 You need to install `Python` >= 3.8, `Django`, `appdirs`, `Pillow`, `numpy`, `tables`,
