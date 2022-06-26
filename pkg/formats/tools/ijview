@@ -1,0 +1,68 @@
+#!/usr/bin/env bash
+
+# Copyright (c) 2018 Bhojpur Consulting Private Limited, India. All rights reserved.
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+# THE SOFTWARE.
+
+# ijview: a script for displaying an image file in ImageJ
+#         using the ODE-Formats Importer plugin
+
+# Required JARs: odeformats_package.jar, ij.jar
+
+RESOLVED_PATH=$(readlink -f "$0" 2>/dev/null \
+  || perl -MCwd -le 'print Cwd::abs_path(shift)' "$0" 2>/dev/null \
+  || echo "$0")
+BF_DIR=$(dirname $RESOLVED_PATH)
+
+source "$BF_DIR/config.sh"
+
+if [ -z "$BF_DEVEL" ]
+then
+  # Developer environment variable unset; add JAR libraries to classpath.
+  if [ -e "$BF_JAR_DIR/ij.jar" ]
+  then
+    BF_CP="$BF_JAR_DIR/ij.jar"
+  else
+    # Libraries not found; issue an error
+    echo "Required JAR libraries not found. Please download:"
+    echo "  ij.jar"
+    echo "from:"
+    echo "  https://imagej.nih.gov/ij/upgrade/"
+    echo "and place in the same directory as the command line tools."
+    echo ""
+    exit 3
+  fi
+  if [ -e "$BF_JAR_DIR/ode-formats_plugins.jar" ]
+  then
+    BF_CP="$BF_CP:$BF_JAR_DIR/ode-formats_plugins.jar"
+  elif [ -e "$BF_JAR_DIR/odeformats_package.jar" ]
+  then
+    # Libraries not found; issue an error
+    echo "Required JAR libraries not found. Please download:"
+    echo "  odeformats_package.jar"
+    echo "from:"
+    echo "  https://www.bhojpur.net/ode-formats/downloads"
+    echo "and place in the same directory as the command line tools."
+    echo ""
+    exit 4
+  fi
+fi
+
+BF_PROG=loci.plugins.in.Importer \
+  BF_CP="$BF_CP" "$BF_DIR/bf.sh" "$@"

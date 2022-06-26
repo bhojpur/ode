@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 # These variables are automatically filled in by the configure script.
 name="@PACKAGE_TARNAME@"

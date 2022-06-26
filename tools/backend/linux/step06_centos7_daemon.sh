@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Copyright (c) 2018 Bhojpur Consulting Private Limited, India. All rights reserved.
 #

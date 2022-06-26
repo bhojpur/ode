@@ -22,7 +22,7 @@
 
 cmake_minimum_required(VERSION 3.2.0)
 
-project(openmicroscopy)
+project(ode)
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 

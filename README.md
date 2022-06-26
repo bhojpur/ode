@@ -27,8 +27,7 @@ Depending on specific use-cases, the Bhojpur ODE use following digital imaging f
 - [Tagged Image File Format](https://docs.fileformat.com/image/tiff/)
 - [Scalable Vector Graphics](https://www.w3.org/TR/SVG2/)
 - [Joint Photographic Experts Group](https://jpeg.org/)
-- [Bio-Formats](https://eliceirilab.org/software/bio-formats/) defined by the University of Wisconsin -
-  Madison's [Laboratory for Optical and Computation Instrumentation](https://eliceirilab.org/)
+- [Bio-Formats](https://eliceirilab.org/software/bio-formats/) defined by the University of Wisconsin - Madison's [Laboratory for Optical and Computation Instrumentation](https://eliceirilab.org/)
 - [Flexible Image Transport System](https://fits.gsfc.nasa.gov/)
 
 ## Installation

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Copyright (c) 2018 Bhojpur Consulting Private Limited, India. All rights reserved.
 #
@@ -51,7 +51,7 @@ if [ -e $file ]; then
 	rm $file
 fi
 cat <<EOF > $file
-#!/bin/bash
+#!/usr/bin/env bash
 set -e -u -x
 EOF
 

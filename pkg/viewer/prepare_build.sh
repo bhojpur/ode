@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Copyright (c) 2018 Bhojpur Consulting Private Limited, India. All rights reserved.
 #
@@ -25,7 +25,6 @@ echo "Preparing build. You are going to need npm at a minimum"
 #fetch dependencies via npm
 echo "Fetching dependencies needed for build..."
 npm install
-
 
 #wipe build directory
 echo "Erasing build/deploy directories..."
