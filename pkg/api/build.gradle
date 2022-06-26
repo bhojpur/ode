@@ -28,7 +28,7 @@ plugins {
 }
 
 group = "net.bhojpur.ode"
-version = "1.0.0-SNAPSHOT"
+version = "1.0.0"
 
 repositories {
     mavenLocal()
@@ -167,7 +167,7 @@ tasks.addRule("Pattern: pythonTask<ID>") { String taskName ->
         def dir = camel.replaceAll("([A-Z])", '/$1').toLowerCase()
         def dirAsPrefix = dir.replace("/", "_") + "_"
 
-        task(taskName, type: com.zeroc.gradle.icebuilder.slice.PythonTask, dependsOn: "copySliceFiles") {
+        task(taskName, type: net.bhojpur.gradle.icebuilder.slice.PythonTask, dependsOn: "copySliceFiles") {
             includeDirs = "${generatedSliceDir}"
             inputFiles = fileTree(dir: "${generatedSliceDir}/${dir}", include: "**.ice")
             outputDir = file("$pythonOutputDir")

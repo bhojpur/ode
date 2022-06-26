@@ -36,4 +36,4 @@ pluginManagement {
 }
 
 rootProject.name = 'ode'
-include('pkg:plugins:artifact', )
+include('pkg:plugins:artifact', 'pkg:plugins:api', 'pkg:plugins:javapackager', 'pkg:plugins:dsl', 'pkg:plugins:server', 'pkg:plugins:icebuilder', 'pkg:server', )

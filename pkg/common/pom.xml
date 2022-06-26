@@ -7,7 +7,7 @@
 
   <groupId>net.bhojpur.ode</groupId>
   <artifactId>common</artifactId>
-  <version>1.0.0-SNAPSHOT</version>
+  <version>1.0.0</version>
 
   <name>Bhojpur ODE Common Library</name>
   <description>The Bhojpur ODE common classes used by Java client/server programs.</description>

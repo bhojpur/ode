@@ -20,12 +20,12 @@
 
 plugins {
     id "java-library"
-    id "net.bhojpur.ode.project" version "1.0.0"
-    id "net.bhojpur.ode.gradle.icebuilder.slice" version "1.0.0"
+    id "net.bhojpur.gradle.project" version "1.0.0"
+    id "net.bhojpur.gradle.icebuilder.slice" version "1.0.0"
 }
 
 group = "net.bhojpur.ode"
-version = "1.0.0-SNAPSHOT"
+version = "1.0.0"
 
 repositories {
     mavenLocal()
@@ -108,7 +108,7 @@ test {
 
 if (slice.iceVersion.contains("3.7")) {
     dependencies {
-        api "com.zeroc:ice:3.7.2"
+        api "com.zeroc:ice:3.7.7"
     }
     sourceSets.main.java {
         srcDirs "src/main/ice37", "$generatedDir/ice37"

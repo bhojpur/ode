@@ -1,3 +1,5 @@
+package net.bhojpur.gradle.icebuilder.slice
+
 // Copyright (c) 2018 Bhojpur Consulting Private Limited, India. All rights reserved.
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -18,41 +20,14 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-plugins {
-    id "java-library"
-    id "net.bhojpur.gradle.project" version "1.0.0"
-}
+class Java {
+    final name
+    def args = ""
+    def files
+    def srcDir = "src/main/slice"
+    def include
 
-group = "net.bhojpur.ode"
-version = "1.0.0"
-
-repositories {
-    mavenLocal()
-    mavenCentral()
-}
-
-java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
-}
-
-dependencies {
-    testImplementation("org.testng:testng:6.14.2")
-
-    api("net.bhojpur.ode:common:1.0.0")
-
-    // Keep from being exposed to child projects
-    implementation("commons-io:commons-io:2.6")
-    implementation("commons-lang:commons-lang:2.6")
-}
-
-test {
-    testLogging {
-        events "passed", "skipped", "failed", "standardOut", "standardError"
+    Java(String n) {
+        name = n
     }
-    // enable TestNG support (default is JUnit)
-    useTestNG() {
-        suites "src/test/resources/unit.testng.xml"
-    }
-    dependsOn cleanTest
 }

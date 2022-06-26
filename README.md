@@ -94,11 +94,24 @@ for the *client-side* frameworks.
 ### Gradle Plugins
 
 Firstly, you need to build different Gradle plugins (e.g. `artifact`, `project`, `api`,
-`dsl`, `server`, `javapackeger`, `icebuilder`) that are used by source code generators.
+`dsl`, `server`, `javapackager`, `icebuilder`) that are used by source code generators.
+Simply issue the following command in a new Terminal window to `build` these plugins.
 
 ```bash
 cd pkg/plugins
+gradle --no-daemon --init-script init-ci.gradle build
+```
+
+then, you need to `publish` these Gradle plugins locally by issuing the following command
+
+```bash
 gradle --no-daemon --init-script init-ci.gradle publishToMavenLocal
+```
+
+Finally, you can `publish` these Gradle plugins centrally by issuing the following command
+
+```bash
+gradle --no-daemon --init-script init-ci.gradle publish
 ```
 
 ### Source Code Generator

@@ -20,11 +20,11 @@
 
 plugins {
     id 'java-library'
-    id "net.bhojpur.ode.project" version "1.0.0"
+    id "net.bhojpur.gradle.project" version "1.0.0"
 }
 
 group = "net.bhojpur.ode"
-version = "1.0.0-SNAPSHOT"
+version = "1.0.0"
 
 repositories {
     mavenLocal()

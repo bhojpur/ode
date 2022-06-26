@@ -31,6 +31,7 @@ plugins {
 }
 
 project.group = "net.bhojpur.gradle"
+version = "1.0.0"
 
 // Project properties can be accessed via delegation
 val odeArtifactVersion: String by project

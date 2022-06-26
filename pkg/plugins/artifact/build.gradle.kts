@@ -19,15 +19,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
- 
+
 plugins {
+    `maven-publish`
     `kotlin-dsl`
     `java-gradle-plugin`
     // net.bhojpur.gradle.`plugin-project`
 }
 
 group = "net.bhojpur.gradle"
-version = "1.0.0-SNAPSHOT"
+version = "1.0.0"
 
 kotlinDslPluginOptions {
     experimentalWarning.set(false)
