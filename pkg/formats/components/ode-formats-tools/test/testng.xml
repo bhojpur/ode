@@ -1,0 +1,11 @@
+<!--
+  ODE-Formats command line tools for reading and converting files
+  -->
+
+<suite name="ODE-Formats Tools Tests">
+  <test name="ImageConverterTest">
+    <classes>
+      <class name="loci.formats.tools.ImageConverterTest"/>
+    </classes>
+  </test>
+</suite>

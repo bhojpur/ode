@@ -24,7 +24,6 @@ plugins {
     `maven-publish`
     `kotlin-dsl`
     `java-gradle-plugin`
-    // net.bhojpur.gradle.`plugin-project`
 }
 
 group = "net.bhojpur.gradle"

@@ -41,7 +41,6 @@ version = "1.0.0"
 apply plugin: 'groovy'
 apply plugin: 'java-gradle-plugin'
 apply plugin: 'maven-publish'
-// apply plugin: 'net.bhojpur.gradle.plugin-project'
 
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8

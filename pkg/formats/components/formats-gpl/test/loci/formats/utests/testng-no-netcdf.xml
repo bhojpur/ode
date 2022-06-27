@@ -1,0 +1,13 @@
+<!--
+  Bhojpur ODE-Formats package for reading and converting biological file formats.
+  -->
+
+<suite name="Missing NetCDF Service Tests">
+    <test name="MissingNetCDFService">
+        <groups/>
+        <classes>
+            <class name="loci.formats.utests.MissingNetCDFServiceTest"/>
+        </classes>
+        <packages/>
+    </test>
+</suite>

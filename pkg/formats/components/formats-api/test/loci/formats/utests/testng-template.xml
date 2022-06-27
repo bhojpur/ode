@@ -1,0 +1,31 @@
+<!--
+  Top-level reader and writer APIs
+  -->
+
+<suite name="Formats API Tests">
+   <test name="CoreMetadataList">
+      <classes>
+        <class name="loci.formats.utests.CoreMetadataListTest"/>
+      </classes>
+    </test>
+    <test name="MetadataList">
+      <classes>
+        <class name="loci.formats.utests.MetadataListTest"/>
+      </classes>
+    </test>
+    <test name="FormatTools">
+      <classes>
+        <class name="loci.formats.utests.FormatToolsTest"/>
+      </classes>
+    </test>
+    <test name="DynamicMetadataOptions">
+      <classes>
+        <class name="loci.formats.utests.DynamicMetadataOptionsTest"/>
+      </classes>
+    </test>
+    <test name="DefaultMetadataOptions">
+      <classes>
+        <class name="loci.formats.utests.DefaultMetadataOptionsTest"/>
+      </classes>
+    </test>
+</suite>

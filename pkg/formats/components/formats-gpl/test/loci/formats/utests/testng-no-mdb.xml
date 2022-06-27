@@ -1,0 +1,13 @@
+<!--
+  Bhojpur ODE-Formats package for reading and converting biological file formats.
+  -->
+
+<suite name="Missing MDB Service Tests">
+    <test name="MissingMDBService">
+        <groups/>
+        <classes>
+            <class name="loci.formats.utests.MissingMDBServiceTest"/>
+        </classes>
+        <packages/>
+    </test>
+</suite>

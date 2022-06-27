@@ -1,7 +1,7 @@
 <!--
 build.xml
 
-Master ant build file for ODE-Formats.
+Master ant build file for Bhojpur ODE-Formats.
 Download Apache Ant from http://ant.apache.org/.
 Type "ant -p" for a list of targets.
 

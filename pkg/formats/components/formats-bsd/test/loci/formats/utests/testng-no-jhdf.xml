@@ -1,0 +1,13 @@
+<!--
+  BSD implementations of ODE-Formats readers and writers
+  -->
+
+<suite name="Missing JHDF Service Tests">
+    <test name="MissingJHDFService">
+        <groups/>
+        <classes>
+            <class name="loci.formats.utests.MissingJHDFServiceTest"/>
+        </classes>
+        <packages/>
+    </test>
+</suite>

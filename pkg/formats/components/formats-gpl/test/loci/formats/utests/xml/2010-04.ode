@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ODE:ODE xmlns="http://www.bhojpur.net/Schemas/ODE/2010-04"
+	xmlns:ROI="http://www.bhojpur.net/Schemas/ROI/2010-04"
+	xmlns:ODE="http://www.bhojpur.net/Schemas/ODE/2010-04"
+	xmlns:BIN="http://www.bhojpur.net/Schemas/BinaryFile/2010-04"
+	xmlns:SPW="http://www.bhojpur.net/Schemas/SPW/2010-04"
+	xmlns:SA="http://www.bhojpur.net/Schemas/SA/2010-04"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.bhojpur.net/Schemas/ODE/2010-04 
+	http://www.bhojpur.net/Schemas/ODE/2010-04/ode.xsd">   
+	
+	<!--
+		Work in progress!
+		Proposal 3 - 1st July 2010
+	-->
+	<SA:StructuredAnnotations>
+		<SA:StringAnnotation ID="StringAnnotation:0" Namespace="Transform">
+			<Value>Foobar</Value>
+		</SA:StringAnnotation>
+	</SA:StructuredAnnotations>
+	<SPW:Plate 
+		ID="Plate:1" 
+		Name="Control Plate" 
+		ColumnNamingConvention="letter" 
+		RowNamingConvention="number" 
+		Columns="12" 
+		Rows="8"
+		>
+		<SPW:Description></SPW:Description>
+		
+		<!-- repeat SPW:Well for # of wells in the plate that contain images -->
+		<SPW:Well ID="Well:1" Column="0" Row="0">
+			<!-- repeat SPW:WellSample for # of images taken in the well -->
+			<SPW:WellSample ID="WellSample:1" Index="0">
+				<!-- 
+					if there is an image associated with this SPW:WellSample
+					it is linked using an SPW:ImageRef
+				-->
+				<SPW:ImageRef ID="Image:0"/>
+			</SPW:WellSample>
+		</SPW:Well>
+	</SPW:Plate>
+	<!-- plus one more Plate for each Plate in this set -->
+	
+	<!-- SPW:Screen is not required -->
+	
+	<!-- The ODE:Image element follows the structure for the ODE Compliant File Specification -->
+	<ODE:Image ID="Image:0" Name="Series 1">
+		<ODE:AcquiredDate>2008-02-06T13:43:19</ODE:AcquiredDate>
+		<ODE:Description>An example ODE compliant file, based on Olympus.oib</ODE:Description>
+		<ODE:Pixels DimensionOrder="XYCZT" ID="Pixels:0" PhysicalSizeX="0.207" PhysicalSizeY="0.207"
+			PhysicalSizeZ="0.0" SizeC="3" SizeT="16" SizeX="1024" SizeY="1024" SizeZ="1"
+			TimeIncrement="120.1302" Type="uint16">
+			<ODE:Channel EmissionWavelength="523" ExcitationWavelength="488" ID="Channel:0:0"
+				IlluminationType="Epifluorescence" Name="CH1" SamplesPerPixel="1"
+				PinholeSize="103.5" AcquisitionMode="LaserScanningConfocalMicroscopy"/>
+			<ODE:Channel EmissionWavelength="578" ExcitationWavelength="561" ID="Channel:0:1"
+				IlluminationType="Epifluorescence" Name="CH3" SamplesPerPixel="1"
+				PinholeSize="127.24" AcquisitionMode="LaserScanningConfocalMicroscopy"/>
+			<ODE:Channel ExcitationWavelength="488" ID="Channel:0:2" IlluminationType="Transmitted"
+				ContrastMethod="DIC" Name="TD1" SamplesPerPixel="1"  
+				AcquisitionMode="LaserScanningConfocalMicroscopy"/>
+			<BIN:BinData BigEndian="false" Length="0"/>
+		</ODE:Pixels>
+	</ODE:Image>
+</ODE:ODE>

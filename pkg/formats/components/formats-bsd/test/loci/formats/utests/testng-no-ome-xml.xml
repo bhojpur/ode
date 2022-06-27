@@ -1,0 +1,12 @@
+<!--
+  BSD implementations of Bhopur ODE-Formats readers and writers
+  -->
+<suite name="Missing ODE-XML Service Tests">
+    <test name="MissingODEXMLService">
+        <groups/>
+        <classes>
+            <class name="loci.formats.utests.MissingODEXMLServiceTest"/>
+        </classes>
+        <packages/>
+    </test>
+</suite>

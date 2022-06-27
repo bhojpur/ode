@@ -36,4 +36,9 @@ pluginManagement {
 }
 
 rootProject.name = 'ode'
-include('pkg:plugins:artifact', 'pkg:plugins:api', 'pkg:plugins:javapackager', 'pkg:plugins:dsl', 'pkg:plugins:server', 'pkg:plugins:icebuilder', 'pkg:server', )
+
+// Bhojpur ODE - Uncomment to compile Gradle Plugins
+// include('pkg:plugins:artifact', 'pkg:plugins:api', 'pkg:plugins:javapackager', 'pkg:plugins:dsl', 'pkg:plugins:server', 'pkg:plugins:icebuilder',)
+
+// Bhojpur ODE - Uncomment to compile Client/Server
+include('pkg:model', /* 'pkg:common', 'pkg:romio', 'pkg:renderer', 'pkg:server', 'pkg:api', */)

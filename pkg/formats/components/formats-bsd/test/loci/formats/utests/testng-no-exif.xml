@@ -1,0 +1,12 @@
+<!--
+  BSD implementations of ODE-Formats readers and writers
+  -->
+<suite name="Missing EXIF Tests">
+    <test name="MissingEXIF">
+        <groups/>
+        <classes>
+            <class name="loci.formats.utests.MissingEXIFTest"/>
+        </classes>
+        <packages/>
+    </test>
+</suite>

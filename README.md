@@ -99,19 +99,19 @@ Simply issue the following command in a new Terminal window to `build` these plu
 
 ```bash
 cd pkg/plugins
-gradle --no-daemon --init-script init-ci.gradle build
+gradle --no-daemon --init-script ../init-ci.gradle build
 ```
 
 then, you need to `publish` these Gradle plugins locally by issuing the following command
 
 ```bash
-gradle --no-daemon --init-script init-ci.gradle publishToMavenLocal
+gradle --no-daemon --init-script ../init-ci.gradle publishToMavenLocal
 ```
 
 Finally, you can `publish` these Gradle plugins centrally by issuing the following command
 
 ```bash
-gradle --no-daemon --init-script init-ci.gradle publish
+gradle --no-daemon --init-script ../init-ci.gradle publish
 ```
 
 ### Source Code Generator
@@ -134,7 +134,7 @@ to securely store, retrieve, and process digital images efficiently.
 
 ```bash
 cd pkg/server
-gradle build
+gradle --no-daemon --init-script ../init-ci.gradle build
 ```
 
 ### Client-side Framework
@@ -159,6 +159,8 @@ node_modules/webpack/bin/webpack.js --progress
 
 ### Web Application
 
+#### Engine Application
+
 Now, change directory to `pkg/components/tools/OdeWeb` and issue the following commands.
 
 ```bash
@@ -166,7 +168,7 @@ cd pkg/components/tools/OdeWeb
 python3 ./engine/manage.py runserver 0:8000
 ```
 
-#### Web Viewer Application
+#### Viewer Application
 
 Also, a web viewer of Bhojpur ODE is available in the `pkg/viewer` folder.
 

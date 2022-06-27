@@ -1,0 +1,23 @@
+<!--
+  ODE-Formats Plugins for ImageJ: a collection of ImageJ plugins including the
+  ODE-Formats Importer, ODE-Formats Exporter, ODE-Formats Macro Extensions,
+  Data Browser and Stack Slicer.
+  -->
+
+<suite name="ODE-Formats Plugin Tests">
+  <test name="AutoscaleTest">
+    <classes>
+      <class name="loci.plugins.in.AutoscaleTest"/>        
+    </classes>
+  </test>
+  <test name="ImporterTest">
+    <classes>
+      <class name="loci.plugins.in.ImporterTest"/>
+   </classes>
+ </test>
+ <test name="MacroTest">
+    <classes>
+      <class name="loci.plugins.in.MacroTest"/>
+    </classes>
+  </test>
+</suite>

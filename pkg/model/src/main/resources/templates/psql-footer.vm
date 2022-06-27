@@ -703,9 +703,9 @@ insert into session
 insert into event (id,permissions,time,status,experimenter,session) values (0,0,clock_timestamp(),'BOOTSTRAP',0,0);
 
 --
--- Default group permissions (ticket:1783)
+-- Default group permissions
 -- * "system" is private, so that administrators do not share by accident
--- * "user" is public by default since its purpose is to share objects (ticket:1794)
+-- * "user" is public by default since its purpose is to share objects
 -- * "guest" is private by default so that it doesn't show up on any lists,
 --    though nothing should be created there.
 --
@@ -789,7 +789,7 @@ create table configuration ( name varchar(255) primary key, value text );
 insert into configuration values ('ode.db.uuid',uuid());
 
 --
--- ticket:2201 - creating repository data structures
+-- creating repository data structures
 --
 alter  table pixels add column path text;
 alter  table pixels add column name text;
@@ -811,15 +811,15 @@ CREATE UNIQUE INDEX originalfile_repo_path_index ON originalfile
     WHERE repo IS NOT NULL;
 
 --
--- end ticket:2201
+-- end
 --
 
 
--- ticket:11591 Shrink the userIP column down to maximum (IPv4-mapped IPv6)
+-- Shrink the userIP column down to maximum (IPv4-mapped IPv6)
 alter table session alter column userIP TYPE varchar(45);
 
 
--- Indices. See #1640, #2573, etc.
+-- Indices.
 create unique index namespace_name on namespace (name);
 create unique index well_col_row on well (plate, "column", "row");
 create index eventlog_entitytype on eventlog(entitytype);

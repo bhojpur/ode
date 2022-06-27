@@ -1,7 +1,7 @@
 <!--
 toplevel.xml
 
-Toplevel targets for ODE-Formats builds.
+Toplevel targets for Bhojpur ODE-Formats builds.
 Download Apache Ant from http://ant.apache.org/.
 Type "ant -p" for a list of targets.
 -->
@@ -399,13 +399,13 @@ Type "ant -p" for a list of targets.
   <!-- Source release -->
   <target name="release" description="zip the git release as odeformats-[dfsg-]${release.version}.zip">
     <mkdir dir="${artifact.dir}"/>
-    <exec executable="python" failonerror="true">
+    <exec executable="python3" failonerror="true">
       <arg value="${root.dir}/tools/source-archive.py"/>
       <arg value="--release=odeformats"/>
       <arg value="--odeformats-version=${release.version}"/>
       <arg value="--target=${artifact.dir}"/>
     </exec>
-    <exec executable="python" failonerror="true">
+    <exec executable="python3" failonerror="true">
       <arg value="${root.dir}/tools/source-archive.py"/>
       <arg value="--release=odeformats-dfsg"/>
       <arg value="--odeformats-version=${release.version}"/>

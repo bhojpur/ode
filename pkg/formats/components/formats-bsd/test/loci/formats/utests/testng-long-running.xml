@@ -1,0 +1,12 @@
+<!--
+  BSD implementations of ODE-Formats readers and writers
+  -->
+<suite name="Long Running Tests">
+    <test name="SixteenBitLosslessJPEG2000LongRunningTest">
+        <groups/>
+        <classes>
+            <class name="loci.formats.utests.SixteenBitLosslessJPEG2000LongRunningTest"/>
+        </classes>
+        <packages/>
+    </test>
+</suite>

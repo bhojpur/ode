@@ -1,0 +1,47 @@
+<!--
+  Bhojpur ODE-Formats package for reading and converting biological file formats.
+  -->
+
+<suite name="OdeFormats Unit Tests">
+    <test name="ServiceTests">
+        <groups/>
+        <classes>
+            <class name="loci.formats.utests.MDBServiceTest"/>
+            <class name="loci.formats.utests.NetCDFServiceTest"/>
+            <class name="loci.formats.utests.POIServiceTest"/>
+        </classes>
+        <packages>
+            <package name="loci.formats.utests.xml"/>
+        </packages>
+    </test>
+    <test name="CurrentSchemaModelObjects">
+        <groups>
+            <run>
+                <exclude name="disabled"/>
+            </run>
+        </groups>
+        <parameter name="mockClassName"
+                   value="loci.formats.utests.ObjectBasedODEModelMock"/>
+        <classes>
+            <class name="loci.formats.utests.InOutCurrentTest"/>
+        </classes>
+    </test>
+    <test name="CurrentSchemaIMetadata">
+        <groups>
+            <run>
+                <exclude name="disabled"/>
+            </run>
+        </groups>
+        <parameter name="mockClassName"
+                   value="loci.formats.utests.IMetadataBasedODEModelMock"/>
+        <classes>
+            <class name="loci.formats.utests.InOutCurrentTest"/>
+        </classes>
+    </test>
+    <test name="XMLAnnotation">
+      <groups/>
+      <classes>
+        <class name="loci.formats.utests.XMLAnnotationTest"/>
+      </classes>
+    </test>
+</suite>

@@ -1,0 +1,32 @@
+## The odeformats package must be present in the *static* classpath to
+## work properly in Octave.  We must error loading the package if not.
+
+## First check if Octave was even built with Java support
+if (! usejava ("jvm"))
+  error ("odeformats: support for java was disabled when Octave was built");
+endif
+
+## Now check if odeformats java library is working properly
+
+if (! bfCheckJavaPath (false))
+  error (["odeformats: the odeformats java library is missing " ...
+          "(check javaclasspath)"]);
+endif
+
+## The whole reason why we need odeformats.jar to be on the static classpath
+## is because Octave can't handle this properly.  So we use it for testing.
+if (! isa (javaObject ("loci.formats.in.FakeReader"),
+           "loci.formats.IFormatReader"))
+
+  ## If we find it, tell the user, otherwise a more general error message.
+  if (any (cellfun (@numel, regexp (javaclasspath ("-dynamic"),
+                                    [filesep "odeformats_package.jar$"]))))
+    error (["found odeformats_package.jar on java dynamic classpath but " ...
+            "must be on java static classpath"]);
+  else
+    error (["odeformats java library not working.  Note that it must be " ...
+            "present on 'javaclasspath -static'"]);
+  endif
+
+endif
+

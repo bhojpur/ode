@@ -1,0 +1,12 @@
+Name: odeformats
+Version: ${release.version}
+Date: ${DATE}
+Author: Bhojpur Consulting Private Limited, India
+Maintainer: Bhojpur Consulting Private Limited, India
+Title: odeformats
+Categories: Image I/O
+Description: Wrapper to the OdeFormats java library.
+Depends: octave (>= 4.0.0)
+License: BSD-2-Clause
+SystemRequirements: odeformats_package.jar on java static classpath
+Url: https://www.bhojpur-consulting.com/
