@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:math="http://exslt.org/math"
+	exclude-result-prefixes="xs"
+	version="1.0"
+	xmlns:py="http://genshi.edgewall.org/">
+
+	<!-- getDefault function (AttributeName, NodeName, ParentNodeName?) -->
+	<!-- 	returns the default as string -->
+	<xsl:template name="GetDefaultUnit">
+		<xsl:param name="theAttributeName"/>
+		<xsl:param name="theElementName"/>
+		<xsl:choose>
+			<!-- codegen begin - defaults -->
+<py:for each="field in fields">
+			<xsl:when test="$$theAttributeName = '$field.NAME' and $$theElementName = '$field.CLASS'">$field.DEFAULT</xsl:when>
+</py:for>
+			<!-- codegen end - defaults -->
+			<xsl:otherwise>
+				<xsl:message terminate="yes">ODE-XSLT: units-conversion.xsl - ERROR - GetDefaultUnit, the default for [<xsl:value-of select="$$theAttributeName"/>] in element [<xsl:value-of select="$$theElementName"/>] is not supported.</xsl:message>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+
+	<!-- 	returns the value in the default units -->
+	<!-- 	error and terminate if conversion not possible e.g. pixel->nm -->
+	<xsl:template name="ConvertValueToDefault">
+		<xsl:param name="theValue"/>
+		<xsl:param name="theCurrentUnit"/>
+		<xsl:param name="theAttributeName"/>
+		<xsl:param name="theElementName"/>
+		<xsl:message>ODE-XSLT: units-conversion.xsl - Message - ConvertValueToDefault, (<xsl:value-of select="$$theValue"/>, <xsl:value-of select="$$theCurrentUnit"/>, <xsl:value-of select="$$theAttributeName"/>, <xsl:value-of select="$$theElementName"/>).</xsl:message>
+		<xsl:choose>
+			<xsl:when test="$$theCurrentUnit = ''">
+				<!-- Already using default units so no conversion necessary -->
+				<xsl:value-of select="$$theValue"/>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:call-template name="ConvertValueToUnit">
+					<xsl:with-param name="theValue"><xsl:value-of select="$$theValue"/></xsl:with-param>
+					<xsl:with-param name="theCurrentUnit"><xsl:value-of select="$$theCurrentUnit"/></xsl:with-param>
+					<xsl:with-param name="theNewUnit">
+						<xsl:call-template name="GetDefaultUnit">
+							<xsl:with-param name="theAttributeName"><xsl:value-of select="$$theAttributeName"/></xsl:with-param>
+							<xsl:with-param name="theElementName"><xsl:value-of select="$$theElementName"/></xsl:with-param>
+						</xsl:call-template>
+					</xsl:with-param>
+				</xsl:call-template>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+
+	<xsl:template name="ConvertValueToUnit">
+		<xsl:param name="theValue"/>
+		<xsl:param name="theCurrentUnit"/>
+		<xsl:param name="theNewUnit"/>
+		<xsl:choose>
+			<xsl:when test="$$theNewUnit = ''">
+				<xsl:message terminate="yes">ODE-XSLT: units-conversion.xsl - ERROR - ConvertValueToUnit, cannot perform conversion of [<xsl:value-of select="$$theCurrentUnit"/>] to an unknown unit.</xsl:message>
+			</xsl:when>
+			<xsl:when test="$$theNewUnit = $$theCurrentUnit"><xsl:value-of select="$$theValue"/></xsl:when>
+			<!-- codegen begin - convert -->
+<?python
+def conversion(cfrom, cto, equation):
+    if cfrom == cto:
+        return "$theValue"
+
+    def Add(*c):
+        sb = "+".join([str(x) for x in c])
+        return "(%s)" % sb
+
+    def Int(i):
+        return str(i)
+
+    def Mul(*c):
+        sb = "*".join([str(x) for x in c])
+        return "(%s)" % sb
+
+    def Pow(base, exp):
+        return "math:power(%s, %s)" % (base, exp)
+
+    def Rat(n, d):
+        return "(%s div %s)" % (n, d)
+
+    def Sym(x):
+        return "$theValue"
+
+    from math import pi
+    return str(eval(equation))
+?>
+<py:for each="name, unit in sorted(items.items())">
+<py:for each="cfrom in unit">
+<!--! Same block as in templates/core.java -->
+			<xsl:when test="$$theCurrentUnit = '$cfrom.SYMBOL'">
+				<xsl:choose>
+					<xsl:when test="$$theNewUnit = 'UNKNOWN%SYMBOL'"><xsl:value-of select="ERROR"/></xsl:when>
+<py:for each="cto in unit">
+<py:if test="cfrom != cto">
+<py:with vars="equation = equations.get(name.upper(), {}).get(cfrom.CODE, {}).get(cto.CODE, {})">
+<py:if test="equation">
+					<xsl:when test="$$theNewUnit = '$cto.SYMBOL'"><xsl:value-of select="${conversion(cfrom, cto, equation)}"/></xsl:when>
+</py:if>
+</py:with>
+</py:if>
+</py:for>
+					<xsl:otherwise>
+						<xsl:message terminate="yes">ODE-XSLT: units-conversion.xsl - ERROR - ConvertValueToUnit, cannot perform conversion, [<xsl:value-of select="$$theCurrentUnit"/>] to [<xsl:value-of select="$$theNewUnit"/>] is not supported.</xsl:message>
+					</xsl:otherwise>
+				</xsl:choose>
+			</xsl:when>
+			<xsl:when test="$$theNewUnit = '°C'">
+				<xsl:choose>
+					<xsl:when test="$$theCurrentUnit = '°F'"><xsl:value-of select="(($$theValue - 32) * 5) div 9"/></xsl:when>
+					<xsl:otherwise>
+						<xsl:message terminate="yes">ODE-XSLT: units-conversion.xsl - ERROR - ConvertValueToUnit, cannot perform conversion, [<xsl:value-of select="$$theCurrentUnit"/>] to [<xsl:value-of select="$$theNewUnit"/>] is not supported.</xsl:message>
+					</xsl:otherwise>
+				</xsl:choose>
+			</xsl:when>
+</py:for>
+</py:for>
+			<!-- codegen end - convert -->
+			<xsl:otherwise>
+				<xsl:message terminate="yes">ODE-XSLT: units-conversion.xsl - ERROR - ConvertValueToUnit, cannot perform conversion from any unit to [<xsl:value-of select="$$theNewUnit"/>].</xsl:message>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+
+</xsl:stylesheet>

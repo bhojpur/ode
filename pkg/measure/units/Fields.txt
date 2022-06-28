@@ -1,0 +1,35 @@
+Channel	EmissionWavelength	Length	nm
+Channel	ExcitationWavelength	Length	nm
+Channel	PinholeSize	Length	µm
+Detector	Voltage	ElectricPotential	V
+DetectorSettings	ReadOutRate	Frequency	MHz
+DetectorSettings	Voltage	ElectricPotential	V
+ImagingEnvironment	AirPressure	Pressure	mbar
+ImagingEnvironment	Temperature	Temperature	°C
+Laser	RepetitionRate	Frequency	Hz
+Laser	Wavelength	Length	nm
+LightSource	Power	Power	mW
+LightSourceSettings	Wavelength	Length	nm
+Objective	WorkingDistance	Length	µm
+Pixels	PhysicalSizeX	Length	µm
+Pixels	PhysicalSizeY	Length	µm
+Pixels	PhysicalSizeZ	Length	µm
+Pixels	TimeIncrement	Time	s
+Plane	DeltaT	Time	s
+Plane	ExposureTime	Time	s
+Plane	PositionX	Length	reference frame
+Plane	PositionY	Length	reference frame
+Plane	PositionZ	Length	reference frame
+Plate	WellOriginX	Length	reference frame
+Plate	WellOriginY	Length	reference frame
+Shape	FontSize	Length	pt
+Shape	StrokeWidth	Length	pixel
+StageLabel	X	Length	reference frame
+StageLabel	Y	Length	reference frame
+StageLabel	Z	Length	reference frame
+TransmittanceRange	CutIn	Length	nm
+TransmittanceRange	CutInTolerance	Length	nm
+TransmittanceRange	CutOut	Length	nm
+TransmittanceRange	CutOutTolerance	Length	nm
+WellSample	PositionX	Length	reference frame
+WellSample	PositionY	Length	reference frame

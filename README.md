@@ -153,11 +153,11 @@ gradle --no-daemon --init-script pkg/init-ci.gradle build
 #### Python-based Backend
 
 You need to install `Python` >= 3.8, `Django`, `appdirs`, `Pillow`, `numpy`, `tables`,
-`mox3`, and other software libraries. The Bhojpur CLI is dependent on Python-based server
-framework that access the Java-based backed using ZeroC middleware.
+`mox3`, `genshi`, and other software libraries. The Bhojpur CLI is dependent on
+Python-based server framework that access the Java-based backed using ZeroC middleware.
 
 ```bash
-sudo pip3 install appdirs django Pillow numpy tables mox3
+sudo pip3 install appdirs django Pillow numpy tables mox3 genshi
 sudo pip3 install -U -r requirements.txt
 cd pkg && ant build
 ```

@@ -1,0 +1,12 @@
+{% python
+def create(items):
+    codes = [x.SYMBOL for x in items]
+    codes = ["'%s'" % x for x in codes]
+    return ",".join(codes)
+%}CREATE TYPE Units${name} AS ENUM (${create(items)});
+
+{% for field in fields %}\
+{% if field.TYPE == name %}\
+ALTER TABLE ${field.CLASS} ADD CONSTRAINT ${field.NAME}_nulls check ((${field.NAME} is null and ${field.NAME}unit is null) or (${field.NAME} is not null and ${field.NAME}unit is not null));
+{% end %}\
+{% end %}\

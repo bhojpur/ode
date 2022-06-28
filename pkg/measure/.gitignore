@@ -1,0 +1,10 @@
+.*un~
+server/
+formats/
+model/
+model2/
+sql/
+xsd/
+.ropeproject
+*.pyc
+.DS_Store
