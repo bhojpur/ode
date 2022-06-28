@@ -35,7 +35,7 @@ public final class About implements PlugIn {
 
   // -- Constants --
 
-  /** URL of the ODE-Formats web page. */
+  /** URL of the Bhojpur ODE-Formats web page. */
   public static final String URL_SOFTWARE =
     "https://www.bhojpur.net/ode-formats";
 

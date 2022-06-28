@@ -32,7 +32,7 @@ import loci.formats.ImageReader;
 
 /**
  * Utility class for printing a list of scientific domains supported by
- * ODE-Formats, and all of the supported formats in each domain.
+ * Bhojpur ODE-Formats, and all of the supported formats in each domain.
  */
 public class PrintDomains {
 

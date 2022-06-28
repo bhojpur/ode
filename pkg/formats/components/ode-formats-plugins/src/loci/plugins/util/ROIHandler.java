@@ -62,7 +62,7 @@ import ode.xml.model.primitives.NonNegativeInteger;
 /**
  * Utility class for managing regions of interest within ImageJ.
  * Capable of constructing ROIs within ImageJ's ROI manager matching
- * those specified in an ODE metadata store, and vice versa.
+ * those specified in a Bhojpur ODE metadata store, and vice versa.
  */
 public class ROIHandler {
 

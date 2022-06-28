@@ -25,7 +25,7 @@ import loci.plugins.util.ImageProcessorReader;
 import loci.plugins.util.WindowTools;
 
 /**
- * ODE-Formats Importer range chooser dialog box.
+ * Bhojpur ODE-Formats Importer range chooser dialog box.
  */
 public class RangeDialog extends ImporterDialog {
 

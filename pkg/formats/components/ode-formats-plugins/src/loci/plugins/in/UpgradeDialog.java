@@ -28,7 +28,7 @@ import loci.plugins.BF;
 import loci.plugins.Updater;
 
 /**
- * ODE-Formats Importer upgrade checker dialog box.
+ * Bhojpur ODE-Formats Importer upgrade checker dialog box.
  */
 public class UpgradeDialog extends ImporterDialog {
 

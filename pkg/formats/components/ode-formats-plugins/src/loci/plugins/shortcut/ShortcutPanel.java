@@ -44,11 +44,11 @@ import loci.plugins.util.WindowTools;
 
 /**
  * A plugin that displays a small window containing shortcuts to the
- * plugins, including the ODE-Formats Importer, ODE-Formats Exporter,
- * Stack Colorizer and Stack Slicer.
+ * plugins, including the Bhojpur ODE-Formats Importer, Bhojpur ODE-Formats
+ * Exporter, Stack Colorizer and Stack Slicer.
  *
  * Files dragged and dropped onto the window will be opened using the
- * ODE-Formats Importer plugin.
+ * Bhojpur ODE-Formats Importer plugin.
  */
 public class ShortcutPanel extends JPanel implements ActionListener, PlugIn {
 
@@ -206,7 +206,7 @@ public class ShortcutPanel extends JPanel implements ActionListener, PlugIn {
   /** Executes the plugin. */
   @Override
   public void run(String arg) {
-    JFrame frame = new JFrame("ODE-Formats Plugins Shortcut Window");
+    JFrame frame = new JFrame("Bhojpur ODE-Formats Plugins Shortcut Window");
     frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
     frame.setContentPane(new ShortcutPanel());
     frame.pack();

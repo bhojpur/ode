@@ -31,7 +31,7 @@ import loci.plugins.util.ImageProcessorReader;
 import loci.plugins.util.WindowTools;
 
 /**
- * ODE-Formats Importer dimension swapper dialog box.
+ * Bhojpur ODE-Formats Importer dimension swapper dialog box.
  */
 public class SwapDialog extends ImporterDialog implements ItemListener {
 

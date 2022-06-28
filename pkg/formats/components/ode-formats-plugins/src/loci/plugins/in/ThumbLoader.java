@@ -40,7 +40,7 @@ import loci.formats.gui.BufferedImageReader;
 import loci.plugins.BF;
 
 /**
- * Loads thumbnails for ODE-Formats Importer
+ * Loads thumbnails for Bhojpur ODE-Formats Importer
  * series chooser in a separate thread.
  */
 public class ThumbLoader implements Runnable {

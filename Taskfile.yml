@@ -9,6 +9,16 @@ tasks:
         - echo "{{.GREETING}}"
         silent: true
 
+    build-java:
+        desc: Build the Bhojpur ODE java software tools
+        cmds:
+        - gradle --no-daemon --init-script pkg/init-ci.gradle build
+
+    build-python:
+        desc: Build the Bhojpur ODE python software tools
+        cmds:
+        - cd pkg && ant build
+
     build-web:
         desc: Build the web application
         cmds:

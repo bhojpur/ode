@@ -37,7 +37,7 @@ import loci.plugins.util.ImageProcessorReader;
 import loci.plugins.util.WindowTools;
 
 /**
- * ODE-Formats Importer custom color chooser dialog box.
+ * Bhojpur ODE-Formats Importer custom color chooser dialog box.
  *
  * Heavily adapted from {@link ij.gui.ColorChooser}.
  * ColorChooser is not used because there is no way to change the slider

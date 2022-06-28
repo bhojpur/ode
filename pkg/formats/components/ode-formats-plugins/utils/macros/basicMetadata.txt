@@ -1,6 +1,6 @@
 // basicMetadata.txt
 
-// Uses ODE-Formats to print the chosen file's basic metadata to the Log.
+// Uses Bhojpur ODE-Formats to print the chosen file's basic metadata to the Log.
 
 run("ODE-Formats Macro Extensions");
 id = File.openDialog("Choose a file");

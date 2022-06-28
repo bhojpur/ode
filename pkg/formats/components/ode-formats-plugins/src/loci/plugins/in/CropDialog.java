@@ -27,7 +27,7 @@ import loci.formats.IFormatReader;
 import loci.plugins.util.WindowTools;
 
 /**
- * ODE-Formats Importer crop options dialog box.
+ * Bhojpur ODE-Formats Importer crop options dialog box.
  */
 public class CropDialog extends ImporterDialog {
 

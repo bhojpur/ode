@@ -24,7 +24,7 @@ import ij.plugin.PlugIn;
 import loci.plugins.util.WindowTools;
 
 /**
- * An ImageJ plugin for displaying the ODE-Formats plugins configuration dialog.
+ * An ImageJ plugin for displaying the Bhojpur ODE-Formats plugins configuration dialog.
  */
 public class LociConfig implements PlugIn {
 

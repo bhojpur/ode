@@ -309,7 +309,7 @@ public final class ImageConverter {
   private void printUsage() {
     String[] s = {
       "To convert a file between formats, run:",
-      "  bfconvert [-debug] [-stitch] [-separate] [-merge] [-expand]",
+      "  odeimgconv [-debug] [-stitch] [-separate] [-merge] [-expand]",
       "    [-bigtiff] [-nobigtiff] [-compression codec] [-series series] [-noflat]",
       "    [-cache] [-cache-dir dir] [-no-sas]",
       "    [-map id] [-range start end] [-crop x,y,w,h]",

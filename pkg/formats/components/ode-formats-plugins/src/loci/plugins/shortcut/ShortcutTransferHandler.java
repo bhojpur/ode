@@ -36,7 +36,7 @@ import javax.swing.TransferHandler;
 import loci.common.Constants;
 
 /**
- * Drag and drop transfer handler for ODE-Formats Plugins Shortcut Window.
+ * Drag and drop transfer handler for Bhojpur ODE-Formats Plugins Shortcut Window.
  */
 public class ShortcutTransferHandler extends TransferHandler {
 

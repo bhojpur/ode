@@ -283,7 +283,7 @@ public class ImageInfo {
     String fmt = reader instanceof ImageReader ? "any" : reader.getFormat();
     String[] s = {
       "To test read a file in " + fmt + " format, run:",
-      "  showinf file [-nopix] [-nocore] [-nometa] [-thumbs] [-minmax] ",
+      "  odeimginfo file [-nopix] [-nocore] [-nometa] [-thumbs] [-minmax] ",
       "    [-merge] [-nogroup] [-stitch] [-separate] [-expand] [-odexml]",
       "    [-normalize] [-fast] [-debug] [-range start end] [-series num]",
       "    [-resolution num] [-swap inputOrder] [-shuffle outputOrder]",
@@ -304,7 +304,7 @@ public class ImageInfo {
       "     -stitch: stitch files with similar names",
       "   -separate: split RGB image into separate channels",
       "     -expand: expand indexed color to RGB",
-      "     -odexml: populate ODE-XML metadata",
+      "     -odexml: populate Bhojpur ODE-XML metadata",
       "  -normalize: normalize floating point images (*)",
       "       -fast: paint RGB images as quickly as possible (*)",
       "      -debug: turn on debugging output",
@@ -321,9 +321,9 @@ public class ImageInfo {
       "              requires more memory",
       "       -crop: crop images before displaying; argument is 'x,y,w,h'",
       "  -autoscale: automatically adjust brightness and contrast (*)",
-      "    -novalid: do not perform validation of ODE-XML",
-      "-odexml-only: only output the generated ODE-XML",
-      "     -no-sas: do not output ODE-XML StructuredAnnotation elements",
+      "    -novalid: do not perform validation of Bhojpur ODE-XML",
+      "-odexml-only: only output the generated Bhojpur ODE-XML",
+      "     -no-sas: do not output Bhojpur ODE-XML StructuredAnnotation elements",
       " -no-upgrade: do not perform the upgrade check",
       "     -format: read file with a particular reader (e.g., ZeissZVI)",
       "      -cache: cache the initialized reader",
@@ -955,9 +955,9 @@ public class ImageInfo {
       throw new MissingLibraryException(ODEXMLServiceImpl.NO_ODE_XML_MSG, de);
     }
     String version = service.getODEXMLVersion(ms);
-    if (version == null) LOGGER.info("Generating ODE-XML");
+    if (version == null) LOGGER.info("Generating Bhojpur ODE-XML");
     else {
-      LOGGER.info("Generating ODE-XML (schema version {})", version);
+      LOGGER.info("Generating Bhojpur ODE-XML (schema version {})", version);
     }
     if (ms instanceof MetadataRetrieve) {
       if (odexmlOnly) {
@@ -970,9 +970,9 @@ public class ImageInfo {
       }
     }
     else {
-      LOGGER.info("The metadata could not be converted to ODE-XML.");
+      LOGGER.info("The metadata could not be converted to Bhojpur ODE-XML.");
       if (odexmlVersion == null) {
-        LOGGER.info("The ODE-XML Java library is probably not available.");
+        LOGGER.info("The Bhojpur ODE-XML Java library is probably not available.");
       }
       else {
         LOGGER.info("{} is probably not a legal schema version.",

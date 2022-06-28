@@ -23,7 +23,7 @@ package loci.plugins.in;
 import ij.gui.GenericDialog;
 
 /**
- * ODE-Formats Importer memory usage confirmation dialog box.
+ * Bhojpur ODE-Formats Importer memory usage confirmation dialog box.
  */
 public class MemoryDialog extends ImporterDialog {
 

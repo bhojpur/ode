@@ -51,7 +51,7 @@ import ode.units.quantity.Time;
 import ode.units.UNITS;
 
 /**
- * This class provides macro extensions in ImageJ for ODE-Formats.
+ * This class provides macro extensions in ImageJ for Bhojpur ODE-Formats.
  * Currently, it is a fairly tight mirror to the
  * {@link loci.formats.IFormatReader} interface, with some additional
  * functions to control the type of format reader used.

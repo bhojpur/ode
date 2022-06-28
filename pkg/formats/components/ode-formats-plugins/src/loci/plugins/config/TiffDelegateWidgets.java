@@ -31,7 +31,7 @@ import javax.swing.JCheckBox;
 import loci.plugins.util.LociPrefs;
 
 /**
- * Custom widgets for configuring ODE-Formats TIFF support.
+ * Custom widgets for configuring Bhojpur ODE-Formats TIFF support.
  */
 public class TiffDelegateWidgets implements IFormatWidgets, ItemListener {
 

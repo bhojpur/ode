@@ -25,7 +25,7 @@ import loci.plugins.util.WindowTools;
 
 /**
  * An ImageJ plugin for installing and upgrading libraries
- * related to the ODE-Formats plugins.
+ * related to the Bhojpur ODE-Formats plugins.
  */
 public class LociInstaller implements PlugIn {
 

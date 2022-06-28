@@ -31,7 +31,7 @@ import javax.swing.JCheckBox;
 import loci.plugins.util.LociPrefs;
 
 /**
- * Custom widgets for configuring ODE-Formats SDT support.
+ * Custom widgets for configuring Bhojpur ODE-Formats SDT support.
  */
 public class SDTWidgets implements IFormatWidgets, ItemListener {
 

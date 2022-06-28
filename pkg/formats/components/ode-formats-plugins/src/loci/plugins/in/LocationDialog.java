@@ -23,13 +23,13 @@ package loci.plugins.in;
 import ij.gui.GenericDialog;
 
 /**
- * ODE-Formats Importer location chooser dialog box.
+ * Bhojpur ODE-Formats Importer location chooser dialog box.
  */
 public class LocationDialog extends ImporterDialog {
 
   // -- Constructor --
 
-  /** Creates a location chooser dialog for the ODE-Formats Importer. */
+  /** Creates a location chooser dialog for the Bhojpur ODE-Formats Importer. */
   public LocationDialog(ImportProcess process) {
     super(process);
   }

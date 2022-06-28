@@ -1,6 +1,6 @@
 // bfOpenAsHyperstack.txt
 
-// Uses the ODE-Formats macro extensions to open a file as a hyperstack.
+// Uses the Bhojpur ODE-Formats macro extensions to open a file as a hyperstack.
 
 requires("1.41c");
 

@@ -45,7 +45,7 @@ public final class LibraryChecker {
 
   /** Message to be displayed if ImageJ is too old for ODE-Formats plugins. */
   public static final String IMAGEJ_MSG =
-    "Sorry, the ODE-Formats plugins require ImageJ v" + IMAGEJ_VERSION + " or later.";
+    "Sorry, the Bhojpur ODE-Formats plugins require ImageJ v" + IMAGEJ_VERSION + " or later.";
 
   /** URL for ODE-Formats web page. */
   public static final String URL_BF_SOFTWARE =

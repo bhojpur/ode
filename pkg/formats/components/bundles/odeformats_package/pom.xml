@@ -7,7 +7,7 @@
 
   <parent>
     <groupId>net.bhojpur.ode</groupId>
-    <artifactId>pom-ode-formats</artifactId>
+    <artifactId>ode-formats</artifactId>
     <version>1.0.0</version>
     <relativePath>../../../</relativePath>
   </parent>
@@ -16,9 +16,9 @@
   <packaging>pom</packaging>
 
   <name>odeformats_package bundle</name>
-  <description>A bundle of ODE-Formats and dependencies, without slf4j bindings.</description>
+  <description>A bundle of Bhojpur ODE-Formats and dependencies, without slf4j bindings.</description>
   <url>https://www.bhojpur.net/ode-formats</url>
-  <inceptionYear>2006</inceptionYear>
+  <inceptionYear>2018</inceptionYear>
 
   <licenses>
     <license>

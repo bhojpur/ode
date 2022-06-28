@@ -1,5 +1,5 @@
 <!--
-  BSD implementations of ODE-Formats readers and writers
+  BSD implementations of Bhojpur ODE-Formats readers and writers
   -->
 <suite name="Missing EXIF Tests">
     <test name="MissingEXIF">

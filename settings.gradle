@@ -40,5 +40,11 @@ rootProject.name = 'ode'
 // Bhojpur ODE - Uncomment to compile Gradle Plugins
 // include('pkg:plugins:artifact', 'pkg:plugins:api', 'pkg:plugins:javapackager', 'pkg:plugins:dsl', 'pkg:plugins:server', 'pkg:plugins:icebuilder',)
 
+// Bhojpur ODE - Uncomment to compile Image Data Model
+include('pkg:model')
+
+// Bhojpur ODE - Uncomment to compile Common Libraries
+// include('pkg:common')
+
 // Bhojpur ODE - Uncomment to compile Client/Server
-include('pkg:model', /* 'pkg:common', 'pkg:romio', 'pkg:renderer', 'pkg:server', 'pkg:api', */)
+// include('pkg:romio', 'pkg:renderer', 'pkg:server', 'pkg:api',)

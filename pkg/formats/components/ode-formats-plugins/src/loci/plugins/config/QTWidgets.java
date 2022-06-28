@@ -31,7 +31,7 @@ import javax.swing.JCheckBox;
 import loci.plugins.util.LociPrefs;
 
 /**
- * Custom widgets for configuring ODE-Formats QuickTime support.
+ * Custom widgets for configuring Bhojpur ODE-Formats QuickTime support.
  */
 public class QTWidgets implements IFormatWidgets, ItemListener {
 

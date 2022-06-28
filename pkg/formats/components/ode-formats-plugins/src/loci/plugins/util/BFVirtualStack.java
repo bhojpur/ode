@@ -40,7 +40,7 @@ import loci.formats.cache.CrosshairStrategy;
 import loci.plugins.util.RecordedImageProcessor.MethodEntry;
 
 /**
- * Subclass of VirtualStack that uses ODE-Formats to read planes on demand.
+ * Subclass of VirtualStack that uses Bhojpur ODE-Formats to read planes on demand.
  */
 public class BFVirtualStack extends VirtualStack {
 

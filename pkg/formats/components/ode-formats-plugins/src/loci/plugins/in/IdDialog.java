@@ -30,7 +30,7 @@ import java.util.Vector;
 import loci.common.Location;
 
 /**
- * ODE-Formats Importer id chooser dialog box.
+ * Bhojpur ODE-Formats Importer id chooser dialog box.
  */
 public class IdDialog extends ImporterDialog {
 
@@ -76,7 +76,7 @@ public class IdDialog extends ImporterDialog {
   }
 
   /**
-   * Asks user whether ODE-Formats should automatically check for upgrades,
+   * Asks user whether Bhojpur ODE-Formats should automatically check for upgrades,
    * and if so, checks for an upgrade and prompts user to install it.
    *
    * @return status of operation

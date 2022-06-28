@@ -34,7 +34,7 @@ Type "ant -p" for a list of targets.
    <target name="mvn-init" unless="compile.classpath">
      <mkdir dir="${build.dir}"/>
      <condition property="maven.repo.local" value="${maven.repo.local}"
-         else="${user.home}/.m2/repository">
+         else="/Volumes/Software/macos/maven/repo">
        <isset property="maven.repo.local"/>
      </condition>
      <artifact:localRepository id="local.repository"

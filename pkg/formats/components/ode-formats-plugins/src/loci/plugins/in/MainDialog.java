@@ -49,7 +49,7 @@ import javax.swing.JScrollPane;
 import loci.plugins.util.WindowTools;
 
 /**
- * ODE-Formats Importer general options dialog box.
+ * Bhojpur ODE-Formats Importer general options dialog box.
  */
 public class MainDialog extends ImporterDialog
   implements FocusListener, ItemListener, MouseListener

@@ -82,7 +82,7 @@ import ode.xml.model.enums.PixelType;
 import ode.xml.model.primitives.PositiveInteger;
 
 /**
- * Core logic for the ODE-Formats Exporter ImageJ plugin.
+ * Core logic for the Bhojpur ODE-Formats Exporter ImageJ plugin.
  */
 public class Exporter {
 
@@ -303,7 +303,7 @@ public class Exporter {
             // ask if we want to export multiple files
 
             GenericDialog multiFile =
-                    new GenericDialog("ODE-Formats Exporter - Multiple Files");
+                    new GenericDialog("Bhojpur ODE-Formats Exporter - Multiple Files");
             multiFile.addCheckbox("Write_each_Z_section to a separate file", false);
             multiFile.addCheckbox("Write_each_timepoint to a separate file", false);
             multiFile.addCheckbox("Write_each_channel to a separate file", false);
@@ -370,7 +370,7 @@ public class Exporter {
 
 
 
-            if (store == null) IJ.error("ODE-XML Java library not found.");
+            if (store == null) IJ.error("Bhojpur ODE-XML Java library not found.");
 
             ODEXMLMetadataRoot root = (ODEXMLMetadataRoot) store.getRoot();
             if (root.sizeOfROIList()>0){
@@ -505,7 +505,7 @@ public class Exporter {
                     imp.getNChannels() * imp.getNSlices() * imp.getNFrames())
             {
                 if (!windowless) {
-                    IJ.showMessageWithCancel("ODE-Formats Exporter Warning",
+                    IJ.showMessageWithCancel("Bhojpur ODE-Formats Exporter Warning",
                             "The number of planes in the stack (" + imp.getImageStackSize() +
                             ") does not match the number of expected planes (" +
                             (imp.getNChannels() * imp.getNSlices() * imp.getNFrames()) + ")." +
@@ -635,7 +635,7 @@ public class Exporter {
                 }
                 if (!selected && !windowless) {
                     GenericDialog gd =
-                            new GenericDialog("ODE-Formats Exporter Options");
+                            new GenericDialog("Bhojpur ODE-Formats Exporter Options");
 
                     gd.addChoice("Compression type: ", codecs, codecs[0]);
                     if (saveRoi != null) {
@@ -802,7 +802,6 @@ public class Exporter {
                     // only save the lookup table if it is not the default grayscale LUT
                     // saving a LUT for every plane can cause performance issues,
                     // especially for 16 bit data
-                    // see https://trello.com/c/Qk6NBnPs/92-imagej-ode-tiff-writing-performance
                     if (!proc.isDefaultLut() && (noLookupTables == null || !noLookupTables)) {
                         if (luts[currentChannel] != null) {
                             // expand to 16-bit LUT if necessary

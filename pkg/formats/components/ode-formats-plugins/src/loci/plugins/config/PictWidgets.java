@@ -31,7 +31,7 @@ import javax.swing.JCheckBox;
 import loci.plugins.util.LociPrefs;
 
 /**
- * Custom widgets for configuring ODE-Formats PICT support.
+ * Custom widgets for configuring Bhojpur ODE-Formats PICT support.
  */
 public class PictWidgets implements IFormatWidgets, ItemListener {
 

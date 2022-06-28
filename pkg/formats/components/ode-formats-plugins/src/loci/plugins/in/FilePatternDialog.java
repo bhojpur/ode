@@ -46,7 +46,7 @@ import loci.formats.FilePattern;
 import loci.formats.FilePatternBlock;
 
 /**
- * ODE-Formats Importer file pattern dialog box.
+ * Bhojpur ODE-Formats Importer file pattern dialog box.
  */
 public class FilePatternDialog extends ImporterDialog {
 

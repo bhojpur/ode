@@ -42,7 +42,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * A class for testing the ODE-Formats Importer's
+ * A class for testing the Bhojpur ODE-Formats Importer's
  * autoscaling behavior in various cases.
  */
 public class AutoscaleTest {

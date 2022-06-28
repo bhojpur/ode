@@ -31,7 +31,7 @@ import javax.swing.JCheckBox;
 import loci.plugins.util.LociPrefs;
 
 /**
- * Custom widgets for configuring ODE-Formats Zeiss CZI support.
+ * Custom widgets for configuring Bhojpur ODE-Formats Zeiss CZI support.
  *
  */
 public class ZeissCZIWidgets implements IFormatWidgets, ItemListener {

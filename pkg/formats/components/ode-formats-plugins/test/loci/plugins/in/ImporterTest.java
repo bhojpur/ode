@@ -106,7 +106,7 @@ import org.slf4j.LoggerFactory;
 //    - improve, comment, and generalize code for increased coverage
 
 /**
- * A class for testing the ODE-Formats Importer behavior.
+ * A class for testing the Bhojpur ODE-Formats Importer behavior.
  */
 public class ImporterTest {
 

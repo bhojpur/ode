@@ -4,7 +4,7 @@
   <properties file="${ivy.settings.dir}/build.properties"/>
   <properties file="${ivy.settings.dir}/local.properties"/>
   <properties file="${ivy.settings.dir}/../target/ode.version"/>
-  <property name="local-maven2-dir" value="${user.home}/.m2/repository/"
+  <property name="local-maven2-dir" value="/Volumes/Software/macos/maven/repo/"
       override="false"/> <!-- deprecated - use maven.repo.local instead -->
   <property name="maven.repo.local" value="${local-maven2-dir}"
       override="false"/>

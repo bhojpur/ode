@@ -1,6 +1,6 @@
 // planeTimings.txt
 
-// Uses ODE-Formats to print the chosen file's plane timings to the Log.
+// Uses Bhojpur ODE-Formats to print the chosen file's plane timings to the Log.
 
 run("ODE-Formats Macro Extensions");
 

@@ -33,7 +33,7 @@ import loci.plugins.util.RecordedImageProcessor.MethodEntry;
 
 /**
  * Extension of {@link ij.ImagePlus} that supports
- * ODE-Formats-driven virtual stacks.
+ * Bhojpur ODE-Formats driven virtual stacks.
  */
 public class VirtualImagePlus extends ImagePlus {
 

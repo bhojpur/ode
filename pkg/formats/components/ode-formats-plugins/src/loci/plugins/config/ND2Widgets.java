@@ -32,7 +32,7 @@ import loci.formats.in.NativeND2Reader;
 import loci.plugins.util.LociPrefs;
 
 /**
- * Custom widgets for configuring ODE-Formats ND2 support.
+ * Custom widgets for configuring Bhojpur ODE-Formats ND2 support.
  */
 public class ND2Widgets implements IFormatWidgets, ItemListener {
 

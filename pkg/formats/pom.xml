@@ -10,7 +10,7 @@
   <version>1.0.0</version>
   <packaging>pom</packaging>
 
-  <name>ODE-Formats projects</name>
+  <name>Bhojpur ODE-Formats projects</name>
   <description>An umbrella project for the Bhojpur ODE-Formats software project.</description>
   <url>https://www.bhojpur.net/ode-formats</url>
   <inceptionYear>2018</inceptionYear>
@@ -457,7 +457,7 @@
     </repository>
     <repository>
       <id>ode</id>
-      <name>ODE Artifactory</name>
+      <name>Bhojpur Artifactory</name>
       <url>https://artifacts.bhojpur.net/artifactory/maven/</url>
     </repository>
   </repositories>
@@ -474,12 +474,12 @@
   <distributionManagement>
     <repository>
       <id>ode.staging</id>
-      <name>ODE Staging Repository</name>
+      <name>Bhojpur ODE Staging Repository</name>
       <url>https://artifacts.bhojpur.net/artifactory/ode.staging</url>
     </repository>
     <snapshotRepository>
       <id>ode.snapshots</id>
-      <name>ODE Snapshots Repository</name>
+      <name>Bhojpur ODE Snapshots Repository</name>
       <url>https://artifacts.bhojpur.net/artifactory/ode.snapshots</url>
     </snapshotRepository>
   </distributionManagement>

@@ -1,4 +1,4 @@
-// Uses ODE-Formats to print the chosen file's plane positions to the Log.
+// Uses Bhojpur ODE-Formats to print the chosen file's plane positions to the Log.
 
 run("ODE-Formats Macro Extensions");
 

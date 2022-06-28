@@ -7,17 +7,17 @@
 
   <parent>
     <groupId>net.bhojpur.ode</groupId>
-    <artifactId>pom-ode-formats</artifactId>
+    <artifactId>ode-formats</artifactId>
     <version>1.0.0</version>
     <relativePath>../..</relativePath>
   </parent>
 
   <artifactId>ode-formats_plugins</artifactId>
 
-  <name>ODE-Formats Plugins for ImageJ</name>
-  <description>A collection of plugins for ImageJ, including the ODE-Formats Importer, ODE-Formats Exporter, ODE-Formats Macro Extensions, Data Browser and Stack Slicer.</description>
+  <name>Bhojpur ODE-Formats Plugins for ImageJ</name>
+  <description>A collection of plugins for ImageJ, including the Bhojpur ODE-Formats Importer, Bhojpur ODE-Formats Exporter, Bhojpur ODE-Formats Macro Extensions, Data Browser, and Stack Slicer.</description>
   <url>https://www.bhojpur.net/ode-formats</url>
-  <inceptionYear>2006</inceptionYear>
+  <inceptionYear>2018</inceptionYear>
 
   <licenses>
     <license>

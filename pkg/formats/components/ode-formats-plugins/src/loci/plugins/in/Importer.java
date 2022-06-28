@@ -32,7 +32,7 @@ import loci.plugins.LociImporter;
 import loci.plugins.util.WindowTools;
 
 /**
- * Core logic for the ODE-Formats Importer ImageJ plugin.
+ * Core logic for the Bhojpur ODE-Formats Importer ImageJ plugin.
  */
 public class Importer {
 

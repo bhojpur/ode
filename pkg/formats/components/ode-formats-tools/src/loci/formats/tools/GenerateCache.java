@@ -72,7 +72,7 @@ public class GenerateCache {
     if (args.length < 2) {
       System.out.println("Usage:");
       System.out.println(
-        "cachegen [-list] fileOrDir cacheFileDir");
+        "odecachegen [-list] fileOrDir cacheFileDir");
       System.out.println();
       System.out.println("If '-list' is specified, then 'fileOrDir' is a text file with one file per line.");
       return;

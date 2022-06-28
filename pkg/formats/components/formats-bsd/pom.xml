@@ -7,15 +7,15 @@
 
   <parent>
     <groupId>net.bhojpur.ode</groupId>
-    <artifactId>pom-ode-formats</artifactId>
+    <artifactId>ode-formats</artifactId>
     <version>1.0.0</version>
     <relativePath>../..</relativePath>
   </parent>
 
   <artifactId>formats-bsd</artifactId>
 
-  <name>BSD ODE-Formats readers and writers</name>
-  <description>Reader and writer implementations that are BSD-licensed.</description>
+  <name>Bhojpur ODE-Formats BSD readers and writers</name>
+  <description>All the Reader and writer implementations that are BSD-licensed.</description>
   <url>https://www.bhojpur.net/ode-formats</url>
   <inceptionYear>2005</inceptionYear>
 

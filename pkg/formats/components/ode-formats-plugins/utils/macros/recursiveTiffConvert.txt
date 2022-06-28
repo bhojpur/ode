@@ -1,12 +1,12 @@
 // recursiveTiffConvert.txt
 
-// Recursively converts files to TIFF using ODE-Formats.
+// Recursively converts files to TIFF using Bhojpur ODE-Formats.
 
 // It was originally written to convert Gatan DM3 files, but you can easily
 // change the code to work with any or all extensions of your choice.
 
-// Thanks to Chris Zahm for suggestions and improvements:
-//   - Save as ODE-TIFF using ODE-Formats Exporter, to preserve metadata
+// Thanks for suggestions and improvements:
+//   - Save as Bhojpur ODE-TIFF using ODE-Formats Exporter, to preserve metadata
 //   - Run garbage collection after each exported file
 
 ext = "DM3"; // this variable controls the extension of source files

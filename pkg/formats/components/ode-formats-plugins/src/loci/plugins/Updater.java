@@ -30,7 +30,7 @@ import java.io.File;
 import loci.formats.UpgradeChecker;
 
 /**
- * A plugin for updating the ODE-Formats plugins.
+ * A plugin for updating the Bhojpur ODE-Formats plugins.
  */
 public class Updater implements PlugIn {
 
@@ -58,7 +58,7 @@ public class Updater implements PlugIn {
       return;
     }
 
-    GenericDialog upgradeDialog = new GenericDialog("Update ODE-Formats Plugins");
+    GenericDialog upgradeDialog = new GenericDialog("Update Bhojpur ODE-Formats Plugins");
     String[] options = new String[] {TRUNK, DAILY, STABLE};
     upgradeDialog.addChoice("Release", options, options[0]);
     upgradeDialog.showDialog();
@@ -118,10 +118,10 @@ public class Updater implements PlugIn {
 
     BF.status(false, "");
     if (!success) {
-      IJ.showMessage("An error occurred while downloading the ODE-Formats plugins");
+      IJ.showMessage("An error occurred while downloading the Bhojpur ODE-Formats plugins");
     }
     else {
-      IJ.showMessage("The ODE-Formats plugins have been downloaded.\n" +
+      IJ.showMessage("The Bhojpur ODE-Formats plugins have been downloaded.\n" +
         "Please restart ImageJ to complete the upgrade process.");
     }
   }

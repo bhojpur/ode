@@ -7,17 +7,17 @@
 
   <parent>
     <groupId>net.bhojpur.ode</groupId>
-    <artifactId>pom-ode-formats</artifactId>
+    <artifactId>ode-formats</artifactId>
     <version>1.0.0</version>
     <relativePath>../..</relativePath>
   </parent>
 
   <artifactId>ode-formats-tools</artifactId>
 
-  <name>ODE-Formats command line tools</name>
-  <description>ODE-Formats command line tools for reading and converting files</description>
+  <name>Bhojpur ODE-Formats command line tools</name>
+  <description>Bhojpur ODE-Formats command line tools for reading and converting files</description>
   <url>https://www.bhojpur.net/ode-formats</url>
-  <inceptionYear>2005</inceptionYear>
+  <inceptionYear>2018</inceptionYear>
 
   <licenses>
     <license>

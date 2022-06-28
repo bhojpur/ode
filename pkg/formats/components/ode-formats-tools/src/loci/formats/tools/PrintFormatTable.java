@@ -29,7 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Utility class for printing a list of formats supported by ODE-Formats.
+ * Utility class for printing a list of formats supported by Bhojpur ODE-Formats.
  */
 public class PrintFormatTable {
 

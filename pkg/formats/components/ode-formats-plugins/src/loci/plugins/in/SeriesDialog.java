@@ -45,7 +45,7 @@ import loci.formats.gui.BufferedImageReader;
 import loci.plugins.util.WindowTools;
 
 /**
- * ODE-Formats Importer series chooser dialog box.
+ * Bhojpur ODE-Formats Importer series chooser dialog box.
  */
 public class SeriesDialog extends ImporterDialog implements ActionListener {
 

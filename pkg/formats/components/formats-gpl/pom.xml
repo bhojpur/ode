@@ -7,7 +7,7 @@
 
   <parent>
     <groupId>net.bhojpur.ode</groupId>
-    <artifactId>pom-ode-formats</artifactId>
+    <artifactId>ode-formats</artifactId>
     <version>1.0.0</version>
     <relativePath>../..</relativePath>
   </parent>
@@ -15,7 +15,7 @@
   <artifactId>formats-gpl</artifactId>
 
   <name>Bhojpur ODE-Formats library</name>
-  <description>A library for reading and writing popular microscopy file formats.</description>
+  <description>A library for reading and writing popular Bhojpur ODE microscopy file formats.</description>
   <url>https://www.bhojpur.net/ode-formats</url>
   <inceptionYear>2018</inceptionYear>
 
