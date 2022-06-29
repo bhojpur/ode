@@ -30,8 +30,8 @@
   <dependencies>
     <dependency>
       <groupId>net.bhojpur.ode</groupId>
-      <artifactId>common</artifactId>
-      <version>${common.version}</version>
+      <artifactId>ode-common</artifactId>
+      <version>${ode-common.version}</version>
     </dependency>
     <dependency>
       <groupId>${ode-model.group}</groupId>
@@ -50,8 +50,8 @@
     </dependency>
     <dependency>
       <groupId>net.bhojpur.ode</groupId>
-      <artifactId>mdbtools</artifactId>
-      <version>${mdbtools.version}</version>
+      <artifactId>ode-mdbtools</artifactId>
+      <version>${ode-mdbtools.version}</version>
     </dependency>
     <dependency>
       <groupId>net.bhojpur.ode</groupId>
@@ -60,8 +60,8 @@
     </dependency>
     <dependency>
       <groupId>net.bhojpur.ode</groupId>
-      <artifactId>poi</artifactId>
-      <version>${poi.version}</version>
+      <artifactId>ode-poi</artifactId>
+      <version>${ode-poi.version}</version>
     </dependency>
     <dependency>
       <groupId>edu.ucar</groupId>
@@ -312,7 +312,10 @@
   </developers>
 
   <contributors>
+    <contributor><name>Shashi Bhushan Rai</name></contributor>
     <contributor><name>Bimla Pandey</name></contributor>
+    <contributor><name>Divya Rai</name></contributor>
+    <contributor><name>Anushka Rai</name></contributor>
   </contributors>
 
   <!-- NB: for project parent, in case of partial checkout -->

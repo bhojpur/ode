@@ -44,7 +44,7 @@ rootProject.name = 'ode'
 include('pkg:model')
 
 // Bhojpur ODE - Uncomment to compile Common Libraries
-// include('pkg:common')
+//include('pkg:common')
 
 // Bhojpur ODE - Uncomment to compile Client/Server
 // include('pkg:romio', 'pkg:renderer', 'pkg:server', 'pkg:api',)

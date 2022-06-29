@@ -48,9 +48,9 @@ import org.testng.Assert;
 
 /**
  * Collections of tests.
- * Checks if the downgrade from current schema to 2003-FC schema works.
+ * Checks if the downgrade from current schema to 2018-FC schema works.
  */
-public class SchemaCurrent_TO_2003_FC_Test
+public class SchemaCurrent_TO_2018_FC_Test
 	extends AbstractTest
 {
 
@@ -285,13 +285,13 @@ public class SchemaCurrent_TO_2003_FC_Test
 
 		/** The target schema file */
 		schemaArray = new StreamSource[1];
-		schemaArray[0] = new StreamSource(this.getClass().getResourceAsStream("/released-schema/2003-FC/ode.xsd"));
-		//components/specification/released-schema/2003-FC/
+		schemaArray[0] = new StreamSource(this.getClass().getResourceAsStream("/released-schema/2018-FC/ode.xsd"));
+		//components/specification/released-schema/2018-FC/
 
 		/** The transforms */
 		STYLESHEET_A = this.getClass().getResourceAsStream("/transforms/2012-06-to-2011-06.xsl");
 		STYLESHEET_B = this.getClass().getResourceAsStream("/transforms/2011-06-to-2010-06.xsl");
-		STYLESHEET_C = this.getClass().getResourceAsStream("/transforms/2010-06-to-2003-FC.xsl");
+		STYLESHEET_C = this.getClass().getResourceAsStream("/transforms/2010-06-to-2018-FC.xsl");
 		//components/specification/transforms/
 
     	files = new ArrayList<File>();
@@ -314,25 +314,25 @@ public class SchemaCurrent_TO_2003_FC_Test
     }
 
 	/**
-     * Tests the XSLT used to downgrade from current schema to 2003-FC.
+     * Tests the XSLT used to downgrade from current schema to 2018-FC.
      * An XML file with an image is created and the stylesheet is applied.
      * @throws Exception Thrown if an error occurred.
      */
     @Test(enabled = false)
-	public void testDowngradeTo2003FCImageNoMetadata()
+	public void testDowngradeTo2018FCImageNoMetadata()
 		throws Exception
 	{
-		File inFile = File.createTempFile("testDowngradeTo2003FCImageNoMetadata",
+		File inFile = File.createTempFile("testDowngradeTo2018FCImageNoMetadata",
 				"."+ODE_XML_FORMAT);
 		files.add(inFile);
-		File middleFileA = File.createTempFile("testDowngradeTo2003FCImageNoMetadataMiddleA",
+		File middleFileA = File.createTempFile("testDowngradeTo2018FCImageNoMetadataMiddleA",
 				"."+ODE_XML_FORMAT);
 		files.add(middleFileA);
-		File middleFileB = File.createTempFile("testDowngradeTo2003FCImageNoMetadataMiddleB",
+		File middleFileB = File.createTempFile("testDowngradeTo2018FCImageNoMetadataMiddleB",
 				"."+ODE_XML_FORMAT);
 		files.add(middleFileB);
 		File outputFile = File.createTempFile(
-				"testDowngradeTo2003FCImageNoMetadataOutput",
+				"testDowngradeTo2018FCImageNoMetadataOutput",
 				"."+ODE_XML_FORMAT);
 		files.add(outputFile);
 		XMLMockObjects xml = new  XMLMockObjects();

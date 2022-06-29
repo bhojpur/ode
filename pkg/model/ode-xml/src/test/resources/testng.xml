@@ -1,0 +1,26 @@
+<!--
+  Bhojpur ODE-XML Java library for working with ODE-XML metadata structures.
+  -->
+
+  <suite name="ODEXMLTests">
+    <test name="2010-04SchemaPrimitives">
+        <groups>
+            <run>
+                <exclude name="inOutTests"/>
+            </run>
+        </groups>
+        <packages>
+            <package name="ode.xml.utests"/>
+        </packages>
+    </test>
+    <test name="UnitsTests">
+        <groups>
+            <run>
+                <exclude name="inOutTests"/>
+            </run>
+        </groups>
+        <packages>
+            <package name="ode.units.utests"/>
+        </packages>
+    </test>
+</suite>

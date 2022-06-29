@@ -54,7 +54,7 @@ dependencies {
     api("org.hibernate:hibernate-search:3.4.2.Final")
 
     // Our libraries
-    //api("net.bhojpur.ode:formats-gpl:1.0.0")
+    api("net.bhojpur.ode:formats-gpl:1.0.0")
 
     // Unidata
     api("edu.ucar:bufr:3.0"){

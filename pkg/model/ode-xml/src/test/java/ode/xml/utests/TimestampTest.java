@@ -78,19 +78,19 @@ public class TimestampTest {
 
   @Test
   public void testString() {
-    Timestamp t1 = Timestamp.valueOf("2003-08-26T19:46:38");
-    Timestamp t2 = Timestamp.valueOf("2003-08-26T19:46:38.762");
-    Timestamp t3 = Timestamp.valueOf("2003-08-26T19:46:38.762Z");
-    Timestamp t4 = Timestamp.valueOf("2003-08-26T19:46:38.762+0400");
+    Timestamp t1 = Timestamp.valueOf("2018-08-26T19:46:38");
+    Timestamp t2 = Timestamp.valueOf("2018-08-26T19:46:38.762");
+    Timestamp t3 = Timestamp.valueOf("2018-08-26T19:46:38.762Z");
+    Timestamp t4 = Timestamp.valueOf("2018-08-26T19:46:38.762+0400");
     Timestamp t5 = Timestamp.valueOf("invalid");
     Timestamp t6 = Timestamp.valueOf("2011-10-20T15:07:14");
     Timestamp t7 = Timestamp.valueOf("2011-10-20T15:07:14Z");
     Timestamp t8 = Timestamp.valueOf("2011-10-20T15:07:14.632Z");
 
-    Assert.assertEquals(t1.toString(), "2003-08-26T19:46:38");
-    Assert.assertEquals(t2.toString(), "2003-08-26T19:46:38.762");
-    Assert.assertEquals(t3.toString(), "2003-08-26T19:46:38.762");
-    Assert.assertEquals(t4.toString(), "2003-08-26T15:46:38.762");
+    Assert.assertEquals(t1.toString(), "2018-08-26T19:46:38");
+    Assert.assertEquals(t2.toString(), "2018-08-26T19:46:38.762");
+    Assert.assertEquals(t3.toString(), "2018-08-26T19:46:38.762");
+    Assert.assertEquals(t4.toString(), "2018-08-26T15:46:38.762");
     Assert.assertEquals(t5, null);
     Assert.assertEquals(t6.toString(), "2011-10-20T15:07:14");
     Assert.assertEquals(t7.toString(), "2011-10-20T15:07:14");

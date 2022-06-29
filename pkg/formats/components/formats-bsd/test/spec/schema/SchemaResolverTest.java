@@ -37,7 +37,7 @@ public class SchemaResolverTest {
 
     /** List of published schema versions. */
     private static final String[][] SCHEMAS = {
-      {"/XMLschemas/ODE/FC/2003-FC"}, {"/Schemas/2007-06"},
+      {"/XMLschemas/ODE/FC/2018-FC"}, {"/Schemas/2007-06"},
       {"/Schemas/2008-02"}, {"/Schemas/2008-04"}, {"/Schemas/2008-09"},
       {"/Schemas/2009-09"}, {"/Schemas/2010-04"}, {"/Schemas/2010-06"},
       {"/Schemas/2011-06"}, {"/Schemas/2012-06"}, {"/Schemas/2012-06"},

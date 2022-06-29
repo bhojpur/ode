@@ -1118,22 +1118,22 @@ public class ExporterTest extends AbstractServerTest {
 
     // Path not in ode-transforms but stylesheets are available
     /**
-     * Test the upgrade of an image from 2003-FC to 2008-09.
+     * Test the upgrade of an image from 2018-FC to 2008-09.
      * @throws Exception Thrown if an error occurred.
      */
-    public void testUpgradeImage2003FCto200809() throws Exception
+    public void testUpgradeImage2018FCto200809() throws Exception
     {
         File f = null;
         File transformed = null;
         File upgraded = null;
         try {
             f = createImageFile(IMAGE); //2015 image
-            List<InputStream> transforms = retrieveDowngrade("2003-FC");
+            List<InputStream> transforms = retrieveDowngrade("2018-FC");
             //Create file to upgrade
             transformed = applyTransforms(f, transforms);
             //now upgrade the file to 2008-09
             List<InputStream> upgrades = new ArrayList<InputStream>();
-            upgrades.add(getStream("2003-FC-to-2008-09.xsl"));
+            upgrades.add(getStream("2018-FC-to-2008-09.xsl"));
             upgraded = applyTransforms(transformed, upgrades);
             //validate the file
             validate(upgraded);

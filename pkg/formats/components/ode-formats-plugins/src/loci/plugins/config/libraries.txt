@@ -207,7 +207,7 @@ notes = Used by the NetCDF Java library.
 [ODE-XML Java library]
 type = Java library
 class = ode.xml.model.ODEModelObject
-url = http://ode-xml.org/wiki/OdeXmlJava
+url = https://docs.bhojpur.net/wiki/OdeXmlJava
 license = LGPL
 notes = Used by ODE-Formats to work with ODE-XML.
 

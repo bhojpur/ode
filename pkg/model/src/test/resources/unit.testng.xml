@@ -7,14 +7,12 @@
       <run>
         <exclude name="broken"/>
         <exclude name="ignore"/>
-        <exclude name="inOutTests"/>
       </run>
     </groups>
     <packages>
       <package name="ode.conditions.*"/>
       <package name="ode.model.*"/>
       <package name="ode.util.*"/>
-      <package name="ode.xml.*"/>
     </packages>
   </test>
 

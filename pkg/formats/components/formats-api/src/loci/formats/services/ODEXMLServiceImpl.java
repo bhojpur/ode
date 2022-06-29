@@ -95,8 +95,8 @@ public class ODEXMLServiceImpl extends AbstractService implements ODEXMLService
   // -- Stylesheet names --
 
   private static final String XSLT_PATH = "/transforms/";
-  private static final String XSLT_2003FC =
-    XSLT_PATH + "2003-FC-to-2008-09.xsl";
+  private static final String XSLT_2018FC =
+    XSLT_PATH + "2018-FC-to-2008-09.xsl";
   private static final String XSLT_200706 =
     XSLT_PATH + "2007-06-to-2008-09.xsl";
   private static final String XSLT_200802 =
@@ -124,7 +124,7 @@ public class ODEXMLServiceImpl extends AbstractService implements ODEXMLService
   private static Templates reorderXSLT;
 
   /** Stylesheets for updating from previous schema releases. */
-  private static Templates update2003FC;
+  private static Templates update2018FC;
   private static Templates update200706;
   private static Templates update200802;
   private static Templates update200809;
@@ -193,14 +193,14 @@ public class ODEXMLServiceImpl extends AbstractService implements ODEXMLService
 
     String transformed = null;
     try {
-      if (version.equals("2003-FC")) {
+      if (version.equals("2018-FC")) {
         xml = verifyODENamespace(xml);
-        LOGGER.debug("Running UPDATE_2003FC stylesheet.");
-        if (update2003FC == null) {
-          update2003FC =
-            XMLTools.getStylesheet(XSLT_2003FC, ODEXMLServiceImpl.class);
+        LOGGER.debug("Running UPDATE_2018FC stylesheet.");
+        if (update2018FC == null) {
+          update2018FC =
+            XMLTools.getStylesheet(XSLT_2018FC, ODEXMLServiceImpl.class);
         }
-        transformed = XMLTools.transformXML(xml, update2003FC);
+        transformed = XMLTools.transformXML(xml, update2018FC);
       }
       else if (version.equals("2007-06")) {
         xml = verifyODENamespace(xml);
@@ -424,7 +424,7 @@ public class ODEXMLServiceImpl extends AbstractService implements ODEXMLService
           namespace = e.getAttribute("xmlns:ODE");
         }
 
-        return namespace.endsWith("ode.xsd") ? "2003-FC" :
+        return namespace.endsWith("ode.xsd") ? "2018-FC" :
           namespace.substring(namespace.lastIndexOf("/") + 1);
       }
       catch (ParserConfigurationException pce) { }

@@ -76,7 +76,7 @@ public interface ODEXMLService extends Service {
    *
    * @param xml The ODE-XML string to use for initial population of the
    *   metadata object.
-   * @param version The ODE-XML version to use (e.g., "2003-FC" or "2007-06").
+   * @param version The ODE-XML version to use (e.g., "2018-FC" or "2007-06").
    *   If the xml and version parameters are both null, the newest version is
    *   used.
    * @return A new instance of {@link loci.formats.ode.AbstractODEXMLMetadata},
@@ -111,7 +111,7 @@ public interface ODEXMLService extends Service {
 
   /**
    * Gets the schema version for the given ODE-XML metadata or root object
-   * (e.g., "2007-06" or "2003-FC").
+   * (e.g., "2007-06" or "2018-FC").
    * @return ODE-XML schema version, or null if the object is not an instance
    *   of {@link loci.formats.ode.ODEXMLMetadata}.
    */

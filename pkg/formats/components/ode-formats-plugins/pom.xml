@@ -30,8 +30,8 @@
   <dependencies>
     <dependency>
       <groupId>net.bhojpur.ode</groupId>
-      <artifactId>common</artifactId>
-      <version>${common.version}</version>
+      <artifactId>ode-common</artifactId>
+      <version>${ode-common.version}</version>
     </dependency>
     <dependency>
       <groupId>${ode-model.group}</groupId>

@@ -1,0 +1,146 @@
+/*
+ * Bhojpur ODE-XML Java library for working with ODE-XML metadata structures.
+ *
+ * Copyright (c) 2018 Bhojpur Consulting Private Limited, India. All rights reserved.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+
+/*-----------------------------------------------------------------------------
+ *
+ * THIS IS AUTOMATICALLY GENERATED CODE. DO NOT MODIFY.
+ *
+ *-----------------------------------------------------------------------------
+ */
+
+package ${lang.odexml_model_enums_package};
+
+import ${lang.units_package}.quantity.Angle;
+import ${lang.units_package}.quantity.ElectricPotential;
+import ${lang.units_package}.quantity.Frequency;
+import ${lang.units_package}.quantity.Length;
+import ${lang.units_package}.quantity.Power;
+import ${lang.units_package}.quantity.Pressure;
+import ${lang.units_package}.quantity.Temperature;
+import ${lang.units_package}.quantity.${lang.typeToUnitsType("UnitsTime")};
+import ${lang.units_package}.unit.Unit;
+
+import ${lang.odexml_model_odexml_model_enum_handlers_package}.${klass.langType}EnumHandler;
+import ode.xml.model.primitives.*;
+
+public enum ${klass.langType} implements Enumeration
+{
+{% for value in klass.possibleValues %}\
+{% if klass.enumProperties is not None and value in klass.enumProperties and klass.enumProperties[value].get('enum', None) is not None %}\
+  /** ${klass.enumDocumentation[value]} */
+{% if value == klass.possibleValues[-1] %}\
+  ${klass.enumProperties[value].enum}("${value}");
+{% end %}\
+{% if value != klass.possibleValues[-1] %}\
+  ${klass.enumProperties[value].enum}("${value}"),
+{% end %}\
+{% end %}\
+{% if klass.enumProperties is None or not value in klass.enumProperties or klass.enumProperties[value].get('enum', None) is None %}\
+{% if value == klass.possibleValues[-1] %}\
+  ${value.upper()}("${value}");
+{% end %}\
+{% if value != klass.possibleValues[-1] %}\
+  ${value.upper()}("${value}"),
+{% end %}\
+{% end %}\
+{% end %}\
+{% for value in klass.possibleValues %}\
+{% if klass.enumProperties is not None and value in klass.enumProperties and klass.enumProperties[value].get('cppenum', None) is not None %}\
+  /** C++ compatibility name for ${klass.enumProperties[value].enum}. */
+  public static final ${klass.langType} ${klass.enumProperties[value].cppenum} = ${klass.enumProperties[value].enum};
+{% end %}\
+{% end %}\
+
+  private ${klass.langType}(String value)
+  {
+    this.value = value;
+  }
+
+  public static ${klass.langType} fromString(String value)
+    throws EnumerationException
+  {
+{% for value in klass.possibleValues %}\
+{% if klass.enumProperties is not None and value in klass.enumProperties and klass.enumProperties[value].get('enum', None) is not None %}\
+    if ("${value}".equals(value))
+    {
+      return ${klass.enumProperties[value].enum};
+    }
+{% end %}\
+{% if klass.enumProperties is None or not value in klass.enumProperties or klass.enumProperties[value].get('enum', None) is None %}\
+    if ("${value}".equals(value))
+    {
+      return ${enum_value_name(value, klass.isUnitsEnumeration).upper()};
+    }
+{% end %}\
+{% end %}\
+
+    String s = String.format("'%s' not a supported value of '%s'",
+                             value, ${klass.langType}.class);
+    throw new EnumerationException(s);
+  }
+
+  public String getValue()
+  {
+    return value;
+  }
+
+  @Override
+  public String toString()
+  {
+    return value;
+  }
+
+{% end %}\
+{% if klass.isUnitsEnumeration %}\
+  public static <T extends PrimitiveNumber> ${lang.typeToUnitsType(klass.langType)} create(T newValue, ${klass.langType} newUnit)
+  {
+    ${lang.typeToUnitsType(klass.langType)} theQuantity = null;
+
+    try
+    {
+      theQuantity = ${klass.langType}EnumHandler.getQuantity(newValue, newUnit);
+    }
+    finally
+    {
+      return theQuantity;
+    }
+  }
+
+  public static <T extends Number> ${lang.typeToUnitsType(klass.langType)} create(T newValue, ${klass.langType} newUnit)
+  {
+    ${lang.typeToUnitsType(klass.langType)} theQuantity = null;
+
+    try
+    {
+      theQuantity = ${klass.langType}EnumHandler.getQuantity(newValue, newUnit);
+    }
+    finally
+    {
+      return theQuantity;
+    }
+  }
+
+{% end %}\
+  private final String value;
+}

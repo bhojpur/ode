@@ -41,7 +41,7 @@ dependencies {
     testImplementation("jmock:jmock:1.+")
     testImplementation("com.jamonapi:jamon:2.81")
 
-    api("net.bhojpur.ode:model:1.0.0")
+    api("net.bhojpur.ode:ode-model:1.0.0")
     implementation("com.codahale.metrics:metrics-graphite:3.0.2")
     implementation("com.codahale.metrics:metrics-jvm:3.0.2")
     implementation("com.codahale.metrics:metrics-logback:3.0.2")

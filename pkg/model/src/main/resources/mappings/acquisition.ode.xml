@@ -538,7 +538,7 @@
 <!-- OriginalFile Entity -->
 	<enum id="ode.model.enums.Format">
 		<!-- Note: Format is not in model but used by OriginalFile-->
-		<!-- Note: On server startup the DBEnumCheck class adds the formats as determined from the current Bio-Formats -->
+		<!-- Note: On server startup the DBEnumCheck class adds the formats as determined from the current Bhojpur ODE-Formats -->
 		<!-- Note: Other and Unknown are not needed use text/plain or application/octet-stream -->
 	</enum>
 	<enum id="ode.model.enums.ChecksumAlgorithm">

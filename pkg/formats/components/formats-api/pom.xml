@@ -30,8 +30,8 @@
   <dependencies>
     <dependency>
       <groupId>net.bhojpur.ode</groupId>
-      <artifactId>common</artifactId>
-      <version>${common.version}</version>
+      <artifactId>ode-common</artifactId>
+      <version>${ode-common.version}</version>
     </dependency>
 
     <dependency>
@@ -42,8 +42,8 @@
 
     <dependency>
         <groupId>net.bhojpur.ode</groupId>
-        <artifactId>codecs</artifactId>
-        <version>${codecs.version}</version>
+        <artifactId>ode-codecs</artifactId>
+        <version>${ode-codecs.version}</version>
     </dependency>
 
     <dependency>

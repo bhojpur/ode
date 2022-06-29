@@ -1,0 +1,215 @@
+/*
+ * Bhojpur ODE-XML Java library for working with ODE-XML metadata structures.
+ *
+ * Copyright (c) 2018 Bhojpur Consulting Private Limited, India. All rights reserved.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+
+/*-----------------------------------------------------------------------------
+ *
+ * THIS IS AUTOMATICALLY GENERATED CODE. DO NOT MODIFY.
+ *
+ *-----------------------------------------------------------------------------
+ */
+
+package ${lang.odexml_model_odexml_model_enum_handlers_package};
+
+import java.util.Hashtable;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import ${lang.odexml_model_enums_package}.Enumeration;
+import ${lang.odexml_model_enums_package}.EnumerationException;
+import ${lang.odexml_model_enums_package}.${klass.langType};
+
+import ${lang.units_package}.quantity.Angle;
+import ${lang.units_package}.quantity.ElectricPotential;
+import ${lang.units_package}.quantity.Frequency;
+import ${lang.units_package}.quantity.Length;
+import ${lang.units_package}.quantity.Power;
+import ${lang.units_package}.quantity.Pressure;
+import ${lang.units_package}.quantity.Temperature;
+import ${lang.units_package}.quantity.${lang.typeToUnitsType("UnitsTime")};
+import ${lang.units_package}.unit.Unit;
+
+import ode.xml.model.primitives.*;
+
+${lang.units_implementation_imports}
+
+/**
+ * Enumeration handler for ${klass.langType}.
+ */
+public class ${klass.langType}EnumHandler implements IEnumerationHandler {
+
+  // -- Constants --
+
+  /** Logger for this class. */
+  private static final Logger LOGGER =
+    LoggerFactory.getLogger(${klass.langType}EnumHandler.class);
+
+  // -- Fields --
+
+  /** Every ${klass.langType} value must match one of these patterns. */
+  private static final Hashtable<String, String> patterns = makePatterns();
+
+  private static Hashtable<String, String> makePatterns() {
+    Hashtable<String, String> p = new Hashtable<String, String>();
+    // BEGIN Schema enumeration mappings
+{% for value in klass.possibleValues %}\
+    p.put("^\\\s*${value}\\\s*", "${value}");
+{% end %}\
+{% for value in klass.possibleValues %}\
+{% if klass.enumProperties is not None and value in klass.enumProperties and klass.enumProperties[value].get('compatregex', None) is not None %}\
+    p.put("${klass.enumProperties[value].compatregex}", "${value}"); // Custom mapping from schema
+{% end %}\
+{% end %}\
+{% if klass.langType in config %}\
+{% for k, v in config[klass.langType] %}\
+    p.put("${k.replace('\\\','\\\\\\\')}", "${v.replace('\\\','\\\\\\\')}"); // Custom mapping from config.py
+{% end %}\
+{% end %}\
+    return p;
+  }
+
+  // -- IEnumerationHandler API methods --
+
+  /* @see IEnumerationHandler#getEnumeration(String) */
+  public Enumeration getEnumeration(String value)
+    throws EnumerationException
+  {
+    if (value != null) {
+      for (String pattern : patterns.keySet()) {
+{% if not klass.isUnitsEnumeration %}\
+        // case insensitive compare
+        if (value.toLowerCase().matches(pattern.toLowerCase())) {
+{% end %}\
+{% if klass.isUnitsEnumeration %}\
+        // case sensitive compare
+        if (value.matches(pattern)) {
+{% end %}\
+          String v = patterns.get(pattern);
+          return ${klass.langType}.fromString(v);
+        }
+      }
+    }
+    LOGGER.warn("Unknown {} value '{}' will be stored as \"Other\"",
+      "${klass.langType}", value);
+{% if 'Other' in klass.possibleValues %}\
+    return ${klass.langType}.OTHER;
+{% end %}\
+{% if 'Other' not in klass.possibleValues %}\
+    throw new EnumerationException(this.getClass().getName() +
+      " could not find enumeration for " + value);
+{% end %}\
+  }
+
+{% if klass.isUnitsEnumeration %}\
+{% if lang.units_implementation_is == "ode" %}
+  public Enumeration getEnumeration(${klass.model.opts.lang.typeToUnitsType(klass.langType)} inUnit)
+    throws EnumerationException {
+    return getEnumeration(inUnit.unit().getSymbol());
+  }
+
+  public static Unit<${klass.model.opts.lang.typeToUnitsType(klass.langType)}> getBaseUnit(${klass.langType} inModelUnit)
+  {
+    Unit<${klass.model.opts.lang.typeToUnitsType(klass.langType)}> theResult;
+    // begin: should be lookup in template
+    theResult = ${klass.model.opts.lang.typeToDefault(klass.langType)};
+{% for value in klass.possibleValues %}\
+{% if klass.enumProperties is not None and value in klass.enumProperties and klass.enumProperties[value].get('enum', None) is not None %}\
+    if (${klass.langType}.${klass.enumProperties[value].enum}.equals(inModelUnit))
+    {
+      theResult = UNITS.${klass.enumProperties[value].enum};
+    }
+{% end %}\
+{% if klass.enumProperties is None or not value in klass.enumProperties or klass.enumProperties[value].get('enum', None) is None %}\
+    if (${klass.langType}.${enum_value_name(value, klass.isUnitsEnumeration).upper()}.equals(inModelUnit))
+    {
+      theResult = UNITS.${enum_value_name(value, klass.isUnitsEnumeration).upper()};
+    }
+{% end %}\
+{% end %}\
+    // end: should be lookup in template
+    return theResult;
+  }
+
+  public static <T extends PrimitiveNumber> ${klass.model.opts.lang.typeToUnitsType(klass.langType)} getQuantity(T inValue, ${klass.langType} inModelUnit)
+    throws EnumerationException
+  {
+    if (inValue instanceof NonNegativeFloat) {
+      NonNegativeFloat typedValue = (NonNegativeFloat) inValue;
+      return new ode.units.quantity.${klass.model.opts.lang.typeToUnitsType(klass.langType)}(typedValue.getValue(), getBaseUnit(inModelUnit));
+    }
+    if (inValue instanceof NonNegativeInteger) {
+      NonNegativeInteger typedValue = (NonNegativeInteger) inValue;
+      return new ode.units.quantity.${klass.model.opts.lang.typeToUnitsType(klass.langType)}(typedValue.getValue(), getBaseUnit(inModelUnit));
+    }
+    if (inValue instanceof NonNegativeLong) {
+      NonNegativeLong typedValue = (NonNegativeLong) inValue;
+      return new ode.units.quantity.${klass.model.opts.lang.typeToUnitsType(klass.langType)}(typedValue.getValue(), getBaseUnit(inModelUnit));
+    }
+    if (inValue instanceof PercentFraction) {
+      PercentFraction typedValue = (PercentFraction) inValue;
+      return new ode.units.quantity.${klass.model.opts.lang.typeToUnitsType(klass.langType)}(typedValue.getValue(), getBaseUnit(inModelUnit));
+    }
+    if (inValue instanceof PositiveFloat) {
+      PositiveFloat typedValue = (PositiveFloat) inValue;
+      return new ode.units.quantity.${klass.model.opts.lang.typeToUnitsType(klass.langType)}(typedValue.getValue(), getBaseUnit(inModelUnit));
+    }
+    if (inValue instanceof PositiveInteger) {
+      PositiveInteger typedValue = (PositiveInteger) inValue;
+      return new ode.units.quantity.${klass.model.opts.lang.typeToUnitsType(klass.langType)}(typedValue.getValue(), getBaseUnit(inModelUnit));
+    }
+    if (inValue instanceof PositiveLong) {
+      PositiveLong typedValue = (PositiveLong) inValue;
+      return new ode.units.quantity.${klass.model.opts.lang.typeToUnitsType(klass.langType)}(typedValue.getValue(), getBaseUnit(inModelUnit));
+    }
+    LOGGER.warn("Unknown type '{}' cannot be used to create a '${klass.model.opts.lang.typeToUnitsType(klass.langType)}' quantity",
+      inValue.getClass().getName());
+    throw new EnumerationException("${klass.langType}EnumHandler: type '"
+      + inValue.getClass().getName() + "' cannot be used to create a quantity");
+  }
+
+  public static <T extends Number> ${klass.model.opts.lang.typeToUnitsType(klass.langType)} getQuantity(T inValue, ${klass.langType} inModelUnit)
+    throws EnumerationException
+  {
+    if (inValue instanceof Double) {
+      Double doubleValue = (Double) inValue;
+      return new ode.units.quantity.${klass.model.opts.lang.typeToUnitsType(klass.langType)}(doubleValue, getBaseUnit(inModelUnit));
+    }
+    if (inValue instanceof Integer) {
+      Integer intValue = (Integer) inValue;
+      return new ode.units.quantity.${klass.model.opts.lang.typeToUnitsType(klass.langType)}(intValue, getBaseUnit(inModelUnit));
+    }
+    LOGGER.warn("Unknown type '{}' cannot be used to create a '${klass.model.opts.lang.typeToUnitsType(klass.langType)}' quantity",
+      inValue.getClass().getName());
+    throw new EnumerationException("${klass.langType}EnumHandler: type '"
+      + inValue.getClass().getName() + "' cannot be used to create a quantity");
+  }
+{% end %}\
+
+{% end %}\
+  /* @see IEnumerationHandler#getEntity() */
+  public Class<? extends Enumeration> getEntity() {
+    return ${klass.langType}.class;
+  }
+
+}

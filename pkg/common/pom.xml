@@ -6,7 +6,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>net.bhojpur.ode</groupId>
-  <artifactId>common</artifactId>
+  <artifactId>ode-common</artifactId>
   <version>1.0.0</version>
 
   <name>Bhojpur ODE Common Library</name>
@@ -34,6 +34,8 @@
   <contributors>
     <contributor><name>Shashi Bhushan Rai</name></contributor>
     <contributor><name>Bimla Pandey</name></contributor>
+    <contributor><name>Divya Rai</name></contributor>
+    <contributor><name>Anushka Rai</name></contributor>
   </contributors>
 
   <mailingLists>
