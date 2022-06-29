@@ -61,7 +61,7 @@ public class UnitsFactory {
     }
 
     /**
-     * Convert a Bio-Formats {@link ${name}} to a Bhojpur ODE ${name}. A null will be
+     * Convert a Bhojpur ODE-Formats {@link ${name}} to a Bhojpur ODE ${name}. A null will be
      * returned if the input is null.
      */
     public static ${name} convert${name}(ode.units.quantity.${name} value) {

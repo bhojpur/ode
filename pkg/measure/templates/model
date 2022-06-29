@@ -1,3 +1,10 @@
+{% python
+def java(items):
+    fields = ['%s("%s")' % (x.CODE, x.SYMBOL) for x in items]
+    return ",\n    ".join(fields)
+%}
+package ode.model.enums;
+
 // Copyright (c) 2018 Bhojpur Consulting Private Limited, India. All rights reserved.
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -17,13 +24,6 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-
-{% python
-def java(items):
-    fields = ['%s("%s")' % (x.CODE, x.SYMBOL) for x in items]
-    return ",\n    ".join(fields)
-%}
-package ode.model.enums;
 
 import ode.model.units.UnitEnum;
 

@@ -160,7 +160,7 @@ def persist_rois(request, conn=None, **kwargs):
             for n in new:
                 new_roi = {
                     "@type":
-                    "http://www.bhojpur.net/Schemas/ODE/2016-06#ROI",
+                    "http://www.bhojpur.net/Schemas/ODE/2018-03#ROI",
                     "shapes": [n]
                 }
                 decoder = ode_marshal.get_decoder(new_roi.get("@type"))

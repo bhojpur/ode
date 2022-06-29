@@ -1,5 +1,5 @@
 function [result] = bfopen(id, varargin)
-% Open microscopy images using ODE-Formats.
+% Bhojpur ODE images using ODE-Formats.
 %
 % SYNOPSIS r = bfopen(id)
 %          r = bfopen(id, x, y, w, h)

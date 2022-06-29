@@ -40,7 +40,7 @@ public class ODEXMLServiceTest {
 
   @Test
   public void testGetLatestVersion() {
-    assertEquals("2016-06", service.getLatestVersion());
+    assertEquals("2018-03", service.getLatestVersion());
   }
 
   @Test
@@ -67,7 +67,7 @@ public class ODEXMLServiceTest {
   @Test
   public void getODEXMLVersion() throws ServiceException {
     assertEquals("2008-09", service.getODEXMLVersion(xml));
-    assertEquals("2016-06",
+    assertEquals("2018-03",
       service.getODEXMLVersion(service.createODEXMLMetadata(xml)));
   }
 
@@ -79,7 +79,7 @@ public class ODEXMLServiceTest {
   @Test
   public void transformToLatestVersion() throws ServiceException {
     String updated = service.transformToLatestVersion(xml);
-    assertEquals("2016-06", service.getODEXMLVersion(updated));
+    assertEquals("2018-03", service.getODEXMLVersion(updated));
   }
 
   @Test(expectedExceptions={ServiceException.class})

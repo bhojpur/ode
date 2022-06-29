@@ -2302,7 +2302,7 @@ class Viewer extends OlObject {
             else {
                 rois[roiId] = {
                     "@id" : roiId,
-                    "@type" : 'http://www.bhojpur.net/Schemas/ODE/2016-06#ROI',
+                    "@type" : 'http://www.bhojpur.net/Schemas/ODE/2018-03#ROI',
                     "shapes" : []
                 };
                 roiContainer = rois[roiId];

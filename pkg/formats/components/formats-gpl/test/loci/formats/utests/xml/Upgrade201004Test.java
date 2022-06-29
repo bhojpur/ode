@@ -47,7 +47,7 @@ public class Upgrade201004Test {
 
   @Test
   public void getODEXMLVersion() throws ServiceException {
-    assertEquals("2016-06", service.getODEXMLVersion(metadata));
+    assertEquals("2018-03", service.getODEXMLVersion(metadata));
   }
 
   @Test

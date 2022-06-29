@@ -336,14 +336,14 @@ export const pointToJsonObject = function(geometry, shape_id) {
 
     var ret = {};
     if (typeof shape_id === 'number') ret['@id'] = shape_id;
-    ret['@type'] = "http://www.bhojpur.net/Schemas/ODE/2016-06#Point";
+    ret['@type'] = "http://www.bhojpur.net/Schemas/ODE/2018-03#Point";
     var center = geometry.getPointCoordinates();
     ret['X'] = center[0];
     ret['Y'] = -center[1];
     var trans = geometry.getTransform();
     if (typeof trans === 'object' && trans !== null) {
         trans['@type'] =
-            "http://www.bhojpur.net/Schemas/ODE/2016-06#AffineTransform";
+            "http://www.bhojpur.net/Schemas/ODE/2018-03#AffineTransform";
         ret['Transform'] = trans;
     }
 
@@ -365,7 +365,7 @@ export const ellipseToJsonObject = function(geometry, shape_id) {
 
     var ret = {};
     if (typeof shape_id === 'number') ret['@id'] = shape_id;
-    ret['@type'] = "http://www.bhojpur.net/Schemas/ODE/2016-06#Ellipse";
+    ret['@type'] = "http://www.bhojpur.net/Schemas/ODE/2018-03#Ellipse";
     var center = geometry.getCenter();
     ret['X'] = center[0];
     ret['Y'] = -center[1];
@@ -375,7 +375,7 @@ export const ellipseToJsonObject = function(geometry, shape_id) {
     var trans = geometry.getTransform();
     if (typeof trans === 'object' && trans !== null) {
         trans['@type'] =
-            "http://www.bhojpur.net/Schemas/ODE/2016-06#AffineTransform";
+            "http://www.bhojpur.net/Schemas/ODE/2018-03#AffineTransform";
         ret['Transform'] = trans;
     }
 
@@ -397,7 +397,7 @@ export const rectangleToJsonObject = function(geometry, shape_id) {
 
     var ret = {};
     if (typeof shape_id === 'number') ret['@id'] = shape_id;
-    ret['@type'] = "http://www.bhojpur.net/Schemas/ODE/2016-06#Rectangle";
+    ret['@type'] = "http://www.bhojpur.net/Schemas/ODE/2018-03#Rectangle";
     var topLeftCorner = geometry.getUpperLeftCorner();
     ret['X'] = topLeftCorner[0];
     ret['Y'] = -topLeftCorner[1];
@@ -407,7 +407,7 @@ export const rectangleToJsonObject = function(geometry, shape_id) {
     var trans = geometry.getTransform();
     if (typeof trans === 'object' && trans !== null) {
         trans['@type'] =
-            "http://www.bhojpur.net/Schemas/ODE/2016-06#AffineTransform";
+            "http://www.bhojpur.net/Schemas/ODE/2018-03#AffineTransform";
         ret['Transform'] = trans;
     }
 
@@ -434,7 +434,7 @@ export const lineToJsonObject = function(geometry, shape_id) {
     if (geometry.isPolyline())
         return polylineToJsonObject.call(null, geometry, shape_id);
 
-    ret['@type'] = "http://www.bhojpur.net/Schemas/ODE/2016-06#Line";
+    ret['@type'] = "http://www.bhojpur.net/Schemas/ODE/2018-03#Line";
     ret['X1'] = flatCoords[0];
     ret['X2'] = flatCoords[2];
     ret['Y1'] = -flatCoords[1];
@@ -446,7 +446,7 @@ export const lineToJsonObject = function(geometry, shape_id) {
     var trans = geometry.getTransform();
     if (typeof trans === 'object' && trans !== null) {
         trans['@type'] =
-            "http://www.bhojpur.net/Schemas/ODE/2016-06#AffineTransform";
+            "http://www.bhojpur.net/Schemas/ODE/2018-03#AffineTransform";
         ret['Transform'] = trans;
     }
 
@@ -473,7 +473,7 @@ export const polylineToJsonObject = function(geometry, shape_id) {
     if (!geometry.isPolyline())
         return lineToJsonObject.call(null, geometry, shape_id);
 
-    ret['@type'] = "http://www.bhojpur.net/Schemas/ODE/2016-06#Polyline";
+    ret['@type'] = "http://www.bhojpur.net/Schemas/ODE/2018-03#Polyline";
     ret['Points'] = "";
     for (var i=0; i<flatCoords.length;i+= 2) {
         if (i !== 0 && i % 2 === 0) ret['Points'] += " ";
@@ -486,7 +486,7 @@ export const polylineToJsonObject = function(geometry, shape_id) {
     var trans = geometry.getTransform();
     if (typeof trans === 'object' && trans !== null) {
         trans['@type'] =
-            "http://www.bhojpur.net/Schemas/ODE/2016-06#AffineTransform";
+            "http://www.bhojpur.net/Schemas/ODE/2018-03#AffineTransform";
         ret['Transform'] = trans;
     }
 
@@ -509,7 +509,7 @@ export const labelToJsonObject = function(geometry, shape_id) {
 
     var ret = {};
     if (typeof shape_id === 'number') ret['@id'] = shape_id;
-    ret['@type'] = "http://www.bhojpur.net/Schemas/ODE/2016-06#Label";
+    ret['@type'] = "http://www.bhojpur.net/Schemas/ODE/2018-03#Label";
     var topLeftCorner = geometry.getUpperLeftCorner();
     ret['X'] = topLeftCorner[0];
     ret['Y'] = -topLeftCorner[1];
@@ -532,7 +532,7 @@ export const polygonToJsonObject = function(geometry, shape_id) {
 
     var ret = {};
     if (typeof shape_id === 'number') ret['@id'] = shape_id;
-    ret['@type'] = "http://www.bhojpur.net/Schemas/ODE/2016-06#Polygon";
+    ret['@type'] = "http://www.bhojpur.net/Schemas/ODE/2018-03#Polygon";
     var flatCoords = geometry.getPolygonCoordinates();
 
     ret['Points'] = "";
@@ -544,7 +544,7 @@ export const polygonToJsonObject = function(geometry, shape_id) {
     var trans = geometry.getTransform();
     if (typeof trans === 'object' && trans !== null) {
         trans['@type'] =
-            "http://www.bhojpur.net/Schemas/ODE/2016-06#AffineTransform";
+            "http://www.bhojpur.net/Schemas/ODE/2018-03#AffineTransform";
         ret['Transform'] = trans;
     }
 
@@ -566,7 +566,7 @@ export const maskToJsonObject = function(geometry, shape_id) {
 
     var ret = {};
     if (typeof shape_id === 'number') ret['@id'] = shape_id;
-    ret['@type'] = "http://www.bhojpur.net/Schemas/ODE/2016-06#Mask";
+    ret['@type'] = "http://www.bhojpur.net/Schemas/ODE/2018-03#Mask";
     var flatCoords = geometry.getPointCoordinates();
 
     ret['X'] = flatCoords[0];
@@ -577,7 +577,7 @@ export const maskToJsonObject = function(geometry, shape_id) {
     var trans = geometry.getTransform();
     if (typeof trans === 'object' && trans !== null) {
         trans['@type'] =
-            "http://www.bhojpur.net/Schemas/ODE/2016-06#AffineTransform";
+            "http://www.bhojpur.net/Schemas/ODE/2018-03#AffineTransform";
         ret['Transform'] = trans;
     }
 
@@ -627,7 +627,7 @@ export const integrateStyleIntoJsonObject = function(feature, jsonObject) {
 
     var isLabel =
         jsonObject['@type'] ===
-            'http://www.bhojpur.net/Schemas/ODE/2016-06#Label';
+            'http://www.bhojpur.net/Schemas/ODE/2018-03#Label';
     var presentFillColor =
         isLabel && presentStyle.getText() && presentStyle.getText().getFill() ?
             presentStyle.getText().getFill().getColor() :
@@ -826,7 +826,7 @@ export const toJsonObject =
             roiContainer = rois[roiIdToBeUsed];
         else {
             rois[roiIdToBeUsed] = {
-                "@type" : 'http://www.bhojpur.net/Schemas/ODE/2016-06#ROI',
+                "@type" : 'http://www.bhojpur.net/Schemas/ODE/2018-03#ROI',
                 "shapes" : []
             };
             roiContainer = rois[roiIdToBeUsed];

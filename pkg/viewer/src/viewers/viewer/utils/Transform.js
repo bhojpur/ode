@@ -45,7 +45,7 @@ export const convertAffineTransformIntoMatrix = function(transform) {
 }
 
 /**
- * Gets the transformation as an AffineTransform object (Bhojpur ODE marshal 2016-06)
+ * Gets the transformation as an AffineTransform object (Bhojpur ODE marshal 2018-03)
  * given a transformation matrix of length 6
  *
  * @static
@@ -58,7 +58,7 @@ export const convertMatrixToAffineTransform = function(transform) {
         return null;
 
     return {
-        '@type': "http://www.bhojpur.net/Schemas/ODE/2016-06#AffineTransform",
+        '@type': "http://www.bhojpur.net/Schemas/ODE/2018-03#AffineTransform",
         'A00' : transform[0], 'A10' : transform[1],
         'A01' : transform[2], 'A11' : transform[3],
         'A02' : transform[4], 'A12' : transform[5]

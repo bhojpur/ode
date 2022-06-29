@@ -75,12 +75,12 @@ class Engine(object):
         markup = kwargs.pop("markup")
         if markup:
             tmpl = MarkupTemplate(
-                self.template_text, encoding="utf-8")
+                self.template_text, encoding='UTF-8')
         else:
             tmpl = NewTextTemplate(
-                self.template_text, encoding="utf-8")
+                self.template_text, encoding='UTF-8')
         content = tmpl.generate(**kwargs)
-        print(content.render(encoding="utf-8"))
+        print(content.render())
 
     def combined_template(self, data_filenames):
         items = dict()
@@ -100,7 +100,6 @@ class Engine(object):
         self.render(markup=self.markup,
                     name=basename, items=data, fields=self.fields,
                     equations=val)
-
 
 if __name__ == "__main__":
     parser = ArgumentParser()

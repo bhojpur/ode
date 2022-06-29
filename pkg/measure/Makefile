@@ -1,3 +1,23 @@
+# Copyright (c) 2018 Bhojpur Consulting Private Limited, India. All rights reserved.
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+# THE SOFTWARE.
+
 DIR ?= /tmp/
 
 all: core/Units.ice core2 core3 core4 core5 formats/UnitsFactory.java model model2 sql xsd
@@ -25,47 +45,47 @@ xsd:    xsd/units-conversion.xsl
 
 core/Units.ice: $(units)
 	mkdir -p core
-	./gen.py --combine templates/Units.ice $(units) > $@
+	./generate.py --combine templates/Units.ice $(units) > $@
 
 formats/UnitsFactory.java: $(units)
 	mkdir -p formats
-	./gen.py --combine templates/formats.java $(units) > $@
+	./generate.py --combine templates/formats.java $(units) > $@
 
 core/%.ice: units/%.txt
 	mkdir -p core
-	./gen.py templates/core.ice $< > $@
+	./generate.py templates/core.ice $< > $@
 
 core/%I.java: units/%.txt
 	mkdir -p core
-	./gen.py templates/core.java $< > $@
+	./generate.py templates/core.java $< > $@
 
 core/ode_model_%I.py: units/%.txt
 	mkdir -p core
-	./gen.py templates/core.py $< > $@
+	./generate.py templates/core.py $< > $@
 
 core/%I.cpp: units/%.txt
 	mkdir -p core
-	./gen.py templates/core.cpp $< > $@
+	./generate.py templates/core.cpp $< > $@
 
 core/%I.h: units/%.txt
 	mkdir -p core
-	./gen.py templates/core.h $< > $@
+	./generate.py templates/core.h $< > $@
 
 model/Units%.java: units/%.txt
 	mkdir -p model
-	./gen.py templates/model $< > $@
+	./generate.py templates/model $< > $@
 
 model2/%.java: units/%.txt
 	mkdir -p model2
-	./gen.py templates/model.java $< > $@
+	./generate.py templates/model.java $< > $@
 
 sql/Units%.sql: units/%.txt
 	mkdir -p sql
-	./gen.py templates/sql $< > $@
+	./generate.py templates/sql $< > $@
 
 xsd/units-conversion.xsl: $(units)
 	mkdir -p xsd
-	./gen.py --markup --combine templates/xsd $(units) > $@
+	./generate.py --markup --combine templates/xsd $(units) > $@
 
 move:
 	/bin/mv $(model_enums) $(DIR)/components/model/src/ode/model/enums

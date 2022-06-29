@@ -82,7 +82,7 @@ public class ODEXMLServiceImpl extends AbstractService implements ODEXMLService
 {
 
   /** Latest ODE-XML version namespace. */
-  public static final String LATEST_VERSION = "2016-06";
+  public static final String LATEST_VERSION = "2018-03";
 
   public static final String NO_ODE_XML_MSG =
     "ode-xml.jar is required to read ODE-TIFF files.  " +
@@ -116,7 +116,7 @@ public class ODEXMLServiceImpl extends AbstractService implements ODEXMLService
   private static final String XSLT_201306 =
     XSLT_PATH + "2013-06-to-2015-01.xsl";
   private static final String XSLT_201501 =
-    XSLT_PATH + "2015-01-to-2016-06.xsl";
+    XSLT_PATH + "2015-01-to-2018-03.xsl";
 
   // -- Cached stylesheets --
 
@@ -309,7 +309,7 @@ public class ODEXMLServiceImpl extends AbstractService implements ODEXMLService
       else transformed = xml;
       LOGGER.debug("XML updated to at least 2015-01");
 
-      if (version.compareTo("2016-06") < 0) {
+      if (version.compareTo("2018-03") < 0) {
         transformed = verifyODENamespace(transformed);
         LOGGER.debug("Running UPDATE_201501 stylesheet.");
         if (update201501 == null) {
@@ -319,7 +319,7 @@ public class ODEXMLServiceImpl extends AbstractService implements ODEXMLService
         transformed = XMLTools.transformXML(transformed, update201501);
       }
       else transformed = xml;
-      LOGGER.debug("XML updated to at least 2016-06");
+      LOGGER.debug("XML updated to at least 2018-03");
 
       // fix namespaces
       transformed = transformed.replaceAll("<ns.*?:", "<");

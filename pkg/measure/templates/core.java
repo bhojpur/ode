@@ -236,7 +236,7 @@ public class ${name}I extends ${name} implements ModelBased {
     }
 
     /**
-     * Convert a Bio-Formats {@link Length} to a Bhojpur ODE Length.
+     * Convert a Bhojpur ODE-Formats {@link Length} to a Bhojpur ODE Length.
      */
     public ${name}I(ode.units.quantity.${name} value) {
         ode.model.enums.Units${name} internal =

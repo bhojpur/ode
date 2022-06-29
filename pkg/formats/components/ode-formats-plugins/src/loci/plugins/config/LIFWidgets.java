@@ -51,7 +51,7 @@ public class LIFWidgets implements IFormatWidgets, ItemListener {
 
     String physicalSizeLabel = "Physical size";
     JCheckBox physicalSizeBox = new JCheckBox(
-      "Ensure physical pixel sizes are compatible with versions <= 5.3.2", physicalSizeBackwardsCompatibility);
+      "Ensure physical pixel sizes are compatible with versions <= 1.0.0", physicalSizeBackwardsCompatibility);
     physicalSizeBox.addItemListener(this);
 
     labels = new String[] {physicalSizeLabel};

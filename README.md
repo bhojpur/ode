@@ -35,6 +35,8 @@ in various formats. For example
 - [Tagged Image File Format](https://docs.fileformat.com/image/tiff/)
 - [Scalable Vector Graphics](https://www.w3.org/TR/SVG2/)
 - [Joint Photographic Experts Group](https://jpeg.org/)
+- [NIH Medical Image Processing, Analysis, and Visualization](https://mipav.cit.nih.gov/)
+- [LuraTech Imaging](https://www.foxit.com/enterprise-automation/)
 - [Bio-Formats](https://eliceirilab.org/software/bio-formats/) defined by the University of Wisconsin - Madison's [Laboratory for Optical and Computation Instrumentation](https://eliceirilab.org/)
 - [Flexible Image Transport System](https://fits.gsfc.nasa.gov/)
 
@@ -134,6 +136,15 @@ Finally, you can `publish` these Gradle plugins centrally by issuing the followi
 
 ```bash
 gradle --no-daemon --init-script ../init-ci.gradle publish
+```
+
+### Core Framework Libraries
+
+There are core components libraries that must be built first prior to builging the server.
+
+```bash
+cd pkg/formats/components/bundles/stubs && mvn
+cd pkg/formats/components/bundles/codecs && mvn
 ```
 
 ### Source Code Generator

@@ -203,7 +203,7 @@ class Rectangle extends Polygon {
     getTransform() {
         if (!isArray(this.transform_)) return null;
 
-        return {'@type': "http://www.bhojpur.net/Schemas/ODE/2016-06#AffineTransform",
+        return {'@type': "http://www.bhojpur.net/Schemas/ODE/2018-03#AffineTransform",
                 'A00' : this.transform_[0], 'A10' : this.transform_[1],
                 'A01' : this.transform_[2], 'A11' : this.transform_[3],
                 'A02' : this.transform_[4], 'A12' : this.transform_[5]

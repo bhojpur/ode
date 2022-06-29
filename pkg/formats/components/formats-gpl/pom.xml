@@ -15,7 +15,7 @@
   <artifactId>formats-gpl</artifactId>
 
   <name>Bhojpur ODE-Formats library</name>
-  <description>A library for reading and writing popular Bhojpur ODE microscopy file formats.</description>
+  <description>A library for reading and writing popular Bhojpur ODE file formats.</description>
   <url>https://www.bhojpur.net/ode-formats</url>
   <inceptionYear>2018</inceptionYear>
 

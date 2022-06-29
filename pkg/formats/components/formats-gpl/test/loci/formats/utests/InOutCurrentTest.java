@@ -274,7 +274,7 @@ public class InOutCurrentTest {
 
   /** XML namespace. */
   public static final String XML_NS =
-    "http://www.bhojpur.net/Schemas/ODE/2016-06";
+    "http://www.bhojpur.net/Schemas/ODE/2018-03";
 
   /** XSI namespace. */
   public static final String XSI_NS =
@@ -282,7 +282,7 @@ public class InOutCurrentTest {
 
   /** XML schema location. */
   public static final String SCHEMA_LOCATION =
-    "http://www.bhojpur.net/Schemas/ODE/2016-06/ode.xsd";
+    "http://www.bhojpur.net/Schemas/ODE/2018-03/ode.xsd";
 
   private Document document;
 
